@@ -11,7 +11,7 @@ exports.login = (req, res)=>{
   User.login(req.body, user=>{
     if (user){
       req.session.userId = user._id;
-      res.redirect('/');
+      res.redirect('/lists');
     }else{
       res.redirect('/login');
     }
@@ -27,7 +27,7 @@ exports.create = (req, res)=>{
   User.create(req.body, user=>{
     if(user){
       req.session.userId = user._id;
-      res.redirect('/');
+      res.redirect('/lists');
     }else{
       res.redirect('/login');
     }

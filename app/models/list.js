@@ -35,6 +35,18 @@ class List {
     });
   }
 
+  static findByArtist (Artist, fn){
+    listCollection.find({Artist: Artist}).toArray((err, list)=>{
+      fn(list);
+    });
+  } //findByArtist
+
+  static findBySong (Song, fn){
+    listCollection.find({Song: Song}).toArray((err, list)=>{
+      fn(list);
+    });
+  } //findBySong
+
   } //list
 
 module.exports = List;

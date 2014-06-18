@@ -32,6 +32,8 @@ function load(app, fn){
   app.post('/key', dbg, lists.key);
   app.post('/bpm', dbg, lists.bpm);
   app.post('/bpmKey', dbg, lists.bpmKey);
+  app.post('/artistSearch', dbg, lists.artistSearch);
+  app.post('/songSearch', dbg, lists.songSearch);
 
   console.log('Routes Loaded');
   fn();

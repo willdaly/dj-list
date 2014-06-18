@@ -28,3 +28,15 @@ exports.bpmKey = (req, res)=>{
     res.send({songs : songs});
   });
 };
+
+exports.artistSearch = (req, res)=>{
+  List.findByArtist(req.body.Artist, songs=>{
+    res.send({songs: songs});
+  });
+};
+
+exports.songSearch = (req, res)=>{
+  List.findBySong(req.body.Song, songs=>{
+    res.send({songs: songs});
+  });
+};
