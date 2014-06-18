@@ -16,3 +16,15 @@ exports.key = (req, res)=>{
     res.send({songs : songs});
   });
 };
+
+exports.bpm = (req, res)=>{
+  List.findByBPM(req.body.BPM, songs=>{
+    res.send({songs : songs});
+  });
+};
+
+exports.bpmKey = (req, res)=>{
+  List.findByBpmKey(req.body, songs=>{
+    res.send({songs : songs});
+  });
+};

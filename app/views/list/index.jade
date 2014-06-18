@@ -1,62 +1,102 @@
 extends ../shared/template
 
 block content
-  h1= title
 
-  select#key
-    option select key
-    option AbM
-    option abm
-    option AM
-    option am
-    option BbM
-    option bbm
-    option BM
-    option bm
-    option CM
-    option cm
-    option C#M
-    option c#m
-    option DM
-    option dm
-    option EbM
-    option ebm
-    option EM
-    option em
-    option FM
-    option fm
-    option F#M
-    option f#m
-    option GM
-    option gm
-    option G#M
-    option g#m
-  button#filter filter
+  .slider
+  .controls
+    span lowest bpm
+    input#lowBPM
+    span upper bpm
+    input#highBPM
 
-  select#bpm
-    
+    span select key
+    select#key
+      option AbM
+      option abm
+      option AM
+      option am
+      option BbM
+      option bbm
+      option BM
+      option bm
+      option CM
+      option cm
+      option C#M
+      option c#m
+      option DM
+      option dm
+      option EbM
+      option ebm
+      option EM
+      option em
+      option FM
+      option fm
+      option F#M
+      option f#m
+      option GM
+      option gm
+      option G#M
+      option g#m
 
-  #ajax
-    table
-      thead
-        tr
-          td artist
-          td song
-          td bpm
-          td key
-      tbody#keyBody
 
-  table
+
+    button#bpmFilter BPM filter
+    button#keyFilter key filter
+    button#bpmKeyFilter BPM Key filter
+  hr
+  table.table.table-bordered.table-hover.table-condensed
     thead
       tr
+        td add
+        td X
         td artist
         td song
         td bpm
         td key
+        td transpose
+    tbody#bpmKeyBody
+
+  table.table.table-bordered.table-hover.table-condensed
+    thead
+      tr
+        td add
+        td X
+        td artist
+        td song
+        td bpm
+        td key
+        td transpose
+    tbody#bpmBody
+
+  table.table.table-bordered.table-hover.table-condensed
+    thead
+      tr
+        td add
+        td X
+        td artist
+        td song
+        td bpm
+        td key
+        td transpose
+    tbody#keyBody
+
+  table.table.table-bordered.table-hover.table-condensed
+    thead
+      tr
+        td add
+        td X
+        td artist
+        td song
+        td bpm
+        td key
+        td transpose
     tbody
       each song in list
         tr
+          td
+          td
           td= song.Artist
           td= song.Song
           td= song.BPM
           td= song.Key
+          td

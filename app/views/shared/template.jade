@@ -3,29 +3,53 @@ html
   head
     meta(charset='utf-8')
     title= title
+    link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/jquery.nouislider.css', rel='stylesheet')
     link(href='/less/app.css', rel='stylesheet')
   body
-    #navBar
-      h1= user ? user.email : ''
-      button
-        a(href='/') home
-      button
-        a(href='/login') login or register
-      if(user)
-        button
-          a(href='/lists') list
-        form(method='POST', action='logout')
-          button logout
+    nav.navbar.navbar-default(role='navigation')
+      .container-fluid
+          .navbar-header
+            a.navbar-brand(href='/') DJ List
+            ul.nav.navbar-nav
+              li
+                if (!user)
+                  a(href='/login') login or register
+              li
+                if (user)
+                  a(href='lists') list
+              li
+                if (user)
+                  a(href='#') logged in as #{user.email}
+              li
+                if (user)
+                  form(method='POST', action='logout')
+                    a(href='#') logout
+
+
+
+      //- h1= user ? user.email : ''
+      //- button
+      //-   a(href='/') home
+      //- button
+      //-   a(href='/login') login or register
+      //- if(user)
+      //-   button
+      //-     a(href='/lists') list
+        //- form(method='POST', action='logout')
+        //-   button logout
 
     block content
 
     script(src='/js/vendor/jquery-2.1.1.js')
+    script(src='/js/vendor/jquery.nouislider.min.js')
     script(src='/js/vendor/lodash-2.4.1.js')
     script(src='/js/vendor/moment-2.6.0.js')
     script(src='/js/vendor/traceur.js')
     script(src='/socket.io/socket.io.js')
     script(src='/js/es5/main.js')
     script(src='/js/es6/compiled/main.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
     script(src='/js/es6/compiled/sockets.js')
 
     block scripts

@@ -30,6 +30,8 @@ function load(app, fn){
 
   app.get('/lists', dbg, lists.index);
   app.post('/key', dbg, lists.key);
+  app.post('/bpm', dbg, lists.bpm);
+  app.post('/bpmKey', dbg, lists.bpmKey);
 
   console.log('Routes Loaded');
   fn();
