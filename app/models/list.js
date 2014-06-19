@@ -21,6 +21,7 @@ class List {
   static findByBPM(BPM, fn) {
     var lowBPM = +BPM[0];
     var highBPM = +BPM[1];
+
     listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}}).toArray((err, list)=>{
       fn(list);
     });
@@ -46,6 +47,12 @@ class List {
       fn(list);
     });
   } //findBySong
+
+  static findByGenre (genre, fn){
+    listCollection.find({genre: {$in: genre}}).toArray((err, list)=>{
+      fn(list);
+    });
+  } //findByGenre
 
   } //list
 

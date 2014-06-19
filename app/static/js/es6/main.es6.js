@@ -24,12 +24,23 @@
 
   } //init
 
-  function genreFilter(){
+  function genreFilter(e){
+    $('#searchResults').empty();
     var genreArray = [];
     $('.genres input:checkbox:checked').each(function(){
       genreArray.push($(this).val());
     });
-    console.log(genreArray);
+    $.ajax({
+      url: '/genreFilter',
+      type: 'POST',
+      data: {genre: genreArray},
+      success: response => {
+        response.songs.forEach(song=>{
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
+        });
+      }
+    });
+    e.preventDefault();
   } //genre filter
 
   function songSearch (e) {
@@ -41,7 +52,7 @@
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td></tr>`);
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
       }
     });
@@ -57,7 +68,7 @@
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td></tr>`);
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
       }
     });
@@ -75,7 +86,7 @@
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td></tr>`);
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
       }
     });
@@ -91,7 +102,7 @@
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td></tr>`);
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
       }
     });
@@ -108,7 +119,7 @@
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td></tr>`);
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
       }
     });

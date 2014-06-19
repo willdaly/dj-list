@@ -40,3 +40,9 @@ exports.songSearch = (req, res)=>{
     res.send({songs: songs});
   });
 };
+
+exports.genreFilter = (req, res)=>{
+  List.findByGenre(req.body.genre, songs=>{
+    res.send({songs: songs});
+  });
+};

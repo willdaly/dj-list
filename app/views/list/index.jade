@@ -4,62 +4,68 @@ block content
 
   .slider
   .controls
-    .input-group
-      span.input-group-addon lowest bpm
-      input.form-control#lowBPM
-    .input-group
-      span.input-group-addon upper bpm
-      input.form-control#highBPM
-      span.input-group-btn
-        button.btn.btn-default(type='button')#bpmFilter BPM filter
+    .col-md-6
+      .input-group
+        span.input-group-addon slowest bpm
+        input.form-control#lowBPM
 
-    .input-group
-      span.input-group-btn
-        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
-          span.caret
-        ul.dropdown-menu
-          li
-            a(href='#')#artistSearch Artist
-          li
-            a(href='#')#albumSearch Album
-          li
-            a(href='#')#songSearch Song
-      input.form-control(type='text', name='search', placeholder='enter search then click \'search by\'')#searchInput
+    .col-md-6
+      .input-group
+        span.input-group-addon select key
+        select.form-control#key
+          option AbM
+          option abm
+          option AM
+          option am
+          option BbM
+          option bbm
+          option BM
+          option bm
+          option CM
+          option cm
+          option C#M
+          option c#m
+          option DM
+          option dm
+          option EbM
+          option ebm
+          option EM
+          option em
+          option FM
+          option fm
+          option F#M
+          option f#m
+          option GM
+          option gm
+          option G#M
+          option g#m
+        span.input-group-btn
+          button.btn.btn-default(type='button')#keyFilter key filter
 
-    .input-group
-      span.input-group-addon select key
-      select.form-control#key
-        option AbM
-        option abm
-        option AM
-        option am
-        option BbM
-        option bbm
-        option BM
-        option bm
-        option CM
-        option cm
-        option C#M
-        option c#m
-        option DM
-        option dm
-        option EbM
-        option ebm
-        option EM
-        option em
-        option FM
-        option fm
-        option F#M
-        option f#m
-        option GM
-        option gm
-        option G#M
-        option g#m
-      span.input-group-btn
-        button.btn.btn-default(type='button')#keyFilter key filter
+    .col-md-6
+      .input-group
+        span.input-group-addon fastest bpm
+        input.form-control#highBPM
+        span.input-group-btn
+          button.btn.btn-default(type='button')#bpmFilter BPM filter
+
+    .col-md-6
+      .input-group
+        span.input-group-addon.glyphicon.glyphicon-search
+        input.form-control(type='text', name='search', placeholder='enter search then click \'search by\'')#searchInput
+        span.input-group-btn
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
+            span.caret
+          ul.dropdown-menu
+            li
+              a(href='#')#artistSearch Artist
+            li
+              a(href='#')#albumSearch Album
+            li
+              a(href='#')#songSearch Song
+
 
     .genres
-      p Select Genres (required)
       label Hip-Hop
       input(type='checkbox', value='Hip-Hop')
       label Soul
@@ -85,67 +91,26 @@ block content
       button.btn.btn-default.btn-md#genreFilter genre filter
 
     button.btn.btn-default.btn-md#bpmKeyFilter BPM Key filter
-  hr
-
-  //- table.table.table-bordered.table-hover.table-condensed
-  //-   thead
-  //-     tr
-  //-       td add
-  //-       td artist
-  //-       td song
-  //-       td bpm
-  //-       td key
-  //-       td transpose
-  //-   tbody#searchResults
-  //-
-  //- table.table.table-bordered.table-hover.table-condensed
-  //-   thead
-  //-     tr
-  //-       td add
-  //-       td artist
-  //-       td song
-  //-       td bpm
-  //-       td key
-  //-       td transpose
-  //-   tbody#bpmKeyBody
-  //-
-  //- table.table.table-bordered.table-hover.table-condensed
-  //-   thead
-  //-     tr
-  //-       td add
-  //-       td artist
-  //-       td song
-  //-       td bpm
-  //-       td key
-  //-       td transpose
-  //-   tbody#bpmBody
-  //-
-  //- table.table.table-bordered.table-hover.table-condensed
-  //-   thead
-  //-     tr
-  //-       td add
-  //-       td artist
-  //-       td song
-  //-       td bpm
-  //-       td key
-  //-       td transpose
-  //-   tbody#keyBody
-
+  //- hr
+  br
   table.table.table-bordered.table-hover.table-condensed
     thead
       tr
         td add
         td artist
+        td album
         td song
         td bpm
         td key
+        td genre
         td transpose
     tbody#searchResults
       each song in list
         tr
           td
           td= song.Artist
+          td= song.Album
           td= song.Song
           td= song.BPM
           td= song.Key
-          td
+          td= song.genre
