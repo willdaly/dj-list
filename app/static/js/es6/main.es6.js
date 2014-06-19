@@ -159,6 +159,7 @@
   function displaySlider () {
     $('.slider').noUiSlider({
 					start: [ 87, 112 ],
+          // orientation: 'vertical',
 					range: {
 						'min': 66,
 						'max': 193
