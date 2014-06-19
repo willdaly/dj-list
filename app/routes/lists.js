@@ -1,24 +1,24 @@
 'use strict';
 
-var lists = global.nss.db.collection('lists');
+// var lists = global.nss.db.collection('lists');
 var traceur = require('traceur');
 var List = traceur.require(__dirname + '/../models/list.js');
 
 exports.index = (req, res)=>{
-  lists.find().toArray((err, list)=>{
-    // console.log(list);
-    res.render('list/index', {list: list, title: 'hiphop List'});
-  });
+  // lists.find().toArray((err, list)=>{
+  // list: list,
+    res.render('list/index', { title: 'dj-List search'});
+  // });
 };
 
 exports.key = (req, res)=>{
-  List.findByKey(req.body.Key, songs=>{
+  List.findByKey(req.body, songs=>{
     res.send({songs : songs});
   });
 };
 
 exports.bpm = (req, res)=>{
-  List.findByBPM(req.body.BPM, songs=>{
+  List.findByBPM(req.body, songs=>{
     res.send({songs : songs});
   });
 };
@@ -31,6 +31,12 @@ exports.bpmKey = (req, res)=>{
 
 exports.artistSearch = (req, res)=>{
   List.findByArtist(req.body.Artist, songs=>{
+    res.send({songs: songs});
+  });
+};
+
+exports.albumSearch = (req, res)=>{
+  List.findByAlbum(req.body.Album, songs=>{
     res.send({songs: songs});
   });
 };

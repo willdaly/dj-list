@@ -18,6 +18,8 @@
 
     $('#artistSearch').click(artistSearch);
 
+    $('#albumSearch').click(albumSearch);
+
     $('#songSearch').click(songSearch);
 
     $('#genreFilter').click(genreFilter);
@@ -25,7 +27,6 @@
   } //init
 
   function genreFilter(e){
-    $('#searchResults').empty();
     var genreArray = [];
     $('.genres input:checkbox:checked').each(function(){
       genreArray.push($(this).val());
@@ -35,6 +36,7 @@
       type: 'POST',
       data: {genre: genreArray},
       success: response => {
+        $('#searchResults').empty();
         response.songs.forEach(song=>{
           $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
         });
@@ -59,6 +61,22 @@
     e.preventDefault();
   }
 
+  function albumSearch (e) {
+    var album = $('#searchInput').val();
+    $.ajax({
+      url: '/albumSearch',
+      type: 'POST',
+      data: {Album: album},
+      success: response => {
+        $('#searchResults').empty();
+        response.songs.forEach(song=>{
+          $('#searchResults').append(`<tr><td><input type="checkbox"></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
+        });
+      }
+    });
+    e.preventDefault();
+  } //albumSearch
+
   function artistSearch (e) {
     var searchInput = $('#searchInput').val();
     $.ajax({
@@ -76,13 +94,17 @@
   } //artistSearch
 
   function bpmKey (e) {
+    var genreArray = [];
+    $('.genres input:checkbox:checked').each(function(){
+      genreArray.push($(this).val());
+    });
     var key = $('#key').val();
     var lowBPM = $('#lowBPM').val();
     var highBPM = $('#highBPM').val();
     $.ajax({
       url: '/bpmKey',
       type: 'POST',
-      data: {BPM:[lowBPM, highBPM], Key: key},
+      data: {BPM:[lowBPM, highBPM], Key: key, genre: genreArray},
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
@@ -94,11 +116,15 @@
   } //bpmkey
 
   function key(e){
+    var genreArray = [];
+    $('.genres input:checkbox:checked').each(function(){
+      genreArray.push($(this).val());
+    });
     var data = $('#key').val();
     $.ajax({
       url: '/key',
       type: 'POST',
-      data: {Key:data},
+      data: {Key:data, genre: genreArray},
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{
@@ -110,12 +136,16 @@
   } //key
 
   function bpm(e){
+    var genreArray = [];
+    $('.genres input:checkbox:checked').each(function(){
+      genreArray.push($(this).val());
+    });
     var lowBPM = $('#lowBPM').val();
     var highBPM = $('#highBPM').val();
     $.ajax({
       url: '/bpm',
       type: 'POST',
-      data: {BPM:[lowBPM, highBPM]},
+      data: {BPM:[lowBPM, highBPM], genre: genreArray},
       success: response => {
         $('#searchResults').empty();
         response.songs.forEach(song=>{

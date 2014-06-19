@@ -12,17 +12,19 @@ class List {
     fn(list);
   } //create
 
-  static findByKey(Key, fn) {
-    listCollection.find({Key:Key}).toArray((err, list)=>{
+  static findByKey(obj, fn) {
+    var Key = obj.Key;
+    var genre = obj.genre;
+    listCollection.find({Key:Key, genre:{$in: genre}}).toArray((err, list)=>{
       fn(list);
       });
     } //findByKey
 
-  static findByBPM(BPM, fn) {
-    var lowBPM = +BPM[0];
-    var highBPM = +BPM[1];
-
-    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}}).toArray((err, list)=>{
+  static findByBPM(obj, fn) {
+    var lowBPM = +obj.BPM[0];
+    var highBPM = +obj.BPM[1];
+    var genre = obj.genre;
+    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, genre:{$in: genre}}).toArray((err, list)=>{
       fn(list);
     });
   } //findByBPM
@@ -31,7 +33,8 @@ class List {
     var lowBPM = +obj.BPM[0];
     var highBPM = +obj.BPM[1];
     var key = obj.Key;
-    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: key}).toArray((err, list)=>{
+    var genre = obj.genre;
+    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
       fn(list);
     });
   }
@@ -41,6 +44,12 @@ class List {
       fn(list);
     });
   } //findByArtist
+
+  static findByAlbum (Album, fn){
+    listCollection.find({Album: Album}).toArray((err, list)=>{
+      fn(list);
+    });
+  } //findByAlbum
 
   static findBySong (Song, fn){
     listCollection.find({Song: Song}).toArray((err, list)=>{
