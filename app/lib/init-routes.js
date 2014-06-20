@@ -17,16 +17,18 @@ function load(app, fn){
   var home = traceur.require(__dirname + '/../routes/home.js');
   var users = traceur.require(__dirname + '/../routes/users.js');
   var lists = traceur.require(__dirname + '/../routes/lists.js');
+  var playlists = traceur.require(__dirname + '/../routes/playlists.js');
 
   app.all('*', users.lookup);
   app.get('/', dbg, home.index);
 
   app.get('/login', dbg, users.loginPage);
   app.post('/login', dbg, users.login);
-
+  app.post('/users', dbg, users.create);
+  //bounce
   app.post('/logout', dbg, users.logout);
 
-  app.post('/users', dbg, users.create);
+
 
   app.get('/lists', dbg, lists.index);
   app.post('/key', dbg, lists.key);
@@ -36,6 +38,9 @@ function load(app, fn){
   app.post('/albumSearch', dbg, lists.albumSearch);
   app.post('/songSearch', dbg, lists.songSearch);
   app.post('/genreFilter', dbg, lists.genreFilter);
+
+  app.get('/playlists', dbg, playlists.index);
+  app.post('/createPlaylist', dbg, playlists.create);
 
 
   console.log('Routes Loaded');

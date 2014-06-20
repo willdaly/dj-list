@@ -12,7 +12,7 @@ block content
       input.form-control#highBPM
       span.input-group-btn
         button.btn.btn-default(type='button')#bpmFilter BPM filter
-          
+
     .input-group
       span.input-group-addon select key
       select.form-control#key
@@ -44,6 +44,12 @@ block content
         option g#m
       span.input-group-btn
         button.btn.btn-default(type='button')#keyFilter key filter
+
+    .input-group
+      span.input-group-addon transpose range
+      input.form-control(type='number', name='transpose', min='0', max='5')#transpose
+      span.input-group-btn
+        button.btn.btn-default(type='button')#transposeFilter Transpose
 
     .input-group
       span.input-group-addon.glyphicon.glyphicon-search
@@ -86,6 +92,13 @@ block content
       button.btn.btn-default.btn-md#genreFilter genre filter
 
     button.btn.btn-default.btn-md#bpmKeyFilter Search
+
+    .input-group
+      span.input-group-addon Set
+      input.form-control(type='text', name='name', placeholder='name')#name
+      span.input-group-btn
+        button.btn.btn-default(type='button')#saveSet Save Set
+    #message    
 
   .col-md-9
     table.table.table-bordered.table-hover.table-condensed

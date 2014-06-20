@@ -1,29 +1,37 @@
 extends ../shared/template
 
 block content
-  #loginBody
-    .panel.panel-default.col-md-6
+  .col-md-4
+  #loginBody.col-md-6
+
+    .panel.panel-default
       .panel-heading
         h1.panel-title Register
       .panel-body
         form(action='/users', method='post')
+
           .input-group
             span.input-group-addon Email
             input.form-control(type='email', name='email', placeholder='email')
+
           .input-group
             span.input-group-addon password
             input.form-control(type='password', name='password', placeholder='password')
-          button.btn.btn-primary.btn-lg Register
+          //- button.btn.btn-primary(type='button') Register
+          button Register
 
-    .panel.panel-default.col-md-6
+    .panel.panel-default
       .panel-heading
         h1.panel-title Log In
       .panel-body
         form(action='/login', method='post')
+
           .input-group
             span.input-group-addon email
             input.form-control(type='email', name='email', placeholder='')
           .input-group
             span.input-group-addon password
             input.form-control(type='password', name='password', placeholder='password')
-          button.btn.btn-primary.btn-lg Log In
+          //- button.btn.btn-default(type='button') Log In
+          button Login
+  .col-md-2

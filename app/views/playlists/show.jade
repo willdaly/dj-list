@@ -1,0 +1,31 @@
+extends ../shared/template
+
+block content
+  table.table.table-bordered.table-hover.table-condensed
+    thead
+      tr
+        td bpm
+        td key
+        td song
+        td artist
+        td album
+        td remove
+
+
+
+
+
+        td genre
+        td transpose
+    tbody#searchResults
+      each song in playlist
+        tr
+          td= song.BPM
+          td= song.Key
+          td= song.Song
+          td= song.Artist
+          if (song.Album)
+            td= song.Album
+          td. song.genre
+          td
+            input(type='checkbox', value=#{song._id})

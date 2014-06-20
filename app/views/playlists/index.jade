@@ -1,0 +1,11 @@
+extends ../shared/template
+
+block content
+  //- .page-header
+  //-   h1= title
+  #playlistIndexBody
+    each playlist in playlists
+      .flightCase
+        #playlistName
+          h3
+            a(href='#')= playlist.name
