@@ -41,6 +41,7 @@ function load(app, fn){
 
   app.get('/playlists', dbg, playlists.index);
   app.post('/createPlaylist', dbg, playlists.create);
+  app.get('/playlists/:id', dbg, playlists.show);
 
 
   console.log('Routes Loaded');

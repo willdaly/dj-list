@@ -18,7 +18,7 @@ block content
         td genre
         td transpose
     tbody#searchResults
-      each song in playlist
+      each song in songs
         tr
           td= song.BPM
           td= song.Key
@@ -26,6 +26,6 @@ block content
           td= song.Artist
           if (song.Album)
             td= song.Album
-          td. song.genre
-          td
-            input(type='checkbox', value=#{song._id})
+          td= song.genre
+          //- td
+          //-   input(type='checkbox', value=#{song._id})
