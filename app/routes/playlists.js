@@ -8,7 +8,7 @@ var Mongo = require('mongodb');
 
 exports.index = (req, res)=>{
   playlistCollection.find({userId : req.session.userId}).toArray((e, playlist)=>{
-    console.log('**********playlist');
+
     res.render('playlists/index', {playlists: playlist, title: 'Playlist index'});
   });
 };
@@ -21,15 +21,23 @@ exports.create = (req, res)=>{
 };
 
 exports.update = (req, res)=>{
-  var _id = Mongo.ObjectID(req.params.id);
+  var _id = Mongo.ObjectID(req.body.playlistId);
+  console.log('**********_id*********');
+  console.log(_id);
   var songs = req.body.songs;
+  console.log('**********songs*********');
+  console.log(songs);
   playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-    playlist.update(songs);
-    playlistCollection.save((pl)=>{
-      res.render('playlists/show', {songs : songs});
+    console.log('**********playlist');
+    console.log(playlist);
+    // playlist.update(songs);
+    songs.forEach(song=>{
+      playlist.songs.push(song);
     });
-
-  });
+    console.log('**********pushed*********');
+    console.log(playlist);
+    playlistCollection.save(playlist, ()=>res.render('list/index'));
+    });
 };
 
 exports.show = (req, res) =>{
@@ -39,11 +47,7 @@ exports.show = (req, res) =>{
     pl.songs.forEach(id =>{
       songsArray.push(Mongo.ObjectID(id));
     });
-    console.log('**********songsArray*********');
-    console.log(songsArray);
     listCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
-      console.log('**********songs*********');
-      console.log(songs);
       res.render('playlists/show', {songs : songs});
       });
   });

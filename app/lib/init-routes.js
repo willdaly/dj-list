@@ -41,7 +41,7 @@ function load(app, fn){
 
   app.get('/playlists', dbg, playlists.index);
   app.post('/createPlaylist', dbg, playlists.create);
-  app.post('/addToPlaylist/:id', dbg, playlists.update);
+  app.put('/addToPlaylist', dbg, playlists.update);
   app.get('/playlists/:id', dbg, playlists.show);
 
 

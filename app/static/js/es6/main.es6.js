@@ -31,7 +31,7 @@
 
     $('#saveSet').click(saveSet);
 
-    $('#addToSet').click(addToSet);
+    $('#addToPlaylist').click(addToPlaylist);
 
   } //init
 
@@ -201,16 +201,17 @@
     e.preventDefault();
   }
 
-  function addToSet (e) {
+  function addToPlaylist (e) {
     var songsArray = [];
     $('#searchResults input:checkbox:checked').each(function(){
       songsArray.push($(this).val());
     });
+    console.log(songsArray);
     var id = $('#playlistId').val();
     $.ajax({
-      url: '/addToPlaylist/#{id}',
-      type: 'post',
-      data: {songs: songsArray},
+      url: '/addToPlaylist',
+      type: 'put',
+      data: {songs: songsArray, playlistId : id},
       success: response => {
         $('#message').append(`<p>${name} updated</p>`);
       }
