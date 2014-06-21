@@ -31,6 +31,8 @@
 
     $('#saveSet').click(saveSet);
 
+    $('#addToSet').click(addToSet);
+
   } //init
 
   function genreFilter(e){
@@ -199,9 +201,26 @@
     e.preventDefault();
   }
 
+  function addToSet (e) {
+    var songsArray = [];
+    $('#searchResults input:checkbox:checked').each(function(){
+      songsArray.push($(this).val());
+    });
+    var id = $('#playlistId').val();
+    $.ajax({
+      url: '/addToPlaylist/#{id}',
+      type: 'post',
+      data: {songs: songsArray},
+      success: response => {
+        $('#message').append(`<p>${name} updated</p>`);
+      }
+    });
+    e.preventDefault();
+  }
+
   function displaySlider () {
     $('.slider').noUiSlider({
-					start: [ 87, 112 ],
+					start: [ 88, 102 ],
           // orientation: 'vertical',
 					range: {
 						'min': 66,

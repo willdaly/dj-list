@@ -3,12 +3,18 @@
 // var lists = global.nss.db.collection('lists');
 var traceur = require('traceur');
 var List = traceur.require(__dirname + '/../models/list.js');
+var playlistCollection = global.nss.db.collection('playlists');
 
 exports.index = (req, res)=>{
-  // lists.find().toArray((err, list)=>{
-  // list: list,
-    res.render('list/index', { title: 'dj-List search'});
-  // });
+  playlistCollection.find({userId : req.session.userId}).toArray((e, playlists)=>{
+    if (playlists) {
+      res.render('list/index', {playlists : playlists, title: 'dj-List search'});
+    } else {
+      res.render('list/index', { title: 'dj-List search'});
+    }
+  });
+
+
 };
 
 exports.key = (req, res)=>{

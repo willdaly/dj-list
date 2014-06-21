@@ -20,6 +20,18 @@ exports.create = (req, res)=>{
   });
 };
 
+exports.update = (req, res)=>{
+  var _id = Mongo.ObjectID(req.params.id);
+  var songs = req.body.songs;
+  playlistCollection.findOne({_id:_id}, (err,playlist)=>{
+    playlist.update(songs);
+    playlistCollection.save((pl)=>{
+      res.render('playlists/show', {songs : songs});
+    });
+
+  });
+};
+
 exports.show = (req, res) =>{
   var _id = Mongo.ObjectID(req.params.id);
   playlistCollection.findOne({_id:_id}, (err, pl)=>{

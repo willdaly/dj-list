@@ -17,7 +17,7 @@ html
                   a(href='/login') login or register
               li
                 if (user)
-                  a(href='lists') Song Search
+                  a(href='/lists') Song Search
 
               li
                 if (user)
@@ -30,7 +30,7 @@ html
             li
               if (user)
                 form(method='POST', action='logout')
-                  button logout
+                  button.btn.btn-default.btn-sm logout
 
 
       //- h1= user ? user.email : ''

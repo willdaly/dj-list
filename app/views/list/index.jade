@@ -45,27 +45,6 @@ block content
       span.input-group-btn
         button.btn.btn-default(type='button')#keyFilter key filter
 
-    .input-group
-      span.input-group-addon transpose range
-      input.form-control(type='number', name='transpose', min='0', max='5')#transpose
-      span.input-group-btn
-        button.btn.btn-default(type='button')#transposeFilter Transpose
-
-    .input-group
-      span.input-group-addon.glyphicon.glyphicon-search
-      input.form-control(type='text', name='search', placeholder='type, then click dropdown')#searchInput
-      span.input-group-btn
-        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
-          span.caret
-        ul.dropdown-menu
-          li
-            a(href='#')#artistSearch Artist
-          li
-            a(href='#')#albumSearch Album
-          li
-            a(href='#')#songSearch Song
-
-
     .genres
       label Rap
       input(type='checkbox', value='Hip-Hop')
@@ -89,16 +68,46 @@ block content
       input(type='checkbox', value='45 King')
       label Instrumentals
       input(type='checkbox', value='Instrumentals')
-      button.btn.btn-default.btn-md#genreFilter genre filter
+      button.btn.btn-default.btn-sm#genreFilter genre filter
 
-    button.btn.btn-default.btn-md#bpmKeyFilter Search
+    button.btn.btn-default.btn-lg#bpmKeyFilter Search
+    hr
+    .input-group
+      //- span.input-group-addon transpose
+      input.form-control(type='number', name='transpose', min='-5', max='5', placeholder='add song, select +/- semitone')#transpose
+      span.input-group-btn
+        button.btn.btn-default(type='button')#transposeFilter Transpose
 
     .input-group
-      span.input-group-addon Set
-      input.form-control(type='text', name='name', placeholder='name')#name
+      span.input-group-addon.glyphicon.glyphicon-search
+      input.form-control(type='text', name='search', placeholder='Artist, Album, Song')#searchInput
       span.input-group-btn
-        button.btn.btn-default(type='button')#saveSet Save Set
-    #message    
+        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
+          span.caret
+        ul.dropdown-menu
+          li
+            a(href='#')#artistSearch Artist
+          li
+            a(href='#')#albumSearch Album
+          li
+            a(href='#')#songSearch Song
+    hr
+    .input-group
+      //- span.input-group-addon Playlist
+      input.form-control(type='text', name='name', placeholder='enter name, add songs')#name
+      span.input-group-btn
+        button.btn.btn-default(type='button')#saveSet Create Playlist
+    .input-group
+      select.form-control#playlistId
+        option select playlist and add songs
+        if (playlists)
+          each playlist in playlists
+            //- option= playlist.name
+            option(value='#{playlist._id}')= playlist.name
+      span.input-group-btn
+        button.btn.btn-default(type='button')#addToSet Add
+    #message
+    br
 
   .col-md-9
     table.table.table-bordered.table-hover.table-condensed
@@ -111,5 +120,4 @@ block content
           td bpm
           td key
           td genre
-          td transpose
       tbody#searchResults
