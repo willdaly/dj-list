@@ -43,6 +43,7 @@ function load(app, fn){
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
   app.get('/playlists/:id', dbg, playlists.show);
+  app.post('/playlist', dbg, playlists.removeSong);
 
 
   console.log('Routes Loaded');

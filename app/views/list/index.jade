@@ -2,6 +2,30 @@ extends ../shared/template
 
 block content
   .controls.col-md-3
+    .genres
+      label Rap
+      input(type='checkbox', value='Hip-Hop')
+      label Soul
+      input(type='checkbox', value='Soul')
+      label Jazz
+      input(type='checkbox', value='Jazz')
+      label Rock
+      input(type='checkbox', value='Rock')
+      label Pop
+      input(type='checkbox', value='Pop')
+      label Melodiya
+      input(type='checkbox', value='Melodiya')
+      label OST
+      input(type='checkbox', value='OST')
+      label Electronic
+      input(type='checkbox', value='Electronic')
+      label Battle
+      input(type='checkbox', value='Battle')
+      label 45 King
+      input(type='checkbox', value='45 King')
+      label Instrumentals
+      input(type='checkbox', value='Instrumentals')
+      button.btn.btn-default.btn-sm#genreFilter genre filter
     .slider
     .input-group
       span.input-group-addon slowest bpm
@@ -45,30 +69,7 @@ block content
       span.input-group-btn
         button.btn.btn-default(type='button')#keyFilter key filter
 
-    .genres
-      label Rap
-      input(type='checkbox', value='Hip-Hop')
-      label Soul
-      input(type='checkbox', value='Soul')
-      label Jazz
-      input(type='checkbox', value='Jazz')
-      label Rock
-      input(type='checkbox', value='Rock')
-      label Pop
-      input(type='checkbox', value='Pop')
-      label Melodiya
-      input(type='checkbox', value='Melodiya')
-      label OST
-      input(type='checkbox', value='OST')
-      label Electronic
-      input(type='checkbox', value='Electronic')
-      label Battle
-      input(type='checkbox', value='Battle')
-      label 45 King
-      input(type='checkbox', value='45 King')
-      label Instrumentals
-      input(type='checkbox', value='Instrumentals')
-      button.btn.btn-default.btn-sm#genreFilter genre filter
+
 
     button.btn.btn-default.btn-lg#bpmKeyFilter Search
     hr
@@ -99,7 +100,7 @@ block content
         button.btn.btn-default(type='button')#saveSet Create Playlist
     .input-group
       select.form-control#playlistId
-        option select playlist and add songs
+        option select playlist and songs
         if (playlists)
           each playlist in playlists
             //- option= playlist.name
@@ -113,7 +114,7 @@ block content
     table.table.table-bordered.table-hover.table-condensed
       thead
         tr
-          td add
+          td.glyphicon.glyphicon-ok
           td artist
           td album
           td song

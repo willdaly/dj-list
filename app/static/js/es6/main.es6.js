@@ -11,6 +11,9 @@
   // var genreArray = [];
 
   function init(){
+
+    $('#deleteSong').click(deleteSong);
+
     $('#keyFilter').click(key);
 
     displaySlider();
@@ -33,7 +36,36 @@
 
     $('#addToPlaylist').click(addToPlaylist);
 
+
+
   } //init
+
+  function deleteSong (e){
+    var songsArray = [];
+    $('.showTable input:checkbox:checked').each(function(){
+      songsArray.push($(this).val());
+    });
+    // var id = $('.playlistId').val();
+    var url = window.location.pathname;
+    console.log(url);
+    var playlistId = url.substring(url.lastIndexOf('/') + 1);
+    console.log(playlistId);
+    // console.log(id);
+    console.log(songsArray);
+    $.ajax({
+      url: '/playlist',
+      type: 'POST',
+      data: {songs : songsArray, playlistId : playlistId},
+      success: response => {
+      $('.showTable').empty();
+      response.songs.forEach(song=>{
+        $('.showTable').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+      });
+      $('#showMessages').append('songs removed from playlist');
+      }
+    });
+    e.preventDefault();
+  }
 
   function genreFilter(e){
     var genreArray = [];

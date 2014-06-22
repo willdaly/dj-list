@@ -1,24 +1,37 @@
 extends ../shared/template
 
 block content
-  table.table.table-bordered.table-hover.table-condensed#showTable
-    thead
-      tr
-        td bpm
-        td key
-        td song
-        td artist
-        td album
-        td genre
-        td.glyphicon.glyphicon-trash
-    tbody
-      each song in songs
+
+  .controls.col-md-2
+    input.playlistId.hidden(value='#{playlist._id}', placeholder='#{playlist.name}')
+    .input-group
+      input.form-control(type='number', name='move', placeholder='check song, +/-')
+      span.input-group-btn
+        button.btn.btn-default.glyphicon.glyphicon-sort(type='button')#move song
+
+    button.btn.btn-default(type='button')#deleteSong remove selected songs
+    #showMessages
+  .col-md-10
+    //- h1.playlistId(value='#{playlist._id}')= playlist.name
+    table.table.table-bordered.table-hover.table-condensed.showTable
+      thead
         tr
-          td= song.BPM
-          td= song.Key
-          td= song.Song
-          td= song.Artist
-          td= song.Album
-          td= song.genre
-          td
-            input(type='checkbox')
+          td.glyphicon.glyphicon-ok
+          td bpm
+          td key
+          td song
+          td artist
+          td album
+          td genre
+
+      tbody
+        each song in songs
+          tr
+            td
+              input(type='checkbox', value='#{song._id}')
+            td= song.BPM
+            td= song.Key
+            td= song.Song
+            td= song.Artist
+            td= song.Album
+            td= song.genre

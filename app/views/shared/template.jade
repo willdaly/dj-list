@@ -26,10 +26,10 @@ html
           ul.nav.navbar-nav.navbar-right
             li
               if (user)
-                a(href='#') logged in as #{user.email}
+                a(href='#').glyphicon.glyphicon-user #{user.email}
             li
               if (user)
-                form(method='POST', action='logout')
+                form(method='POST', action='/logout')
                   button.btn.btn-default.btn-sm logout
 
 
