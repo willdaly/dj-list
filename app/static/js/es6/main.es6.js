@@ -57,11 +57,12 @@
       type: 'POST',
       data: {songs : songsArray, playlistId : playlistId},
       success: response => {
+      $('.showTable input:checkbox:checked').closest('tr').remove();
       // $('.showTable').empty();
       // response.songs.forEach(song=>{
       //   $('.showTable').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
       // });
-      $('#showMessages').append('songs removed from playlist');
+      $('#showMessages').empty().text('songs removed from playlist');
       }
     });
     e.preventDefault();
@@ -245,7 +246,7 @@
       type: 'put',
       data: {songs: songsArray, playlistId : id},
       success: response => {
-        $('#message').append(`<p>${name} updated</p>`);
+        $('#message').empty().append(`<p>${name} updated</p>`);
       }
     });
     e.preventDefault();

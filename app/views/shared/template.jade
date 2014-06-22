@@ -10,8 +10,14 @@ html
     nav.navbar.navbar-default(role='navigation')
       .container-fluid
           .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.collapse.navbar-collapse')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
             a.navbar-brand(href='/') DJ List
-            ul.nav.navbar-nav
+
+            ul.nav.navbar-nav.collapse.navbar-collapse
               li
                 if (!user)
                   a(href='/login') login or register
@@ -23,7 +29,7 @@ html
                 if (user)
                   a(href='/playlists') Playlists
 
-          ul.nav.navbar-nav.navbar-right
+          ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
             li
               if (user)
                 a(href='#').glyphicon.glyphicon-user #{user.email}
