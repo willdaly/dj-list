@@ -57,10 +57,10 @@
       type: 'POST',
       data: {songs : songsArray, playlistId : playlistId},
       success: response => {
-      $('.showTable').empty();
-      response.songs.forEach(song=>{
-        $('.showTable').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-      });
+      // $('.showTable').empty();
+      // response.songs.forEach(song=>{
+      //   $('.showTable').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+      // });
       $('#showMessages').append('songs removed from playlist');
       }
     });
@@ -186,10 +186,10 @@
       type: 'POST',
       data: {Key:data, genre: genreArray},
       success: response => {
-        $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
-        });
+        // $('#searchResults').empty();
+        // response.songs.forEach(song=>{
+        //   $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.Song}</td><td>${song.BPM}</td><td>${song.Key}</td><td>${song.genre}</td></tr>`);
+        // });
       }
     });
     e.preventDefault();

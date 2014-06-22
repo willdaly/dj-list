@@ -23,7 +23,10 @@ exports.removeSong = (req, res)=>{
   var _id = Mongo.ObjectID(req.body.playlistId);
   var songs = req.body.songs;
   playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-    songs.forEach(song=>{playlist.songs.pop(song);});
+    songs.forEach(song=>{
+      var index = playlist.songs.indexOf(song);
+      playlist.songs.splice(index, 1);
+      });
     playlistCollection.save(playlist, ()=>{
       listCollection.find({_id : {$in: playlist.songs}}).toArray((err, sngs)=>{
         res.render('playlists/show', {songs : songs, playlist : playlist});
