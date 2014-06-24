@@ -3,11 +3,11 @@ extends ../shared/template
 block content
 
   .controls.col-md-2
-    input.playlistId.hidden(value='#{playlist._id}', placeholder='#{playlist.name}')
-    .input-group
-      input.form-control(type='number', name='move', placeholder='check song, +/-')
-      span.input-group-btn
-        button.btn.btn-default.glyphicon.glyphicon-sort(type='button')#move song
+    //- input.playlistId.hidden(value='#{playlist._id}', placeholder='#{playlist.name}')
+    //- .input-group
+    //-   input.form-control(type='number', name='move', placeholder='check song, +/-')
+    //-   span.input-group-btn
+    //-     button.btn.btn-default.glyphicon.glyphicon-sort(type='button')#move song
 
     button.btn.btn-default(type='button')#deleteSong remove selected songs
     #showMessages

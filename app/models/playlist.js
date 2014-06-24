@@ -1,7 +1,6 @@
 var playlistCollection = global.nss.db.collection('playlists');
-// var userCollection = global.nss.db.collection('users');
 var Mongo = require('mongodb');
-// var _ = require('lodash');
+
 
 class Playlist {
   static create (obj, userId, fn){
@@ -13,13 +12,6 @@ class Playlist {
         playlist.songs = obj.songs;
         playlist.userId = userId;
         playlistCollection.save(playlist, ()=>fn(playlist));
-        // update user
-        // var id = Mongo.ObjectID(userId);
-        // userCollection.findOne({_id:id}, (e, u)=>{
-        //   u = _.create()
-        //   u.playlists.push(playlist);
-        //   userCollection.save(u);
-        // });
       }else{
         fn(null);
       }

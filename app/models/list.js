@@ -39,6 +39,56 @@ class List {
     });
   }
 
+  static transpose (obj, fn){
+    var trans = obj.trans;
+    var factor = (trans * 0.06);
+    var bpm;
+    if (factor < 0){
+      factor = factor - 1;
+      bpm = obj.BPM / factor;
+    }else{
+      factor = factor + 1;
+      bpm = obj.BPM * factor;
+    }
+    bpm = Math.abs(bpm);
+    var lowBPM = Math.floor(bpm);
+    var highBPM = Math.ceil(bpm);
+    var oldkey = obj.Key;
+    var oldkeyLength = oldkey.length;
+    var tonality = oldkey.substr(oldkeyLength -1, 1);
+    var majorKeyArray = ['AbM', 'AM',' BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
+    var minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
+    var key;
+    var index;
+    if (tonality === 'M'){
+        index = parseInt(majorKeyArray.indexOf(oldkey));
+        index = index + Number(trans);
+        console.log('******index******');
+        console.log(index);
+        console.log('******old key******');
+        console.log(majorKeyArray[index]);
+        key = majorKeyArray[index];
+        console.log('******major key******');
+        console.log(key);
+    }else{
+      index = parseInt(minorKeyArray.indexOf(oldkey));
+      index = index + Number(trans);
+      console.log('******index******');
+      console.log(index);
+      console.log('******old key******');
+      console.log(majorKeyArray[index]);
+      key = minorKeyArray[index];
+      console.log('******minor key******');
+      console.log(key);
+    }
+    var genre = obj.genre;
+    listCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
+      console.log('******list******');
+      console.log(list);
+      fn(list);
+    });
+  }
+
   static findByArtist (Artist, fn){
     listCollection.find({Artist: Artist}).toArray((err, list)=>{
       fn(list);

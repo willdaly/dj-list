@@ -1,6 +1,5 @@
 'use strict';
 
-// var lists = global.nss.db.collection('lists');
 var traceur = require('traceur');
 var List = traceur.require(__dirname + '/../models/list.js');
 var playlistCollection = global.nss.db.collection('playlists');
@@ -55,6 +54,12 @@ exports.songSearch = (req, res)=>{
 
 exports.genreFilter = (req, res)=>{
   List.findByGenre(req.body.genre, songs=>{
+    res.send({songs: songs});
+  });
+};
+
+exports.transpose = (req, res)=>{
+  List.transpose(req.body, songs=>{
     res.send({songs: songs});
   });
 };

@@ -72,7 +72,7 @@ block content
 
 
     button.btn.btn-default.btn-lg#bpmKeyFilter Search
-    hr
+
     .input-group
       //- span.input-group-addon transpose
       input.form-control(type='number', name='transpose', min='-5', max='5', placeholder='add song, select +/- semitone')#transpose
@@ -115,10 +115,10 @@ block content
       thead
         tr
           th.glyphicon.glyphicon-ok
-          th artist
-          th album
-          th song
           th bpm
           th key
+          th song
+          th artist
+          th album
           th genre
       tbody#searchResults
