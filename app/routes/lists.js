@@ -12,8 +12,6 @@ exports.index = (req, res)=>{
       res.render('list/index', { title: 'dj-List search'});
     }
   });
-
-
 };
 
 exports.key = (req, res)=>{
