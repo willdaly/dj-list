@@ -63,6 +63,12 @@ class List {
     if (tonality === 'M'){
         index = parseInt(majorKeyArray.indexOf(oldkey));
         index = index + Number(trans);
+        if(11 < index){
+          index = index -12;
+        }
+        if (index < 0){
+          index = index + 12;
+        }
         console.log('******index******');
         console.log(index);
         console.log('******old key******');
@@ -73,6 +79,12 @@ class List {
     }else{
       index = parseInt(minorKeyArray.indexOf(oldkey));
       index = index + Number(trans);
+      if(11 < index){
+        index = index -12;
+      }
+      if (index < 0){
+        index = index + 12;
+      }
       console.log('******index******');
       console.log(index);
       console.log('******old key******');
