@@ -14,6 +14,12 @@ exports.index = (req, res)=>{
   });
 };
 
+exports.create = (req, res)=>{
+  List.create(req.body, song=>{
+    res.send({songs : song});
+  });
+};
+
 exports.key = (req, res)=>{
   List.findByKey(req.body, songs=>{
     res.send({songs : songs});

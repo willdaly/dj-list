@@ -74,8 +74,8 @@ block content
     button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
     .input-group
-      //- span.input-group-addon transpose
-      input.form-control(type='number', name='transpose', min='-5', max='5', placeholder='add song, select +/- semitone')#transpose
+      span.input-group-addon.glyphicon.glyphicon-sort
+      input.form-control(type='number', name='transpose', min='-5', max='5', placeholder='check song, semitones')#transpose
       span.input-group-btn
         button.btn.btn-default(type='button')#transposeFilter Transpose
 
@@ -95,12 +95,12 @@ block content
     hr
     .input-group
       //- span.input-group-addon Playlist
-      input.form-control(type='text', name='name', placeholder='enter name, add songs')#name
+      input.form-control(type='text', name='name', placeholder='check songs, enter name')#name
       span.input-group-btn
         button.btn.btn-default(type='button')#saveSet Create Playlist
     .input-group
       select.form-control#playlistId
-        option select playlist and songs
+        option check songs, select playlist
         if (playlists)
           each playlist in playlists
             //- option= playlist.name
@@ -108,6 +108,82 @@ block content
       span.input-group-btn
         button.btn.btn-default(type='button')#addToPlaylist Add
     #message
+    hr
+    button.btn.btn-default.btn-md(type='button', data-toggle='modal', data-target='#createSong') Enter New Song
+    div(class='modal fade', id='createSong', tabindex='-1', role='dialog')
+          .modal-dialog
+            .modal-content
+              .modal-header(style='text-align: center;')
+                button.close(type='button', data-dismiss='modal') &times;
+                h4.modal-title#myModalLabel Add a song to the database
+              .modal-body
+                .input-group
+                  span.input-group-addon BPM
+                  input.form-control(type='number', name='BPM')#newSongBPM
+                .input-group
+                  span.input-group-addon Key
+                  select.form-control#newSongKey
+                    option AbM
+                    option abm
+                    option AM
+                    option am
+                    option BbM
+                    option bbm
+                    option BM
+                    option bm
+                    option CM
+                    option cm
+                    option C#M
+                    option c#m
+                    option DM
+                    option dm
+                    option EbM
+                    option ebm
+                    option EM
+                    option em
+                    option FM
+                    option fm
+                    option F#M
+                    option f#m
+                    option GM
+                    option gm
+                    option G#M
+                    option g#m
+                .input-group
+                  span.input-group-addon Song
+                  input.form-control(type='text', name='Song')#newSongName
+                .input-group
+                  span.input-group-addon Artist
+                  input.form-control(type='text', name='Artist')#newSongArtist
+                .input-group
+                  span.input-group-addon Album
+                  input.form-control(type='text', name='Album')#newSongAlbum
+                .newSongGenre
+                  label Rap
+                  input(type='checkbox', value='Hip-Hop')
+                  label Soul
+                  input(type='checkbox', value='Soul')
+                  label Jazz
+                  input(type='checkbox', value='Jazz')
+                  label Rock
+                  input(type='checkbox', value='Rock')
+                  label Pop
+                  input(type='checkbox', value='Pop')
+                  label Melodiya
+                  input(type='checkbox', value='Melodiya')
+                  label OST
+                  input(type='checkbox', value='OST')
+                  label Electronic
+                  input(type='checkbox', value='Electronic')
+                  label Battle
+                  input(type='checkbox', value='Battle')
+                  label 45 King
+                  input(type='checkbox', value='45 King')
+                  label Instrumentals
+                  input(type='checkbox', value='Instrumentals')
+              .modal-footer
+                button.submit.btn.btn-info#createNewSong Add song
+    br
     br
 
   .col-md-9

@@ -3,13 +3,14 @@ var listCollection = global.nss.db.collection('lists');
 
 class List {
   static create(obj, fn){
-    var list = new List();
-    list.artist = obj.Artist;
-    list.song = obj.Song;
-    list.bpm = obj.BPM;
-    list.key = obj.Key;
-    list.transpose = '';
-    fn(list);
+    var song = new List();
+    song.Artist = obj.Artist;
+    song.Album = obj.Album || '';
+    song.Song = obj.Title;
+    song.BPM = parseInt(obj.BPM);
+    song.Key = obj.Key;
+    song.genre = obj.genre;
+    listCollection.save(song, ()=>fn(song));
   } //create
 
   static findByKey(obj, fn) {

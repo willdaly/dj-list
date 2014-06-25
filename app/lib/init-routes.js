@@ -31,6 +31,7 @@ function load(app, fn){
 
 
   app.get('/lists', dbg, lists.index);
+  app.post('/createSong', dbg, lists.create);
   app.post('/key', dbg, lists.key);
   app.post('/bpm', dbg, lists.bpm);
   app.post('/bpmKey', dbg, lists.bpmKey);

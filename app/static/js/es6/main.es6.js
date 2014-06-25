@@ -36,9 +36,30 @@
 
     $('#addToPlaylist').click(addToPlaylist);
 
-
+    $('#createNewSong').click(createSong);
 
   } //init
+
+  function createSong(e){
+    var bpm = $('#newSongBPM').val();
+    var key = $('#newSongKey').val();
+    var title = $('#newSongName').val();
+    var artist = $('#newSongArtist').val();
+    var album = $('#newSongAlbum').val();
+    var genreArray = [];
+    $('.newSongGenre input:checkbox:checked').each(function(){
+      genreArray.push($(this).val());
+    });
+    $.ajax({
+      url: '/createSong',
+      type: 'POST',
+      data: {BPM: bpm, Key: key, Title: title, Artist: artist, Album: album, genre: genreArray},
+      success: response => {
+        $('#message').append(`<p>${title} saved</p>`);
+      }
+    });
+    e.preventDefault();
+  }
 
   function deleteSong (e){
     var songsArray = [];
@@ -150,20 +171,6 @@
         });
       }
     });
-    // var lowRange = transposition * -1;
-    // var highRange = transposition + 1;
-    // var transposeArray = _.range(lowRange, highRange);
-    // var lowBPM = $('#lowBPM').val();
-    // var highBPM = $('#highBPM').val();
-    // var key = $('#key').val();
-    // var majorKeyArray = ['AbM', 'AM', 'BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
-    // var minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
-    // var arrayCheck = $.inArray(key, majorKeyArray);
-    // if (arrayCheck !== -1){
-    //
-    // }else{
-    //
-    // }
     e.preventDefault();
   }
 
