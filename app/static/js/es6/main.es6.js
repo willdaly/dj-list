@@ -1,16 +1,14 @@
 /* jshint unused:false */
 
-// var _ = require('lodash');
-
 (function(){
 
   'use strict';
 
   $(document).ready(init);
 
-  // var genreArray = [];
-
   function init(){
+
+    $('#dp').click(dp);
 
     $('#deleteSong').click(deleteSong);
 
@@ -39,6 +37,19 @@
     $('#createNewSong').click(createSong);
 
   } //init
+
+  function dp (e) {
+    var id = $('#playlistToDelete').val();
+    $.ajax({
+      url: `/deletePlaylist/${id}`,
+      type: 'DELETE',
+      data: null,
+      success: response => {
+        $(`.flightCase[value=${id}]`).remove();
+      }
+    });
+    e.preventDefault();
+  }
 
   function createSong(e){
     var bpm = $('#newSongBPM').val();
@@ -272,10 +283,11 @@
     e.preventDefault();
   }
 
+
+
   function displaySlider () {
     $('.slider').noUiSlider({
 					start: [ 88, 102 ],
-          // orientation: 'vertical',
 					range: {
 						'min': 66,
 						'max': 193

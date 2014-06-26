@@ -19,6 +19,15 @@ exports.create = (req, res)=>{
   });
 };
 
+exports.delete = (req, res)=>{
+  var _id = Mongo.ObjectID(req.params.id);
+  playlistCollection.findAndRemove({_id:_id}, (err, pl)=>{
+    playlistCollection.find({userId : req.session.userId}).toArray((e, playlist)=>{
+      res.render('playlists/index', {playlists: playlist, title: 'Playlist index'});
+    });
+  });
+};
+
 exports.removeSong = (req, res)=>{
   var _id = Mongo.ObjectID(req.body.playlistId);
   var songs = req.body.songs;
