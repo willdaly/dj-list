@@ -3,6 +3,16 @@
 var traceur = require('traceur');
 var User = traceur.require(__dirname + '/../models/user.js');
 
+//new shit
+exports.bounce = (req, res, next)=>{
+  if(res.locals.user){
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
+//end
+
 exports.loginPage = (req, res)=>{
   res.render('users/login', {title: 'login page'});
 };

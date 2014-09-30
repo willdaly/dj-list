@@ -26,6 +26,10 @@ function load(app, fn){
   app.post('/login', dbg, users.login);
   app.post('/users', dbg, users.create);
   //bounce
+  //new shit
+  app.all('*', users.bounce);
+  //end
+  
   app.post('/logout', dbg, users.logout);
 
 

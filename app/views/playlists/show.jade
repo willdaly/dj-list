@@ -1,7 +1,8 @@
 extends ../shared/template
 
 block content
-
+  .page-header
+    h1= playlist.name
   .controls.col-md-2
     //- input.playlistId.hidden(value='#{playlist._id}', placeholder='#{playlist.name}')
     //- .input-group

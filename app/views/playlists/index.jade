@@ -1,19 +1,17 @@
 extends ../shared/template
 
 block content
-  //- .page-header
-  //-   h1= title
   #playlistIndexBody
     each playlist in playlists
       .flightCase(value='#{playlist._id}')
         .playlistName
           h3
             a(href='playlists/#{playlist._id}')= playlist.name
-    #deleteCase
 
-      .input-group
-        select.form-control#playlistToDelete
-          each playlist in playlists
-            option(value='#{playlist._id}')= playlist.name
-        span.input-group-btn
-          button.btn.btn-default(type='button')#dp delete
+  #deleteCase
+    .input-group
+      select.form-control#playlistToDelete
+        each playlist in playlists
+          option(value='#{playlist._id}')= playlist.name
+      span.input-group-btn
+        button.btn.btn-default(type='button')#dp delete
