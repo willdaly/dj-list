@@ -1,9 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Monoton);
 
-h1, .h1, h2, .h2, h3, .h3 {
+h1, h2, h3 {
   margin-top: 0px;
   margin-bottom: 10px;
-  font-family: 'Monoton', cursive;
 }
 
 th {
@@ -29,11 +28,17 @@ body {
 }
 
 .jumbotron {
+  font-family: 'Monoton', cursive;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.75);
   margin-top: 70px;
   padding-top: 24px;
   padding-bottom: 24px;
+  button{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
 }
 
 .panel-title {
@@ -41,18 +46,13 @@ body {
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-#loginBody {
-  margin: 0 auto;
-  margin-top: 70px;
-  // width: 35%;
-  .panel.panel-default {
-    background-color: rgba(255, 255, 255, 0.75);
-    text-align: center;
-    height: 150px;
-    width: 500px;
-    // button {
-    //   margin-bottom: 10px;
-    // }
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  .submit {
+    font-family: 'Monoton', cursive;
+    padding: 1em;
+    border-radius: 6px;
   }
 }
 

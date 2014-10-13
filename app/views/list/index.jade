@@ -2,6 +2,7 @@ extends ../shared/template
 
 block content
   .controls.col-md-3
+    h4 Select at least one genre
     .genres
       label Hip-Hop
       input(type='checkbox', value='Hip-Hop')
@@ -23,8 +24,8 @@ block content
       input(type='checkbox', value='Battle')
       label 45 King
       input(type='checkbox', value='45 King')
-      //- label Instrumental
-      //- input(type='checkbox', value='Instrumental')
+      label Instrumental
+      input(type='checkbox', value='Hip-Hop Instrumental')
       button.btn.btn-default.btn-sm#genreFilter genre filter
     .slider
     .input-group
@@ -179,8 +180,8 @@ block content
                   input(type='checkbox', value='Battle')
                   label 45 King
                   input(type='checkbox', value='45 King')
-                  //- label Instrumental
-                  //- input(type='checkbox', value='Instrumental')
+                  label Hip-Hop Instrumental
+                  input(type='checkbox', value='Hip-Hop Instrumental')
               .modal-footer
                 button.submit.btn.btn-info#createNewSong Add song
     br

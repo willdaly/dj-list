@@ -5,3 +5,4 @@ app/static/js/es6/compiled/*
 !app/static/js/es6/compiled/.gitkeep
 db/list.json
 db/user.json
+old

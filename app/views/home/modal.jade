@@ -1,0 +1,30 @@
+div(class='modal fade', id='signinmodal', tabindex='-1', role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal') &times;
+      .modal-body
+        form(action='/login', method='post')
+          .input-group
+            span.input-group-addon email
+            input.form-control(type='email', name='email', placeholder='')
+          .input-group
+            span.input-group-addon password
+            input.form-control(type='password', name='password', placeholder='password')
+          button.submit Sign In
+
+div(class='modal fade', id='registermodal', tabindex='-1', role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal') &times;
+      .modal-body
+        form(action='/users', method='post')
+          .input-group
+            span.input-group-addon Email
+            input.form-control(type='email', name='email', placeholder='email')
+
+          .input-group
+            span.input-group-addon password
+            input.form-control(type='password', name='password', placeholder='password')
+          button.submit Register
