@@ -9,19 +9,16 @@ nav.navbar.navbar-default(role='navigation')
         a.navbar-brand(href='/') DJ List
 
         ul.nav.navbar-nav.collapse.navbar-collapse
-          li
-            if (user)
+          if (user)
+            li
               a(href='/lists') Song Search
-
-          li
-            if (user)
+            li
               a(href='/playlists') Playlists
 
       ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
-        li
-          if (user)
+        if (user)
+          li
             a(href='#').glyphicon.glyphicon-user #{user.email}
-        li
-          if (user)
+          li
             form(method='POST', action='/logout')
               button.btn.btn-default.btn-sm logout

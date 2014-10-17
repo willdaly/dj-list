@@ -66,7 +66,7 @@
       type: 'POST',
       data: {BPM: bpm, Key: key, Title: title, Artist: artist, Album: album, genre: genreArray},
       success: response => {
-        $('#message').append(`<p>${title} saved</p>`);
+        $('#createSong').modal('hide');
       }
     });
     e.preventDefault();
@@ -123,13 +123,17 @@
       data: {Song: searchInput},
       success: response => {
         $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
+        if (response.songs.length > 0){
+          response.songs.forEach(song=>{
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+          });
+        } else {
+          $('#searchResults').append(`<tr><td></td><td></td><td></td><td>can't find ${searchInput}</td></tr>`);
+        }
       }
     });
     e.preventDefault();
-  }
+  } //songSearch
 
   function albumSearch (e) {
     var album = $('#searchInput').val();
@@ -139,9 +143,13 @@
       data: {Album: album},
       success: response => {
         $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
+        if (response.songs.length > 0){
+          response.songs.forEach(song=>{
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+          });
+        } else {
+          $('#searchResults').append(`<tr><td></td><td></td><td></td><td></td><td></td><td>can't find ${album}</td></tr>`);
+        }
       }
     });
     e.preventDefault();
@@ -155,9 +163,13 @@
       data: {Artist: searchInput},
       success: response => {
         $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
+        if (response.songs.length > 0){
+          response.songs.forEach(song=>{
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+          });
+        } else {
+          $('#searchResults').append(`<tr><td></td><td></td><td></td><td></td><td>can't find ${searchInput}</td></tr>`);
+        }
       }
     });
     e.preventDefault();

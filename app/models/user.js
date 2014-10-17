@@ -12,7 +12,6 @@ class User {
         user._id = Mongo.ObjectID(obj._id);
         user.email = obj.email;
         user.password = bcrypt.hashSync(obj.password, 8);
-        user.playlists = [];
         userCollection.save(user, ()=>fn(user));
       }else{
         fn(null);

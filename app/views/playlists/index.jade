@@ -2,11 +2,14 @@ extends ../shared/template
 
 block content
   #playlistIndexBody
-    each playlist in playlists
-      .flightCase(value='#{playlist._id}')
-        .playlistName
-          h3
-            a(href='playlists/#{playlist._id}')= playlist.name
+    if (playlists.length > 0)
+      each playlist in playlists
+        .flightCase(value='#{playlist._id}')
+          .playlistName
+            h3
+              a(href='playlists/#{playlist._id}')= playlist.name
+    else
+      h1 no playlists created yet          
 
   #deleteCase
     .input-group
