@@ -8,10 +8,6 @@
 
   function init(){
 
-    $('#dp').click(dp);
-
-    $('#deleteSong').click(deleteSong);
-
     $('#keyFilter').click(key);
 
     displaySlider();
@@ -30,26 +26,9 @@
 
     $('#transposeFilter').click(transpose);
 
-    $('#saveSet').click(saveSet);
-
-    $('#addToPlaylist').click(addToPlaylist);
-
     $('#createNewSong').click(createSong);
 
   } //init
-
-  function dp (e) {
-    var id = $('#playlistToDelete').val();
-    $.ajax({
-      url: `/deletePlaylist/${id}`,
-      type: 'DELETE',
-      data: null,
-      success: response => {
-        $(`.flightCase[value=${id}]`).remove();
-      }
-    });
-    e.preventDefault();
-  }
 
   function createSong(e){
     var bpm = $('#newSongBPM').val();
@@ -72,46 +51,27 @@
     e.preventDefault();
   }
 
-  function deleteSong (e){
-    var songsArray = [];
-    $('.showTable input:checkbox:checked').each(function(){
-      songsArray.push($(this).val());
-    });
-    // var id = $('.playlistId').val();
-    var url = window.location.pathname;
-    console.log(url);
-    var playlistId = url.substring(url.lastIndexOf('/') + 1);
-    console.log(playlistId);
-    // console.log(id);
-    console.log(songsArray);
-    $.ajax({
-      url: '/playlist',
-      type: 'POST',
-      data: {songs : songsArray, playlistId : playlistId},
-      success: response => {
-      $('.showTable input:checkbox:checked').closest('tr').remove();
-      $('#showMessages').empty().text('songs removed from playlist');
-      }
-    });
-    e.preventDefault();
-  } //deleteSong
-
   function genreFilter(e){
-    var genreArray = [];
-    $('.genres input:checkbox:checked').each(function(){
-      genreArray.push($(this).val());
-    });
-    $.ajax({
-      url: '/genreFilter',
-      type: 'POST',
-      data: {genre: genreArray},
-      success: response => {
-        $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
-      }
-    });
+    var genreChecked = $('.genres input').is(':checked');
+    if (genreChecked){
+      var genreArray = [];
+      $('.genres input:checkbox:checked').each(function(){
+        genreArray.push($(this).val());
+      });
+      $.ajax({
+        url: '/genreFilter',
+        type: 'POST',
+        data: {genre: genreArray},
+        success: response => {
+          $('#searchResults').empty();
+          response.songs.forEach(song=>{
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+          });
+        }
+      });
+    } else {
+      $('#genremessage').css('color', 'red');
+    }
     e.preventDefault();
   } //genre filter
 
@@ -177,23 +137,33 @@
 
   function transpose (e) {
     var trans = $('#transpose').val();
-    var bpm = $('#searchResults input:checkbox:checked').closest('td').next().text();
-    var key = $('#searchResults input:checkbox:checked').closest('td').next().next().text();
-    var genreArray = [];
-    $('.genres input:checkbox:checked').each(function(){
-      genreArray.push($(this).val());
-    });
-    $.ajax({
-      url: '/transpose',
-      type: 'POST',
-      data: {trans : trans, BPM: bpm, Key: key, genre: genreArray},
-      success: response => {
-        $('#searchResults').empty();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
-      }
-    });
+    var bpm = $('#searchResults input:checkbox:checked').first().closest('td').next().text();
+    var key = $('#searchResults input:checkbox:checked').first().closest('td').next().next().text();
+    var genreChecked = $('.genres input').is(':checked');
+    if (genreChecked){
+      var genreArray = [];
+      $('.genres input:checkbox:checked').each(function(){
+        genreArray.push($(this).val());
+      });
+      $.ajax({
+        url: '/transpose',
+        type: 'POST',
+        data: {trans : trans, BPM: bpm, Key: key, genre: genreArray},
+        success: response => {
+          if (response.songs.length > 0){
+            $('#searchResults').empty();
+            response.songs.forEach(song=>{
+              $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+            });
+          } else {
+            $('#message').append('<p>didn\'t find anything</p>');
+            $('#message p').delay( 1000 ).fadeOut( 500 );
+          }
+        }
+      });
+    } else {
+      $('#genremessage').css('color', 'red').animate({color: 'black'}, 500);
+    }
     e.preventDefault();
   }
 
@@ -260,43 +230,6 @@
     e.preventDefault();
   }
 
-  function saveSet (e) {
-    var songsArray = [];
-    $('#searchResults input:checkbox:checked').each(function(){
-      songsArray.push($(this).val());
-    });
-    var name = $('#name').val();
-    $.ajax({
-      url: '/createPlaylist',
-      type: 'POST',
-      data: {songs: songsArray, name: name},
-      success: response => {
-        $('#message').append(`<p>${name} saved</p>`);
-      }
-    });
-    e.preventDefault();
-  }
-
-  function addToPlaylist (e) {
-    var songsArray = [];
-    $('#searchResults input:checkbox:checked').each(function(){
-      songsArray.push($(this).val());
-    });
-    console.log(songsArray);
-    var id = $('#playlistId').val();
-    $.ajax({
-      url: '/addToPlaylist',
-      type: 'put',
-      data: {songs: songsArray, playlistId : id},
-      success: response => {
-        $('#message').empty().append(`<p>${name} updated</p>`);
-      }
-    });
-    e.preventDefault();
-  }
-
-
-
   function displaySlider () {
     $('.slider').noUiSlider({
 					start: [ 88, 102 ],
@@ -322,7 +255,5 @@
           } //serialization
 				}); //noUISlider
   } //displaySlider
-
-
 
 })();

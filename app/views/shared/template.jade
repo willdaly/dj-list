@@ -4,6 +4,7 @@ html
     meta(charset='utf-8')
     link(rel='shortcut icon', href='/img/favicon.ico')
     title= title
+    link(href="/jquery-ui/jquery-ui.min.css", rel="stylesheet")
     link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
     link(href='/css/jquery.nouislider.css', rel='stylesheet')
     link(href='/less/app.css', rel='stylesheet')
@@ -12,13 +13,13 @@ html
     block content
 
     script(src='/js/vendor/jquery-2.1.1.js')
-    script(src='/js/vendor/jquery.nouislider.min.js')
+    script(src="/jquery-ui/jquery-ui.min.js")
     script(src='/js/vendor/lodash-2.4.1.js')
     script(src='/js/vendor/moment-2.6.0.js')
     script(src='/js/vendor/traceur.js')
     script(src='/socket.io/socket.io.js')
     script(src='/js/es5/main.js')
-    script(src='/js/es6/compiled/main.js')
+    script(src='/js/es6/compiled/playlists.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
     script(src='/js/es6/compiled/sockets.js')
 

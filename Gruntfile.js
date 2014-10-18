@@ -21,7 +21,9 @@ module.exports = function(grunt){
         'test/**/*.js',
         'app/**/*.js',
         '!app/static/js/vendor/**/*.js',
-        '!app/static/js/es6/compiled/**/*.js'
+        '!app/static/js/es6/compiled/**/*.js',
+        '!app/static/jquery-ui/*.js',
+        '!app/static/jquery-ui/external/jquery/*.js'
       ]
     },
     // ---------------------------------------------------------------------- //
