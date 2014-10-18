@@ -22,13 +22,10 @@ function load(app, fn){
   app.all('*', users.lookup);
   app.get('/', dbg, home.index);
 
-  app.get('/login', dbg, users.loginPage);
   app.post('/login', dbg, users.login);
   app.post('/users', dbg, users.create);
   //bounce
-  //new shit
   app.all('*', users.bounce);
-  //end
   
   app.post('/logout', dbg, users.logout);
 

@@ -11,10 +11,6 @@ exports.bounce = (req, res, next)=>{
   }
 };
 
-exports.loginPage = (req, res)=>{
-  res.render('users/login', {title: 'login page'});
-};
-
 exports.login = (req, res)=>{
   User.login(req.body, user=>{
     if (user){
