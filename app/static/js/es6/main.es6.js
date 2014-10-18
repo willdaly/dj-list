@@ -24,7 +24,17 @@
 
     $('#genreFilter').click(genreFilter);
 
-    $('#transposeFilter').click(transpose);
+    $('#plusOne').click(plusOne);
+    $('#minusOne').click(minusOne);
+    $('#plusTwo').click(plusTwo);
+    $('#minusTwo').click(minusTwo);
+    $('#plusThree').click(plusThree);
+    $('#minusThree').click(minusThree);
+    $('#plusFour').click(plusFour);
+    $('#minusFour').click(minusFour);
+    $('#plusFive').click(plusFive);
+    $('#minusFive').click(minusFive);
+
 
     $('#createNewSong').click(createSong);
 
@@ -36,7 +46,64 @@
 
     $('#deleteSong').click(deleteSong);
 
+    $('#playlists').click(playlists);
+
   } //init
+
+  function playlists() {
+    $('#songControls').toggle();
+    $('#playlistControls').toggle();
+  }
+
+  function plusOne() {
+    var trans = 1;
+    transpose(trans);
+  }
+
+  function minusOne() {
+    var trans = -1;
+    transpose(trans);
+  }
+
+  function plusTwo() {
+    var trans = 2;
+    transpose(trans);
+  }
+
+  function minusTwo() {
+    var trans = -2;
+    transpose(trans);
+  }
+
+  function plusThree() {
+    var trans = 3;
+    transpose(trans);
+  }
+
+  function minusThree() {
+    var trans = -3;
+    transpose(trans);
+  }
+
+  function plusFour() {
+    var trans = 4;
+    transpose(trans);
+  }
+
+  function minusFour() {
+    var trans = -4;
+    transpose(trans);
+  }
+
+  function plusFive() {
+    var trans = 5;
+    transpose(trans);
+  }
+
+  function minusFive() {
+    var trans = -5;
+    transpose(trans);
+  }
 
   function saveSet (e) {
     var songsArray = [];
@@ -223,13 +290,10 @@
     e.preventDefault();
   } //artistSearch
 
-  function transpose (e) {
-    var trans = $('#transpose').val();
-    var bpm = $('#searchResults input:checkbox:checked').first().closest('td').next().text();
-    var key = $('#searchResults input:checkbox:checked').first().closest('td').next().next().text();
+  function transpose (trans) {
+    var bpm = $('#lowBPM').val();
+    var key = $('#key').val();
     var genreChecked = $('.genres input').is(':checked');
-    var songChecked = $('#searchResults input').is(':checked');
-    if (songChecked) {
       if (genreChecked){
         var genreArray = [];
         $('.genres input:checkbox:checked').each(function(){
@@ -255,11 +319,6 @@
         $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
         $('#message a').delay( 2500 ).fadeOut( 500 );
       }
-    } else {
-      $('#message').append('<a href="#">must check one song</a>');
-      $('#message a').delay( 2500 ).fadeOut( 500 );
-    }
-    e.preventDefault();
   }
 
   function bpmKey (e) {

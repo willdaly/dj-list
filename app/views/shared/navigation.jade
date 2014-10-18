@@ -6,17 +6,37 @@ nav.navbar.navbar-default(role='navigation')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='/') DJ List
+        a.navbar-brand(href='#') DJ List
 
         ul.nav.navbar-nav.collapse.navbar-collapse
           if (user)
+            //- li
+            //-   a(href='/lists') Song Search
             li
-              a(href='/lists') Song Search
+              //- a(href='/playlists') Playlists
+              a(href='#')#playlists Song Search / Playlists
             li
-              a(href='/playlists') Playlists
-          li#message
+              a(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
+
+        if (user)
+          form.navbar-form.navbar-left.dropdown(role='search')
+            .form-group
+                input.form-control(type='text', name='search', placeholder='Artist, Album, Song, Genre')#searchInput
+              button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
+                  span.caret
+                ul#searchbar.dropdown-menu
+                  li
+                    a(href='#')#artistSearch Artist
+                  li
+                    a(href='#')#albumSearch Album
+                  li
+                    a(href='#')#songSearch Song
+                  li
+                    a(href='#')#genreFilter Checked Genres
 
       ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
+        li#message
+
         if (user)
           li
             a(href='#').glyphicon.glyphicon-user #{user.email}
