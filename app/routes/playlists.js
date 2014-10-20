@@ -58,12 +58,16 @@ exports.update = (req, res)=>{
 exports.show = (req, res) =>{
   var _id = Mongo.ObjectID(req.params.id);
   playlistCollection.findOne({_id:_id}, (err, pl)=>{
-    var songsArray = [];
-    pl.songs.forEach(id =>{
-      songsArray.push(Mongo.ObjectID(id));
-    });
-    songCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
-      res.send({songs : songs, playlist : pl});
+    if (pl.songs.length > 0){
+      var songsArray = []; //if
+      pl.songs.forEach(id =>{
+        songsArray.push(Mongo.ObjectID(id));
       });
-  });
+      songCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
+        res.send({songs : songs, playlist : pl});
+      }); //if
+    }else{
+      res.send({ songs: 0, playlist : pl});
+    }
+  }); //playlist find one
 };

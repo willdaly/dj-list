@@ -51,22 +51,26 @@
       type: 'POST',
       data: null,
       success: response => {
-        $('ul#playlistsIndex.list-group li').hide();
-        $(this).show();
-        $('#deleteSong').show();
+        $('ul#playlistsIndex.list-group li').not(this).remove();
         $('#createPlaylist').hide();
         $('#searchResults').empty();
         $('#deletePlaylist').show();
-        response.songs.forEach(song=>{
-          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        });
+        $('#deleteSong').show();
+        if (response.songs.length > 0) {
+          response.songs.forEach(song=>{
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+          });
+        } else {
+          $('#searchResults').append('<tr><td></td><td></td><td></td><td>empty playlist</td></tr>');
+        }
       }
     });
   }
 
   function songsControls() {
     $('#playlistControls').hide();
-    $(this).parent().addClass('active');
+    $(this).addClass('active');
+    $('#songsButton').parent().addClass('active');
     $('#playlistsButton').parent().removeClass('active');
     $('#songControls').show();
   }
@@ -122,7 +126,9 @@
   }
 
   function getplaylistindex (){
-    $('.list-group-item:visible').hide();
+    $('#songsButton').parent().removeClass('active');
+    $('#playlistsButton').parent().addClass('active');
+    $('.list-group-item:visible').remove();
     $.ajax({
       url: '/playlists',
       type: 'POST',

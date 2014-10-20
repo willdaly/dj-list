@@ -1,6 +1,5 @@
 var songCollection = global.nss.db.collection('lists');
 
-
 class Song {
   static create(obj, fn){
     var song = new Song();
@@ -89,19 +88,19 @@ class Song {
   }
 
   static findByArtist (Artist, fn){
-    songCollection.find({Artist: Artist}).toArray((err, songs)=>{
+    songCollection.find({'Artist' : { $regex: new RegExp('^' + Artist.toLowerCase(), 'i')  }}).toArray((err, songs)=>{
       fn(songs);
     });
   } //findByArtist
 
   static findByAlbum (Album, fn){
-    songCollection.find({Album: Album}).toArray((err, songs)=>{
+    songCollection.find({'Album' : { $regex: new RegExp('^' + Album.toLowerCase(), 'i')  }}).toArray((err, songs)=>{
       fn(songs);
     });
   } //findByAlbum
 
-  static findBySong (Song, fn){
-    songCollection.find({Song: Song}).toArray((err, song)=>{
+  static findBySong (title, fn){
+    songCollection.find({'Song' : { $regex: new RegExp('^' + title.toLowerCase(), 'i')  }}).toArray((err, song)=>{
       fn(song);
     });
   } //findBySong
