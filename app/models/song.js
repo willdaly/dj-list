@@ -1,22 +1,22 @@
-var listCollection = global.nss.db.collection('lists');
+var songCollection = global.nss.db.collection('lists');
 
 
-class List {
+class Song {
   static create(obj, fn){
-    var song = new List();
+    var song = new Song();
     song.Artist = obj.Artist;
     song.Album = obj.Album || '';
     song.Song = obj.Title;
     song.BPM = parseInt(obj.BPM);
     song.Key = obj.Key;
     song.genre = obj.genre;
-    listCollection.save(song, ()=>fn(song));
+    songCollection.save(song, ()=>fn(song));
   } //create
 
   static findByKey(obj, fn) {
     var Key = obj.Key;
     var genre = obj.genre;
-    listCollection.find({Key:Key, genre:{$in: genre}}).toArray((err, list)=>{
+    songCollection.find({Key:Key, genre:{$in: genre}}).toArray((err, list)=>{
       fn(list);
       });
     } //findByKey
@@ -25,7 +25,7 @@ class List {
     var lowBPM = +obj.BPM[0];
     var highBPM = +obj.BPM[1];
     var genre = obj.genre;
-    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, genre:{$in: genre}}).toArray((err, list)=>{
+    songCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, genre:{$in: genre}}).toArray((err, list)=>{
       fn(list);
     });
   } //findByBPM
@@ -35,7 +35,7 @@ class List {
     var highBPM = +obj.BPM[1];
     var key = obj.Key;
     var genre = obj.genre;
-    listCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
+    songCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
       fn(list);
     });
   }
@@ -70,13 +70,7 @@ class List {
         if (index < 0){
           index = index + 12;
         }
-        console.log('******index******');
-        console.log(index);
-        console.log('******old key******');
-        console.log(majorKeyArray[index]);
         key = majorKeyArray[index];
-        console.log('******major key******');
-        console.log(key);
     }else{
       index = parseInt(minorKeyArray.indexOf(oldkey));
       index = index + Number(trans);
@@ -86,46 +80,38 @@ class List {
       if (index < 0){
         index = index + 12;
       }
-      console.log('******index******');
-      console.log(index);
-      console.log('******old key******');
-      console.log(majorKeyArray[index]);
       key = minorKeyArray[index];
-      console.log('******minor key******');
-      console.log(key);
     }
     var genre = obj.genre;
-    listCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
-      console.log('******list******');
-      console.log(list);
-      fn(list);
+    songCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, songs)=>{
+      fn(songs);
     });
   }
 
   static findByArtist (Artist, fn){
-    listCollection.find({Artist: Artist}).toArray((err, list)=>{
-      fn(list);
+    songCollection.find({Artist: Artist}).toArray((err, songs)=>{
+      fn(songs);
     });
   } //findByArtist
 
   static findByAlbum (Album, fn){
-    listCollection.find({Album: Album}).toArray((err, list)=>{
-      fn(list);
+    songCollection.find({Album: Album}).toArray((err, songs)=>{
+      fn(songs);
     });
   } //findByAlbum
 
   static findBySong (Song, fn){
-    listCollection.find({Song: Song}).toArray((err, list)=>{
-      fn(list);
+    songCollection.find({Song: Song}).toArray((err, song)=>{
+      fn(song);
     });
   } //findBySong
 
   static findByGenre (genre, fn){
-    listCollection.find({genre: {$in: genre}}).toArray((err, list)=>{
-      fn(list);
+    songCollection.find({genre: {$in: genre}}).toArray((err, songs)=>{
+      fn(songs);
     });
   } //findByGenre
 
   } //list
 
-module.exports = List;
+module.exports = Song;

@@ -16,34 +16,27 @@ module.exports = (req, res, next)=>{
 function load(app, fn){
   var home = traceur.require(__dirname + '/../routes/home.js');
   var users = traceur.require(__dirname + '/../routes/users.js');
-  var lists = traceur.require(__dirname + '/../routes/lists.js');
+  var songs = traceur.require(__dirname + '/../routes/songs.js');
   var playlists = traceur.require(__dirname + '/../routes/playlists.js');
 
   app.all('*', users.lookup);
   app.get('/', dbg, home.index);
-
   app.post('/login', dbg, users.login);
   app.post('/users', dbg, users.create);
-  //bounce
-  app.all('*', users.bounce);
-
+  app.all('*', users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
-
-
-
-  app.get('/lists', dbg, lists.index);
-  app.post('/createSong', dbg, lists.create);
-  app.post('/key', dbg, lists.key);
-  app.post('/bpm', dbg, lists.bpm);
-  app.post('/bpmKey', dbg, lists.bpmKey);
-  app.post('/artistSearch', dbg, lists.artistSearch);
-  app.post('/albumSearch', dbg, lists.albumSearch);
-  app.post('/songSearch', dbg, lists.songSearch);
-  app.post('/genreFilter', dbg, lists.genreFilter);
-  app.post('/transpose', dbg, lists.transpose);
+  app.get('/songs', dbg, songs.index);
+  app.post('/createSong', dbg, songs.create);
+  app.post('/key', dbg, songs.key);
+  app.post('/bpm', dbg, songs.bpm);
+  app.post('/bpmKey', dbg, songs.bpmKey);
+  app.post('/artistSearch', dbg, songs.artistSearch);
+  app.post('/albumSearch', dbg, songs.albumSearch);
+  app.post('/songSearch', dbg, songs.songSearch);
+  app.post('/genreFilter', dbg, songs.genreFilter);
+  app.post('/transpose', dbg, songs.transpose);
   app.post('/playlists', dbg, playlists.index);
   app.post('/playlists/:id', dbg, playlists.show);
-
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
   app.post('/playlist', dbg, playlists.removeSong);

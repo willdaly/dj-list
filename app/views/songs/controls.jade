@@ -1,9 +1,9 @@
 .controls.col-md-3
   ul( class='nav nav-pills nav-justified', role='tablist')
     li.active
-      a(href='#')#playlists Songs
+      a(href='#')#songsButton Songs
     li
-      a(href='#')#playlistsTrigger Playlists
+      a(href='#')#playlistsButton Playlists
   #songControls
     .genres
       label Hip-Hop
@@ -37,26 +37,26 @@
         button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Transpose
           span.caret
         ul#tp.dropdown-menu
-          li
-            a(href='#')#minusOne -1
-          li
-            a(href='#')#plusOne +1
-          li
-            a(href='#')#minusTwo -2
-          li
-            a(href='#')#plusTwo +2
-          li
-            a(href='#')#minusThree -3
-          li
-            a(href='#')#plusThree +3
-          li
-            a(href='#')#minusFour -4
-          li
-            a(href='#')#plusFour +4
-          li
-            a(href='#')#minusFive -5
-          li
-            a(href='#')#plusFive +5
+          li(value='-1')
+            a(href='#').transpose -1
+          li(value='1')
+            a(href='#').transpose +1
+          li(value='-2')
+            a(href='#').transpose -2
+          li(value='2')
+            a(href='#').transpose +2
+          li(value='-3')
+            a(href='#').transpose -3
+          li(value='3')
+            a(href='#').transpose +3
+          li(value='-4')
+            a(href='#').transpose -4
+          li(value='4')
+            a(href='#').transpose +4
+          li(value='-5')
+            a(href='#').transpose -5
+          li(value='5')
+            a(href='#').transpose +5
 
     .input-group#fastbpm
       span.input-group-addon fastest bpm
@@ -99,7 +99,7 @@
     button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
   #playlistControls(style='display: none')
-    .input-group
+    .input-group#createPlaylist
       input.form-control(type='text', name='name', placeholder='check songs, enter name')#name
       span.input-group-btn
         button.btn.btn-default(type='button')#saveSet Create Playlist
@@ -112,3 +112,5 @@
     //-   span.input-group-btn
     //-     button.btn.btn-default(type='button')#addToPlaylist Add
     ul#playlistsIndex.list-group
+    button.btn.btn-default(type='button', style='display: none')#deleteSong remove selected songs
+    button.btn.btn-default#deletePlaylist(type='button', style='display: none') Delete Playlist

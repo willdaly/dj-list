@@ -10,84 +10,41 @@
     $('#albumSearch').click(albumSearch);
     $('#songSearch').click(songSearch);
     $('#genreFilter').click(genreFilter);
-    $('#plusOne').click(plusOne);
-    $('#minusOne').click(minusOne);
-    $('#plusTwo').click(plusTwo);
-    $('#minusTwo').click(minusTwo);
-    $('#plusThree').click(plusThree);
-    $('#minusThree').click(minusThree);
-    $('#plusFour').click(plusFour);
-    $('#minusFour').click(minusFour);
-    $('#plusFive').click(plusFive);
-    $('#minusFive').click(minusFive);
+    $('.transpose').click(transpose);
     $('#createNewSong').click(createSong);
     $('#saveSet').click(saveSet);
     $('#addToPlaylist').click(addToPlaylist);
-    $('#dp').click(dp);
+    $('#playlistControls').on('click', '#deletePlaylist', deletePlaylist);
     $('#deleteSong').click(deleteSong);
-    $('#playlists').click(playlists);
-    $('#playlistsTrigger').click(getplaylistindex);
+    $('#songsButton').click(songsControls);
+    $('#playlistsButton').click(getplaylistindex);
     $('#playlistsIndex').on('click', 'li', showPlaylist);
   }
   function showPlaylist() {
+    var $__0 = this;
     var id = $(this).attr('id');
     $.ajax({
       url: ("/playlists/" + id),
       type: 'POST',
       data: null,
       success: (function(response) {
+        $('ul#playlistsIndex.list-group li').hide();
+        $($__0).show();
+        $('#deleteSong').show();
+        $('#createPlaylist').hide();
         $('#searchResults').empty();
+        $('#deletePlaylist').show();
         response.songs.forEach((function(song) {
           $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         }));
       })
     });
   }
-  function playlists() {
-    $('.active').removeClass('active');
-    $(this).addClass('active');
-    $('#songControls').toggle();
-    $('#playlistControls').toggle();
-  }
-  function plusOne() {
-    var trans = 1;
-    transpose(trans);
-  }
-  function minusOne() {
-    var trans = -1;
-    transpose(trans);
-  }
-  function plusTwo() {
-    var trans = 2;
-    transpose(trans);
-  }
-  function minusTwo() {
-    var trans = -2;
-    transpose(trans);
-  }
-  function plusThree() {
-    var trans = 3;
-    transpose(trans);
-  }
-  function minusThree() {
-    var trans = -3;
-    transpose(trans);
-  }
-  function plusFour() {
-    var trans = 4;
-    transpose(trans);
-  }
-  function minusFour() {
-    var trans = -4;
-    transpose(trans);
-  }
-  function plusFive() {
-    var trans = 5;
-    transpose(trans);
-  }
-  function minusFive() {
-    var trans = -5;
-    transpose(trans);
+  function songsControls() {
+    $('#playlistControls').hide();
+    $(this).parent().addClass('active');
+    $('#playlistsButton').parent().removeClass('active');
+    $('#songControls').show();
   }
   function saveSet(e) {
     var songsArray = [];
@@ -114,7 +71,6 @@
     $('#searchResults input:checkbox:checked').each(function() {
       songsArray.push($(this).val());
     });
-    console.log(songsArray);
     var id = $('#playlistId').val();
     $.ajax({
       url: '/addToPlaylist',
@@ -131,43 +87,41 @@
     });
     e.preventDefault();
   }
-  function dp(e) {
-    var id = $('#playlistToDelete').val();
+  function deletePlaylist() {
+    var id = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: ("/deletePlaylist/" + id),
       type: 'DELETE',
       data: null,
       success: (function(response) {
-        $((".flightCase[value=" + id + "]")).remove();
+        $('#searchResults').empty();
+        getplaylistindex();
       })
     });
-    e.preventDefault();
   }
-  function getplaylistindex(e) {
+  function getplaylistindex() {
+    $('.list-group-item:visible').hide();
     $.ajax({
       url: '/playlists',
       type: 'POST',
       data: null,
       success: (function(response) {
-        $('#songControls').toggle();
-        $('#playlistControls').toggle();
+        $('#deleteSong').hide();
+        $('#songControls').hide();
+        $('#playlistControls').show();
+        $('#createPlaylist').show();
         response.playlists.forEach((function(playlist) {
           $('#playlistsIndex').append(("<li class='list-group-item' id=" + playlist._id + ">" + playlist.name + "</li>"));
         }));
       })
     });
-    e.preventDefault();
   }
   function deleteSong(e) {
     var songsArray = [];
-    $('.showTable input:checkbox:checked').each(function() {
+    $('#searchResults input:checkbox:checked').each(function() {
       songsArray.push($(this).val());
     });
-    var url = window.location.pathname;
-    console.log(url);
-    var playlistId = url.substring(url.lastIndexOf('/') + 1);
-    console.log(playlistId);
-    console.log(songsArray);
+    var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: '/playlist',
       type: 'POST',
@@ -176,8 +130,7 @@
         playlistId: playlistId
       },
       success: (function(response) {
-        $('.showTable input:checkbox:checked').closest('tr').remove();
-        $('#showMessages').empty().text('songs removed from playlist');
+        $('#searchResults input:checkbox:checked').closest('tr').remove();
       })
     });
     e.preventDefault();
@@ -293,7 +246,8 @@
     });
     e.preventDefault();
   }
-  function transpose(trans) {
+  function transpose() {
+    var trans = $(this).parent().val();
     var bpm = $('#lowBPM').val();
     var key = $('#key').val();
     var genreChecked = $('.genres input').is(':checked');
