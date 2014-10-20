@@ -8,7 +8,7 @@ var Mongo = require('mongodb');
 
 exports.index = (req, res)=>{
   playlistCollection.find({userId : req.session.userId}).toArray((e, playlist)=>{
-    res.render('playlists/index', {playlists: playlist, title: 'Playlist index'});
+    res.send({playlists : playlist});
   });
 };
 
@@ -63,7 +63,7 @@ exports.show = (req, res) =>{
       songsArray.push(Mongo.ObjectID(id));
     });
     listCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
-      res.render('playlists/show', {songs : songs, playlist : pl});
+      res.send({songs : songs, playlist : pl});
       });
   });
 };

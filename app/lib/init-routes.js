@@ -26,7 +26,7 @@ function load(app, fn){
   app.post('/users', dbg, users.create);
   //bounce
   app.all('*', users.bounce);
-  
+
   app.post('/logout', dbg, users.logout);
 
 
@@ -41,10 +41,11 @@ function load(app, fn){
   app.post('/songSearch', dbg, lists.songSearch);
   app.post('/genreFilter', dbg, lists.genreFilter);
   app.post('/transpose', dbg, lists.transpose);
-  app.get('/playlists', dbg, playlists.index);
+  app.post('/playlists', dbg, playlists.index);
+  app.post('/playlists/:id', dbg, playlists.show);
+
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
-  app.get('/playlists/:id', dbg, playlists.show);
   app.post('/playlist', dbg, playlists.removeSong);
   app.delete('/deletePlaylist/:id', dbg, playlists.delete);
 

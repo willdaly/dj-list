@@ -48,9 +48,30 @@
 
     $('#playlists').click(playlists);
 
+    $('#playlistsTrigger').click(getplaylistindex);
+
+    $('#playlistsIndex').on('click', 'li', showPlaylist);
+
   } //init
 
+  function showPlaylist() {
+    var id = $(this).attr('id');
+    $.ajax({
+      url: `/playlists/${id}`,
+      type: 'POST',
+      data: null,
+      success: response => {
+        $('#searchResults').empty();
+        response.songs.forEach(song=>{
+          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+        });
+      }
+    });
+  }
+
   function playlists() {
+    $('.active').removeClass('active');
+    $(this).addClass('active');
     $('#songControls').toggle();
     $('#playlistControls').toggle();
   }
@@ -155,6 +176,22 @@
     });
     e.preventDefault();
   }
+
+  function getplaylistindex (e){
+    $.ajax({
+      url: '/playlists',
+      type: 'POST',
+      data: null,
+      success: response => {
+      $('#songControls').toggle();
+      $('#playlistControls').toggle();
+      response.playlists.forEach(playlist=>{
+        $('#playlistsIndex').append(`<li class='list-group-item' id=${playlist._id}>${playlist.name}</li>`);
+      });
+      }
+    });
+    e.preventDefault();
+  } //deleteSong
 
   function deleteSong (e){
     var songsArray = [];

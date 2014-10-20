@@ -26,8 +26,26 @@
     $('#dp').click(dp);
     $('#deleteSong').click(deleteSong);
     $('#playlists').click(playlists);
+    $('#playlistsTrigger').click(getplaylistindex);
+    $('#playlistsIndex').on('click', 'li', showPlaylist);
+  }
+  function showPlaylist() {
+    var id = $(this).attr('id');
+    $.ajax({
+      url: ("/playlists/" + id),
+      type: 'POST',
+      data: null,
+      success: (function(response) {
+        $('#searchResults').empty();
+        response.songs.forEach((function(song) {
+          $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        }));
+      })
+    });
   }
   function playlists() {
+    $('.active').removeClass('active');
+    $(this).addClass('active');
     $('#songControls').toggle();
     $('#playlistControls').toggle();
   }
@@ -121,6 +139,21 @@
       data: null,
       success: (function(response) {
         $((".flightCase[value=" + id + "]")).remove();
+      })
+    });
+    e.preventDefault();
+  }
+  function getplaylistindex(e) {
+    $.ajax({
+      url: '/playlists',
+      type: 'POST',
+      data: null,
+      success: (function(response) {
+        $('#songControls').toggle();
+        $('#playlistControls').toggle();
+        response.playlists.forEach((function(playlist) {
+          $('#playlistsIndex').append(("<li class='list-group-item' id=" + playlist._id + ">" + playlist.name + "</li>"));
+        }));
       })
     });
     e.preventDefault();
