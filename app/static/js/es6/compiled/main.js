@@ -12,9 +12,9 @@
     $('#genreFilter').click(genreFilter);
     $('.transpose').click(transpose);
     $('#createNewSong').click(createSong);
-    $('#saveSet').click(createPlaylist);
+    $('#createPlaylist').click(createPlaylist);
     $('#addToPlaylist').click(addToPlaylist);
-    $('#playlistControls').on('click', '#deletePlaylist', deletePlaylist);
+    $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
     $('#deleteSong').click(deleteSong);
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
@@ -36,8 +36,6 @@
           response.songs.forEach((function(song) {
             $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
           }));
-        } else {
-          $('#searchResults').append('<tr><td></td><td></td><td></td><td>empty playlist</td></tr>');
         }
       })
     });
@@ -115,12 +113,10 @@
         $('#songControls').hide();
         $('#playlistControls').show();
         $('#playlistsIndexControls').show();
-        if (response.playlists !== null) {
+        if (response.playlists.length > 0) {
           response.playlists.forEach((function(playlist) {
             $('#playlists').append(("<li class='list-group-item' id=" + playlist._id + ">" + playlist.name + "</li>"));
           }));
-        } else {
-          $('#playlists').append("<li class='list-group-item'>no playlists created yet</li>");
         }
       })
     });

@@ -28,11 +28,11 @@
 
     $('#createNewSong').click(createSong);
 
-    $('#saveSet').click(createPlaylist);
+    $('#createPlaylist').click(createPlaylist);
 
     $('#addToPlaylist').click(addToPlaylist);
 
-    $('#playlistControls').on('click', '#deletePlaylist', deletePlaylist);
+    $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
 
     $('#deleteSong').click(deleteSong);
 
@@ -59,8 +59,6 @@
           response.songs.forEach(song=>{
             $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
           });
-        } else {
-          $('#searchResults').append('<tr><td></td><td></td><td></td><td>empty playlist</td></tr>');
         }
       }
     });
@@ -111,7 +109,7 @@
     e.preventDefault();
   }
 
-  function deletePlaylist () { //this thing
+  function deletePlaylist () {
     var id = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: `/deletePlaylist/${id}`,
@@ -122,7 +120,7 @@
         getplaylistindex();
       }
     });
-  } //this thing
+  }
 
   function getplaylistindex (){
     $('#songsButton').parent().removeClass('active');
@@ -134,18 +132,15 @@
       type: 'POST',
       data: null,
       success: response => {
-      $('#showPlaylistControls').hide();
-      $('#songControls').hide();
-      $('#playlistControls').show();
-      $('#playlistsIndexControls').show();
-      if (response.playlists !== null){
-        response.playlists.forEach(playlist=>{
-          $('#playlists').append(`<li class='list-group-item' id=${playlist._id}>${playlist.name}</li>`);
-        });
-      } else {
-        $('#playlists').append(`<li class='list-group-item'>no playlists created yet</li>`);
-      }
-
+        $('#showPlaylistControls').hide();
+        $('#songControls').hide();
+        $('#playlistControls').show();
+        $('#playlistsIndexControls').show();
+        if (response.playlists.length > 0){
+          response.playlists.forEach(playlist=>{
+            $('#playlists').append(`<li class='list-group-item' id=${playlist._id}>${playlist.name}</li>`);
+          });
+        }
       }
     });
   } //deleteSong

@@ -3,10 +3,6 @@
 var traceur = require('traceur');
 var Song = traceur.require(__dirname + '/../models/song.js');
 
-exports.index = (req, res)=>{
-  res.render('songs/index', { title: 'dj-List search'});
-};
-
 exports.create = (req, res)=>{
   Song.create(req.body, song=>{
     res.send({songs : song});

@@ -25,7 +25,6 @@ function load(app, fn){
   app.post('/users', dbg, users.create);
   app.all('*', users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
-  app.get('/songs', dbg, songs.index);
   app.post('/createSong', dbg, songs.create);
   app.post('/key', dbg, songs.key);
   app.post('/bpm', dbg, songs.bpm);
@@ -40,7 +39,7 @@ function load(app, fn){
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
   app.post('/playlist', dbg, playlists.removeSong);
-  app.delete('/deletePlaylist/:id', dbg, playlists.delete);
+  app.delete('/deletePlaylist/:id', dbg, playlists.deletePlaylist);
 
 
   console.log('Routes Loaded');

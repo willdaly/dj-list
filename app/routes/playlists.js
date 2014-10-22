@@ -16,7 +16,7 @@ exports.create = (req, res)=>{
 };
 
 exports.deletePlaylist = (req, res)=>{
-  Playlist.delete(req.params.id, req.session.userId, playlists=>{
+  Playlist.deletePlaylist(req.params.id, req.session.userId, playlists=>{
     res.send({playlists: playlists});
   });
 };
