@@ -7,7 +7,7 @@ exports.bounce = (req, res, next)=>{
   if(res.locals.user){
     next();
   } else {
-    res.redirect('/login');
+    res.redirect('/');
   }
 };
 
@@ -15,9 +15,9 @@ exports.login = (req, res)=>{
   User.login(req.body, user=>{
     if (user){
       req.session.userId = user._id;
-      res.redirect('/songs');
+      res.redirect('/');
     }else{
-      res.redirect('/login');
+      res.redirect('/');
     }
   });
 };
@@ -31,9 +31,9 @@ exports.create = (req, res)=>{
   User.create(req.body, user=>{
     if(user){
       req.session.userId = user._id;
-      res.redirect('/songs');
+      res.redirect('/');
     }else{
-      res.redirect('/login');
+      res.redirect('/');
     }
   });
 };

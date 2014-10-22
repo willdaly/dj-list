@@ -2,72 +2,39 @@
 
 var traceur = require('traceur');
 var Playlist = traceur.require(__dirname + '/../models/playlist.js');
-var playlistCollection = global.nss.db.collection('playlists');
-var songCollection = global.nss.db.collection('lists');
-var Mongo = require('mongodb');
 
 exports.index = (req, res)=>{
-  playlistCollection.find({userId : req.session.userId}).toArray((e, playlist)=>{
-    res.send({playlists : playlist});
+  Playlist.index(req.session.userId, playlists=>{
+    res.send({playlists : playlists});
   });
 };
 
 exports.create = (req, res)=>{
   Playlist.create(req.body, req.session.userId, playlist=>{
-    console.log(playlist);
-    res.redirect('/songs');
+    res.send({playlist : playlist});
   });
 };
 
-exports.delete = (req, res)=>{
-  var _id = Mongo.ObjectID(req.params.id);
-  playlistCollection.findAndRemove({_id:_id}, (err, pl)=>{
-    playlistCollection.find({userId : req.session.userId}).toArray((e, playlist)=>{
-      res.render('songs/index', {playlists: playlist, title: 'Playlist index'});
-    });
+exports.deletePlaylist = (req, res)=>{
+  Playlist.delete(req.params.id, req.session.userId, playlists=>{
+    res.send({playlists: playlists});
   });
 };
 
 exports.removeSong = (req, res)=>{
-  var _id = Mongo.ObjectID(req.body.playlistId);
-  var songs = req.body.songs;
-  playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-    songs.forEach(song=>{
-      var index = playlist.songs.indexOf(song);
-      playlist.songs.splice(index, 1);
-      });
-    playlistCollection.save(playlist, ()=>{
-      songCollection.find({_id : {$in: playlist.songs}}).toArray((err, sngs)=>{
-        res.render('songs/index', {songs : songs, playlist : playlist});
-      });
-    });
-    });
+  Playlist.removeSong(req.body.playlistId, req.body.songs, songz=>{
+    res.send({song : songz});
+  });
 };
 
 exports.update = (req, res)=>{
-  var _id = Mongo.ObjectID(req.body.playlistId);
-  var songs = req.body.songs;
-  playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-    songs.forEach(song=>{
-      playlist.songs.push(song);
-    });
-    playlistCollection.save(playlist, ()=>res.render('songs/index'));
-    });
+  Playlist.addSongs(req.body.playlistId, req.body.songs, songz=>{
+    res.send({songs : songz});
+  });
 };
 
 exports.show = (req, res) =>{
-  var _id = Mongo.ObjectID(req.params.id);
-  playlistCollection.findOne({_id:_id}, (err, pl)=>{
-    if (pl.songs.length > 0){
-      var songsArray = []; //if
-      pl.songs.forEach(id =>{
-        songsArray.push(Mongo.ObjectID(id));
-      });
-      songCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
-        res.send({songs : songs, playlist : pl});
-      }); //if
-    }else{
-      res.send({ songs: 0, playlist : pl});
-    }
-  }); //playlist find one
+  Playlist.show(req.params.id, (songs, playlist)=>{
+    res.send({songs : songs, playlist : playlist});
+  });
 };

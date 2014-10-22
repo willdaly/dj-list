@@ -98,19 +98,12 @@
 
     button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
-  #playlistControls(style='display: none')
-    .input-group#createPlaylist
+  #playlistsIndexControls(style='display: none')
+    .input-group
       input.form-control(type='text', name='name', placeholder='check songs, enter name')#name
       span.input-group-btn
-        button.btn.btn-default(type='button')#saveSet Create Playlist
-    //- .input-group
-    //-   select.form-control#playlistId
-    //-     option check songs, select playlist
-    //-     if (playlists)
-    //-       each playlist in playlists
-    //-         option(value='#{playlist._id}')= playlist.name
-    //-   span.input-group-btn
-    //-     button.btn.btn-default(type='button')#addToPlaylist Add
-    ul#playlistsIndex.list-group
+        button.btn.btn-default(type='button')#createPlaylist Create Playlist
+  ul#playlists.list-group
+  #showPlaylistControls
     button.btn.btn-default(type='button', style='display: none')#deleteSong remove selected songs
     button.btn.btn-default#deletePlaylist(type='button', style='display: none') Delete Playlist
