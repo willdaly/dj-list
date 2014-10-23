@@ -8,3 +8,9 @@ exports.create = (req, res)=>{
     res.send({listItem : li});
   });
 };
+
+exports.destroyListItem = (req, res)=>{
+  ListItem.destroyListItem(req.body.playlistId, req.body.songIds, songs=>{
+    res.send({songs : songs});
+  });
+};

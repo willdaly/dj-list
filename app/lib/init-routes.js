@@ -18,6 +18,7 @@ function load(app, fn){
   var users = traceur.require(__dirname + '/../routes/users.js');
   var songs = traceur.require(__dirname + '/../routes/songs.js');
   var playlists = traceur.require(__dirname + '/../routes/playlists.js');
+  var listItems = traceur.require(__dirname + '/../routes/listItems.js');
 
   app.all('*', users.lookup);
   app.get('/', dbg, home.index);
@@ -38,7 +39,7 @@ function load(app, fn){
   app.post('/playlists/:id', dbg, playlists.show);
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
-  app.post('/playlist', dbg, playlists.removeSong);
+  app.post('/listItem', dbg, listItems.destroyListItem);
   app.delete('/deletePlaylist/:id', dbg, playlists.deletePlaylist);
 
 

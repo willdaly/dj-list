@@ -54,21 +54,6 @@ class Playlist {
     });
   } // deletePlaylist
 
-  static removeSong (playlistId, songs, fn) {
-    var _id = Mongo.ObjectID(playlistId);
-    playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-      songs.forEach(song=>{
-        var index = playlist.songs.indexOf(song);
-        playlist.songs.splice(index, 1);
-        });
-      playlistCollection.save(playlist, ()=>{
-        listItemsCollection.find({_id : {$in: playlist.songs}}).toArray((err, songz)=>{
-          fn(songz);
-        });
-      });
-    });
-  }//removeSong
-
   static addSongs (playlistId, songs, fn) {
     var _id = Mongo.ObjectID(playlistId);
     playlistCollection.findOne({_id:_id}, (err,playlist)=>{

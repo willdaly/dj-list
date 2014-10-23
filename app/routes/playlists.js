@@ -21,12 +21,6 @@ exports.deletePlaylist = (req, res)=>{
   });
 };
 
-exports.removeSong = (req, res)=>{
-  Playlist.removeSong(req.body.playlistId, req.body.songs, songz=>{
-    res.send({song : songz});
-  });
-};
-
 exports.update = (req, res)=>{
   Playlist.addSongs(req.body.playlistId, req.body.songs, songz=>{
     res.send({songs : songz});

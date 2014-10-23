@@ -147,15 +147,15 @@
   } //deleteSong
 
   function deleteSong (e){
-    var songsArray = [];
+    var songsIdsArray = [];
     $('#searchResults input:checkbox:checked').each(function(){
-      songsArray.push($(this).val());
+      songsIdsArray.push($(this).val());
     });
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
-      url: '/playlist',
+      url: '/listItem',
       type: 'POST',
-      data: {songs : songsArray, playlistId : playlistId},
+      data: {songIds : songsIdsArray, playlistId : playlistId},
       success: response => {
       $('#searchResults input:checkbox:checked').closest('tr').remove();
       }
