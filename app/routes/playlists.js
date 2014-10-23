@@ -34,7 +34,7 @@ exports.update = (req, res)=>{
 };
 
 exports.show = (req, res) =>{
-  Playlist.show(req.params.id, (songs, playlist)=>{
-    res.send({songs : songs, playlist : playlist});
+  Playlist.show(req.params.id, (songs)=>{
+    res.send({songs : songs});
   });
 };

@@ -45,19 +45,20 @@
   } //init
 
   function showPlaylist() {
-    var id = $(this).attr('id');
+    var playlistId = $(this).attr('id');
     $.ajax({
-      url: `/playlists/${id}`,
+      url: `/playlists/${playlistId}`,
       type: 'POST',
       data: null,
       success: response => {
-        $('#showPlaylistControls').show();
-        $('ul#playlists.list-group li').not(this).remove();
         $('#playlistsIndexControls').hide();
         $('#searchResults').empty();
+        $('ul#playlists.list-group li').not(this).remove();
+        $('#showPlaylistControls').show();
+        // $('thead tr:nth-child(4n)').append('<th>order</th>');
         if (response.songs !== null) {
           response.songs.forEach(song=>{
-            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.bpm}>${song.bpm}</td><td value=${song.key}>${song.key}</td><td>${song.title}</td><td>${song.artist}</td><td>${song.album}</td><td>${song.genre}</td></tr>`);
           });
         }
       }
@@ -82,7 +83,7 @@
     $.ajax({
       url: '/createPlaylist',
       type: 'POST',
-      data: {songs: songsArray, name: name},
+      data: {songIds: songsArray, name: name},
       success: response => {
         $('#playlists').prepend(`<li class='list-group-item' id=${response.playlist._id}>${response.playlist.name}</li>`);
       }
@@ -102,7 +103,7 @@
       data: {songs: songsArray, playlistId : id},
       success: response => {
         $('#message').empty().append(`<a href='#'>${name} updated</a>`);
-        $('#message a').delay( 2500 ).fadeOut( 500 );
+        $('#message a').delay( 2500 ).fadeOut(500, ()=>{$('#message a').remove();} );
         $('#playlistId').prepend(`<option value=${id}>${name}</option>`);
       }
     });
@@ -204,7 +205,7 @@
       });
     } else {
       $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
-      $('#message a').delay( 2500 ).fadeOut( 500 );
+      $('#message a').delay( 2500 ).fadeOut(500,  ()=>{$('#message a').remove();} );
     }
     e.preventDefault();
   } //genre filter
@@ -223,7 +224,7 @@
           });
         } else {
           $('#message').empty().append(`<a href='#'>can't find ${searchInput}</a>`);
-          $('#message a').delay( 2500 ).fadeOut( 500 );
+          $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
         }
       }
     });
@@ -244,7 +245,7 @@
           });
         } else {
           $('#message').empty().append(`<a href='#'>can't find ${album}</a>`);
-          $('#message a').delay( 2500 ).fadeOut( 500 );
+          $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
         }
       }
     });
@@ -265,7 +266,7 @@
           });
         } else {
           $('#message').empty().append(`<a href='#'>can't find ${searchInput}</a>`);
-          $('#message a').delay( 2500 ).fadeOut( 500 );
+          $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
         }
       }
     });
@@ -294,13 +295,13 @@
               });
             } else {
               $('#message').append('<a href="#">didn\'t find anything</a>');
-              $('#message a').delay( 2500 ).fadeOut( 500 );
+              $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
             }
           }
         });
       } else {
         $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
-        $('#message a').delay( 2500 ).fadeOut( 500 );
+        $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
       }
   }
 
@@ -326,13 +327,13 @@
             });
           } else{
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay( 2500 ).fadeOut( 500 );
+            $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
           }
         }
       });
     } else {
       $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
-      $('#message a').delay( 2500 ).fadeOut( 500 );
+      $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
     }
     e.preventDefault();
   } //bpmkey
@@ -357,13 +358,13 @@
             });
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay( 2500 ).fadeOut( 500 );
+            $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
           }
         }
       });
     } else {
       $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
-      $('#message a').delay( 2500 ).fadeOut( 500 );
+      $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
     }
     e.preventDefault();
   } //key
@@ -389,13 +390,13 @@
             });
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay( 2500 ).fadeOut( 500 );
+            $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
           }
         }
       });
     } else {
       $('#message').empty().append(`<a href='#'>select at least one genre</a>`);
-      $('#message a').delay( 2500 ).fadeOut( 500 );
+      $('#message a').delay( 2500 ).fadeOut( 500, ()=>{$('#message a').remove();} );
     }
     e.preventDefault();
   }

@@ -1,4 +1,4 @@
-var songCollection = global.nss.db.collection('lists');
+var songCollection = global.nss.db.collection('songs');
 
 class Song {
   static create(obj, fn){

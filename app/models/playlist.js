@@ -1,5 +1,7 @@
 var playlistCollection = global.nss.db.collection('playlists');
-var songCollection = global.nss.db.collection('lists');
+var listItemsCollection = global.nss.db.collection('listItems');
+var traceur = require('traceur');
+var ListItem = traceur.require(__dirname + '/../models/listItem.js');
 var Mongo = require('mongodb');
 
 
@@ -10,8 +12,18 @@ class Playlist {
         var playlist = new Playlist();
         playlist._id = Mongo.ObjectID(obj._id);
         playlist.name = obj.name;
-        playlist.songs = obj.songs;
         playlist.userId = userId;
+        var order = 1;
+        obj.songIds.forEach(sId=>{
+          var songId = Mongo.ObjectID(sId);
+          ListItem.create(order, songId, playlist._id, listItem=>{
+            if (listItem) {
+              order++;
+            }
+          });
+
+        });
+
         playlistCollection.save(playlist, ()=>fn(playlist));
       }else{
         fn(null);
@@ -50,7 +62,7 @@ class Playlist {
         playlist.songs.splice(index, 1);
         });
       playlistCollection.save(playlist, ()=>{
-        songCollection.find({_id : {$in: playlist.songs}}).toArray((err, songz)=>{
+        listItemsCollection.find({_id : {$in: playlist.songs}}).toArray((err, songz)=>{
           fn(songz);
         });
       });
@@ -67,22 +79,12 @@ class Playlist {
     });
   } //addSongs
 
-  static show (id, fn) {
-    var _id = Mongo.ObjectID(id);
-    playlistCollection.findOne({_id:_id}, (err, playlist)=>{
-      if (playlist.songs.length > 0){
-        var songsArray = []; //if
-        playlist.songs.forEach(songId =>{
-          songsArray.push(Mongo.ObjectID(songId));
-        });
-        songCollection.find({_id :{$in: songsArray}}).toArray((err, songs)=>{
-          fn(songs, playlist);
-        }); //if
-      }else{
-        fn(null, playlist);
-      }
-    }); //playlist find one
-  }
+  static show (playlistId, fn) {
+    var _id = Mongo.ObjectID(playlistId);
+    listItemsCollection.find({playlistId : _id}).sort({ order: 1}).toArray((err, songs)=>{ //save
+      fn(songs);
+    }); //save
+  } //show
 
 } //Playlist
 

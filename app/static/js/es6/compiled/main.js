@@ -22,19 +22,19 @@
   }
   function showPlaylist() {
     var $__0 = this;
-    var id = $(this).attr('id');
+    var playlistId = $(this).attr('id');
     $.ajax({
-      url: ("/playlists/" + id),
+      url: ("/playlists/" + playlistId),
       type: 'POST',
       data: null,
       success: (function(response) {
-        $('#showPlaylistControls').show();
-        $('ul#playlists.list-group li').not($__0).remove();
         $('#playlistsIndexControls').hide();
         $('#searchResults').empty();
+        $('ul#playlists.list-group li').not($__0).remove();
+        $('#showPlaylistControls').show();
         if (response.songs !== null) {
           response.songs.forEach((function(song) {
-            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.bpm + ">" + song.bpm + "</td><td value=" + song.key + ">" + song.key + "</td><td>" + song.title + "</td><td>" + song.artist + "</td><td>" + song.album + "</td><td>" + song.genre + "</td></tr>"));
           }));
         }
       })
@@ -58,7 +58,7 @@
       url: '/createPlaylist',
       type: 'POST',
       data: {
-        songs: songsArray,
+        songIds: songsArray,
         name: name
       },
       success: (function(response) {
@@ -82,7 +82,9 @@
       },
       success: (function(response) {
         $('#message').empty().append(("<a href='#'>" + name + " updated</a>"));
-        $('#message a').delay(2500).fadeOut(500);
+        $('#message a').delay(2500).fadeOut(500, (function() {
+          $('#message a').remove();
+        }));
         $('#playlistId').prepend(("<option value=" + id + ">" + name + "</option>"));
       })
     });
@@ -187,7 +189,9 @@
       });
     } else {
       $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500);
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
     }
     e.preventDefault();
   }
@@ -205,7 +209,9 @@
           }));
         } else {
           $('#message').empty().append(("<a href='#'>can't find " + searchInput + "</a>"));
-          $('#message a').delay(2500).fadeOut(500);
+          $('#message a').delay(2500).fadeOut(500, (function() {
+            $('#message a').remove();
+          }));
         }
       })
     });
@@ -225,7 +231,9 @@
           }));
         } else {
           $('#message').empty().append(("<a href='#'>can't find " + album + "</a>"));
-          $('#message a').delay(2500).fadeOut(500);
+          $('#message a').delay(2500).fadeOut(500, (function() {
+            $('#message a').remove();
+          }));
         }
       })
     });
@@ -245,7 +253,9 @@
           }));
         } else {
           $('#message').empty().append(("<a href='#'>can't find " + searchInput + "</a>"));
-          $('#message a').delay(2500).fadeOut(500);
+          $('#message a').delay(2500).fadeOut(500, (function() {
+            $('#message a').remove();
+          }));
         }
       })
     });
@@ -278,13 +288,17 @@
             }));
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay(2500).fadeOut(500);
+            $('#message a').delay(2500).fadeOut(500, (function() {
+              $('#message a').remove();
+            }));
           }
         })
       });
     } else {
       $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500);
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
     }
   }
   function bpmKey(e) {
@@ -313,13 +327,17 @@
             }));
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay(2500).fadeOut(500);
+            $('#message a').delay(2500).fadeOut(500, (function() {
+              $('#message a').remove();
+            }));
           }
         })
       });
     } else {
       $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500);
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
     }
     e.preventDefault();
   }
@@ -346,13 +364,17 @@
             }));
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay(2500).fadeOut(500);
+            $('#message a').delay(2500).fadeOut(500, (function() {
+              $('#message a').remove();
+            }));
           }
         })
       });
     } else {
       $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500);
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
     }
     e.preventDefault();
   }
@@ -380,13 +402,17 @@
             }));
           } else {
             $('#message').append('<a href="#">didn\'t find anything</a>');
-            $('#message a').delay(2500).fadeOut(500);
+            $('#message a').delay(2500).fadeOut(500, (function() {
+              $('#message a').remove();
+            }));
           }
         })
       });
     } else {
       $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500);
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
     }
     e.preventDefault();
   }
