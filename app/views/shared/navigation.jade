@@ -6,7 +6,7 @@ nav.navbar.navbar-default(role='navigation')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='#') DJ List
+        a.navbar-brand(data-target='#') DJ List
 
         ul.nav.navbar-nav.collapse.navbar-collapse
           if (user)
@@ -21,20 +21,18 @@ nav.navbar.navbar-default(role='navigation')
                   span.caret
                 ul#searchbar.dropdown-menu
                   li
-                    a(href='#')#artistSearch Artist
+                    a(data-target='#')#artistSearch Artist
                   li
-                    a(href='#')#albumSearch Album
+                    a(data-target='#')#albumSearch Album
                   li
-                    a(href='#')#songSearch Song
-                  li
-                    a(href='#')#genreFilter Checked Genres
-
+                    a(data-target='#')#songSearch Song
+  
       ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
         li#message
 
         if (user)
           li
-            a(href='#').glyphicon.glyphicon-user #{user.email}
+            a(data-target='#').glyphicon.glyphicon-user #{user.email}
           li
             form(method='POST', action='/logout')
               button.btn.btn-default.btn-sm logout

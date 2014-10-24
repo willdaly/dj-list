@@ -170,14 +170,11 @@
     var title = $('#newSongName').val();
     var artist = $('#newSongArtist').val();
     var album = $('#newSongAlbum').val();
-    var genreArray = [];
-    $('.newSongGenre input:checkbox:checked').each(function(){
-      genreArray.push($(this).val());
-    });
+    var genre = $('#newSongGenre').val();
     $.ajax({
       url: '/createSong',
       type: 'POST',
-      data: {BPM: bpm, Key: key, Title: title, Artist: artist, Album: album, genre: genreArray},
+      data: {BPM: bpm, Key: key, Title: title, Artist: artist, Album: album, genre: genre},
       success: response => {
         $('#createSong').modal('hide');
       }

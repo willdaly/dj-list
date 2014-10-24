@@ -148,10 +148,7 @@
     var title = $('#newSongName').val();
     var artist = $('#newSongArtist').val();
     var album = $('#newSongAlbum').val();
-    var genreArray = [];
-    $('.newSongGenre input:checkbox:checked').each(function() {
-      genreArray.push($(this).val());
-    });
+    var genre = $('#newSongGenre').val();
     $.ajax({
       url: '/createSong',
       type: 'POST',
@@ -161,7 +158,7 @@
         Title: title,
         Artist: artist,
         Album: album,
-        genre: genreArray
+        genre: genre
       },
       success: (function(response) {
         $('#createSong').modal('hide');

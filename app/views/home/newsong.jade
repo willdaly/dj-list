@@ -46,28 +46,19 @@ div(class='modal fade', id='createSong', tabindex='-1', role='dialog')
             .input-group
               span.input-group-addon Album
               input.form-control(type='text', name='Album')#newSongAlbum
-            .newSongGenre
-              label Hip-Hop
-              input(type='checkbox', value='Hip-Hop')
-              label Soul
-              input(type='checkbox', value='Soul')
-              label Jazz
-              input(type='checkbox', value='Jazz')
-              label Rock
-              input(type='checkbox', value='Rock')
-              label Pop
-              input(type='checkbox', value='Pop')
-              label Melodiya
-              input(type='checkbox', value='Melodiya')
-              label OST
-              input(type='checkbox', value='OST')
-              label Electronic
-              input(type='checkbox', value='Electronic')
-              label Battle
-              input(type='checkbox', value='Battle')
-              label 45 King
-              input(type='checkbox', value='45 King')
-              label Hip-Hop Instrumental
-              input(type='checkbox', value='Hip-Hop Instrumental')
+            .input-group
+              span.input-group-addon Genre
+              select.form-control#newSongGenre
+                option Hip-Hop
+                option Soul
+                option Jazz
+                option Rock
+                option Pop
+                option Melodiya
+                option OST
+                option Electronic
+                option Battle
+                option 45 King
+                option Hip-Hop Instrumental
           .modal-footer
             button.submit.btn.btn-info#createNewSong Add song

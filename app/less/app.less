@@ -71,14 +71,14 @@ body {
   padding-bottom: 10px;
 }
 
+#songControls {
+  padding-bottom: 2em;
+}
+
 .slider {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
-// #bpmKeyFilter {
-//   margin-top: 5px;
-// }
 
 footer {
   position:fixed;
@@ -117,16 +117,20 @@ ul.nav.nav-pills.nav-justified {
   margin-bottom: 1em;
 }
 
-.clear {
-  clear: both;
-  margin-bottom: 10px;
-  button, #keyinput, #key {
-    float: left;
-    margin-right: 1px;
-  }
+#bpmKeyFilter, .btn-group, #keyinput, #key {
+  float: left;
+  margin-bottom: .5em;
 }
 
-@media (max-width:480px) {
+#filter {
+  margin-left: 1em;
+}
+
+.slider {
+  margin: 1.5em 0 1.5em 0;
+}
+
+@media (max-width:767px) {
   #songsButton {
     width: 50%;
     float: left;
