@@ -76,9 +76,9 @@ body {
   margin-bottom: 10px;
 }
 
-#bpmKeyFilter {
-  margin-top: 5px;
-}
+// #bpmKeyFilter {
+//   margin-top: 5px;
+// }
 
 footer {
   position:fixed;
@@ -115,4 +115,32 @@ ul#tp.dropdown-menu {
 
 ul.nav.nav-pills.nav-justified {
   margin-bottom: 1em;
+}
+
+.clear {
+  clear: both;
+  margin-bottom: 10px;
+  button, #keyinput, #key {
+    float: left;
+    margin-right: 1px;
+  }
+}
+
+@media (max-width:480px) {
+  #songsButton {
+    width: 50%;
+    float: left;
+  }
+}
+
+@media (max-width:767px) {
+  a.navbar-brand {
+    display: none;
+  }
+}
+
+@media (max-width:800px) {
+  a.glyphicon.glyphicon-user {
+    display: none;
+  }
 }

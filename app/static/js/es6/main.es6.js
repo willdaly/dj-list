@@ -275,7 +275,7 @@
 
   function transpose () {
     var trans = $(this).parent().val();
-    var bpm = $('#lowBPM').val();
+    var lowBPM = parseInt($('.noUi-handle-lower > div').text());
     var key = $('#key').val();
     var genreChecked = $('.genres input').is(':checked');
       if (genreChecked){
@@ -286,7 +286,7 @@
         $.ajax({
           url: '/transpose',
           type: 'POST',
-          data: {trans : trans, BPM: bpm, Key: key, genre: genreArray},
+          data: {trans : trans, BPM: lowBPM, Key: key, genre: genreArray},
           success: response => {
             if (response.songs.length > 0){
               $('#searchResults').empty();
@@ -313,8 +313,8 @@
         genreArray.push($(this).val());
       });
       var key = $('#key').val();
-      var lowBPM = $('#lowBPM').val();
-      var highBPM = $('#highBPM').val();
+      var lowBPM = parseInt($('.noUi-handle-lower > div').text());
+      var highBPM = parseInt($('.noUi-handle-upper > div').text());
       $.ajax({
         url: '/bpmKey',
         type: 'POST',
@@ -376,8 +376,8 @@
       $('.genres input:checkbox:checked').each(function(){
         genreArray.push($(this).val());
       });
-      var lowBPM = $('#lowBPM').val();
-      var highBPM = $('#highBPM').val();
+      var lowBPM = parseInt($('.noUi-handle-lower > div').text());
+      var highBPM = parseInt($('.noUi-handle-upper > div').text());
       $.ajax({
         url: '/bpm',
         type: 'POST',
@@ -408,23 +408,19 @@
 						'min': 66,
 						'max': 193
 					},
-          serialization: {
-            lower: [
-              $.Link({
-                target: $('#lowBPM')
-              })
-            ],
-            upper: [
-              $.Link({
-                target: $('#highBPM'),
-              })
-            ],
-            format: {
-              mark: ',',
-              decimals: 0
-            }
-          } //serialization
+
+          format: {
+            to: function ( value ) {
+          		return parseInt(value);
+	          },
+
+            from: function ( value ) {
+          		return parseInt(value);
+        	  }
+          }
 				}); //noUISlider
+    $('.slider').Link('lower').to('-inline-');
+    $('.slider').Link('upper').to('-inline-');
   } //displaySlider
 
 })();
