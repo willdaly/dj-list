@@ -27,6 +27,12 @@ exports.update = (req, res)=>{
   });
 };
 
+exports.deleteFromPlaylist = (req, res)=>{
+  Playlist.deleteFromPlaylist(req.body.songIds, req.body.playlistId, playlist=>{
+    res.send({playlist : playlist});
+  });
+};
+
 exports.show = (req, res) =>{
   Playlist.show(req.params.id, (songs)=>{
     res.send({songs : songs});

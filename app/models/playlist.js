@@ -1,38 +1,49 @@
-var playlistCollection = global.nss.db.collection('playlists');
-var listItemsCollection = global.nss.db.collection('listItems');
-var traceur = require('traceur');
-var ListItem = traceur.require(__dirname + '/../models/listItem.js');
+var playlistsCollection = global.nss.db.collection('playlists');
+// var listItemsCollection = global.nss.db.collection('listItems');
+var songsCollection = global.nss.db.collection('songs');
+// var traceur = require('traceur');
+// var ListItem = traceur.require(__dirname + '/../models/listItem.js');
 var Mongo = require('mongodb');
 
 
 class Playlist {
   static create (obj, userId, fn){
-    playlistCollection.findOne({name: obj.name}, (e, pl)=>{
-      if (!pl){
-        var playlist = new Playlist();
-        playlist._id = Mongo.ObjectID(obj._id);
-        playlist.name = obj.name;
-        playlist.userId = userId;
+    var songsArray = [];
+    obj.songIds.forEach(song=>{
+      var mongoid =  Mongo.ObjectID(song);
+      songsArray.push(mongoid);
+    });
+    songsCollection.find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
+      if (songs) {
+        var sArray = [];
         var order = 1;
-        obj.songIds.forEach(sId=>{
-          var songId = Mongo.ObjectID(sId);
-          ListItem.create(order, songId, playlist._id, listItem=>{
-            if (listItem) {
-              order++;
-            }
-          });
-
+        songs.forEach(song=>{
+          song.order = order;
+          order++;
+          sArray.push(song);
         });
-
-        playlistCollection.save(playlist, ()=>fn(playlist));
-      }else{
+        playlistsCollection.findOne({name: obj.name}, (e, pl)=>{
+            if (!pl){
+              var playlist = new Playlist();
+              playlist._id = Mongo.ObjectID(obj._id);
+              playlist.name = obj.name;
+              playlist.userId = userId;
+              playlist.songs = sArray;
+              playlistsCollection.save(playlist, ()=>fn(playlist));
+            }else{
+              fn(null);
+            }
+          }); //playlist find
+      } else {
         fn(null);
       }
-    }); //playlist find
-  } //create
+    });
+  }
+
+
 
   static index (userId, fn){
-    playlistCollection.find({userId : userId}).toArray((e, playlists)=>{
+    playlistsCollection.find({userId : userId}).toArray((e, playlists)=>{
       if (playlists) {
         fn(playlists);
       } else {
@@ -43,8 +54,8 @@ class Playlist {
 
   static deletePlaylist (id, userId, fn){
     var _id = Mongo.ObjectID(id);
-    playlistCollection.findAndRemove({_id:_id}, ()=>{
-      playlistCollection.find({userId : userId}).toArray((e, playlists)=>{
+    playlistsCollection.findAndRemove({_id:_id}, ()=>{
+      playlistsCollection.find({userId : userId}).toArray((e, playlists)=>{
         if (playlists) {
           fn(playlists);
         } else {
@@ -56,20 +67,80 @@ class Playlist {
 
   static addSongs (playlistId, songs, fn) {
     var _id = Mongo.ObjectID(playlistId);
-    playlistCollection.findOne({_id:_id}, (err,playlist)=>{
+    playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
       songs.forEach(song=>{
         playlist.songs.push(song);
       });
-      playlistCollection.save(playlist, songz=>fn(songz));
+      playlistsCollection.save(playlist, songz=>fn(songz));
     });
   } //addSongs
 
   static show (playlistId, fn) {
     var _id = Mongo.ObjectID(playlistId);
-    listItemsCollection.find({playlistId : _id}).sort({ order: 1}).toArray((err, songs)=>{ //save
-      fn(songs);
-    }); //save
+    playlistsCollection.findOne({_id : _id}, (err, playlist)=>{
+      if (playlist) {
+        var songs = playlist.songs.sort((a, b)=>{
+          if (a.order > b.order){
+            return 1;
+          }else{
+            return -1;
+          }
+        });
+        fn(songs);
+      } else {
+        fn(null);
+      }
+    });
   } //show
+
+  // static updatePlaylist (songId, order, playlistId, fn){
+  //   var _id = Mongo.ObjectID(playlistId);
+  //   playlistsCollection.findOne({_id : _id }, (err, playlist)=>{
+  //     var o = order;
+  //     playlist.songs.forEach(song=>{
+  //       if (song.order >= o){
+  //         song.order = o +1;
+  //         o++;
+  //       }
+  //     }); //updates songs with orders greater or equal to one that moved
+  //   playlist.songs.forEach(song=>{
+  //     if (song._id.toString() === songId){
+  //       song.order = order;
+  //     }
+  //   }); //updates
+  //
+  //   });
+  // }
+
+  static deleteFromPlaylist (songIds, playlistId, fn) {
+    var _id = Mongo.ObjectID(playlistId);
+    playlistsCollection.findOne({_id : _id }, (err, playlist)=>{
+
+      playlist.songs.forEach(song=>{
+        songIds.forEach(songId=>{
+          if (song._id.toString() === songId){
+            var index = playlist.songs.indexOf(song);
+            playlist.songs.splice(index, 1);
+          }
+        }); //deletes songs
+        playlist.songs.sort((a, b)=>{
+          if (a.order > b.order){
+            return -1;
+          } else if (a.order < b.order ) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }); //sorts playlist
+      var order = 1;
+      playlist.songs.forEach(song=>{
+        song.order = order;
+        order++;
+      }); //reorders playlist
+      });
+    playlistsCollection.save(playlist, ()=>fn(playlist));
+    });
+  }
 
 } //Playlist
 

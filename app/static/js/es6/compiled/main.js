@@ -15,7 +15,7 @@
     $('#createPlaylist').click(createPlaylist);
     $('#addToPlaylist').click(addToPlaylist);
     $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
-    $('#deleteSong').click(deleteSong);
+    $('#deleteFromPlaylist').click(deleteFromPlaylist);
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
@@ -34,7 +34,7 @@
         $('#showPlaylistControls').show();
         if (response.songs !== null) {
           response.songs.forEach((function(song) {
-            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.bpm + ">" + song.bpm + "</td><td value=" + song.key + ">" + song.key + "</td><td>" + song.title + "</td><td>" + song.artist + "</td><td>" + song.album + "</td><td>" + song.genre + "</td></tr>"));
+            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
           }));
         }
       })
@@ -123,21 +123,24 @@
       })
     });
   }
-  function deleteSong(e) {
+  function deleteFromPlaylist(e) {
     var songsIdsArray = [];
     $('#searchResults input:checkbox:checked').each(function() {
       songsIdsArray.push($(this).val());
     });
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
-      url: '/listItem',
+      url: '/deleteFromPlaylist',
       type: 'POST',
       data: {
         songIds: songsIdsArray,
         playlistId: playlistId
       },
       success: (function(response) {
-        $('#searchResults input:checkbox:checked').closest('tr').remove();
+        $('#searchResults').empty();
+        response.playlist.songs.forEach((function(song) {
+          $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        }));
       })
     });
     e.preventDefault();

@@ -34,7 +34,7 @@
 
     $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
 
-    $('#deleteSong').click(deleteSong);
+    $('#deleteFromPlaylist').click(deleteFromPlaylist);
 
     $('#songsButton').click(songsControls);
 
@@ -58,7 +58,7 @@
         // $('thead tr:nth-child(4n)').append('<th>order</th>');
         if (response.songs !== null) {
           response.songs.forEach(song=>{
-            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.bpm}>${song.bpm}</td><td value=${song.key}>${song.key}</td><td>${song.title}</td><td>${song.artist}</td><td>${song.album}</td><td>${song.genre}</td></tr>`);
+            $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
           });
         }
       }
@@ -146,18 +146,21 @@
     });
   } //deleteSong
 
-  function deleteSong (e){
+  function deleteFromPlaylist (e){
     var songsIdsArray = [];
     $('#searchResults input:checkbox:checked').each(function(){
       songsIdsArray.push($(this).val());
     });
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
-      url: '/listItem',
+      url: '/deleteFromPlaylist',
       type: 'POST',
       data: {songIds : songsIdsArray, playlistId : playlistId},
       success: response => {
-      $('#searchResults input:checkbox:checked').closest('tr').remove();
+        $('#searchResults').empty();
+        response.playlist.songs.forEach(song=>{
+          $('#searchResults').append(`<tr><td><input type="checkbox", value=${song._id}></td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+        });
       }
     });
     e.preventDefault();
