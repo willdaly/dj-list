@@ -9,10 +9,6 @@ nav.navbar.navbar-default(role='navigation')
         a.navbar-brand(data-target='#') DJ List
 
         ul.nav.navbar-nav.collapse.navbar-collapse
-          if (user)
-            li
-              a(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
-
         if (user)
           form.navbar-form.navbar-left.dropdown(role='search')
             .form-group
@@ -26,7 +22,7 @@ nav.navbar.navbar-default(role='navigation')
                     a(data-target='#')#albumSearch Album
                   li
                     a(data-target='#')#songSearch Song
-  
+
       ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
         li#message
 
