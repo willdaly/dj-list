@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Monoton);
 
+@monoton: 'Monoton', cursive;
+
+@bgc: rgba(255, 255, 255, 0.75);
+
 h1, h2, h3 {
   margin-top: 0px;
   margin-bottom: 10px;
@@ -14,11 +18,11 @@ th {
 }
 
 a.navbar-brand {
-  font-family: 'Monoton', cursive;
+  font-family: @monoton;
 }
 
 .navbar-default, .page-header {
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: @bgc;
   margin-bottom: 0px;
 }
 
@@ -32,9 +36,9 @@ body {
 }
 
 .jumbotron {
-  font-family: 'Monoton', cursive;
+  font-family: @monoton;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: @bgc;
   margin-top: 70px;
   padding-top: 24px;
   padding-bottom: 24px;
@@ -47,28 +51,27 @@ body {
 
 .panel-title {
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: @bgc;
+}
+
+.modal-body {
+  font-family: @monoton;
 }
 
 .modal-content {
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: @bgc;
   text-align: center;
   .submit {
-    font-family: 'Monoton', cursive;
+    font-family: @monoton;
     padding: 1em;
     border-radius: 6px;
   }
 }
 
 .controls, .table {
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: @bgc;
   text-align: center;
   margin-top: 10px;
-}
-
-.controls {
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .container {
@@ -76,8 +79,8 @@ body {
 }
 
 .slider.noUi-target.noUi-ltr.noUi-horizontal.noUi-background {
-  margin-top: 3em;
-  margin-bottom: 3em;
+  margin-top: 2.5em;
+  margin-bottom: 2em;
 }
 
 footer {
@@ -92,7 +95,7 @@ footer {
   p {
     padding: 2em 1em 1em 2em;
     height: 1em;
-    font-family: 'Monoton', cursive;
+    font-family: @monoton;
   }
 }
 
@@ -113,20 +116,52 @@ ul#tp.dropdown-menu {
   min-width: 100px;
 }
 
-ul.nav.nav-pills.nav-justified {
-  margin-bottom: 1em;
-}
-
-.slider {
-  margin: 1.5em 0 1.5em 0;
-}
-
 #transpose {
   margin-left: -1em;
 }
 
-#newEditSong {
-  margin: 1em 0em -1em 0em;
+.row {
+  margin-bottom: .5em;
+  margin-top: 1.5em;
+}
+
+#keyinput {
+  width: 12.25em;
+}
+
+#key {
+  width: 5em;
+  // height: 5em;
+  // background-color: rgba(255,255,255,.25);
+  font-weight: bold;
+  // font-size: 1em;
+  // color: rgba(0, 0, 0, .5);
+}
+
+#filter {
+  margin-left: -1.5em;
+  // button {
+  //   background-color: rgba(255,255,255,.25);
+    // font-weight: bold;
+  //   font-size: 2em;
+  //   color: rgba(0, 0, 0, .5);
+  // }
+}
+
+#genrebutton {
+  font-weight: bold;
+}
+
+.slider label {
+  // margin: 0;
+  // padding: 0;
+  position: relative;
+  float: left;
+  // left: .25em;
+  bottom: 1.25em;
+  // font-family: @monoton;
+  font-size: 2em;
+  color: rgba(0, 0, 0, .5);
 
 }
 

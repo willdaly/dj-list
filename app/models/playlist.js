@@ -22,9 +22,9 @@ class Playlist {
           order++;
           sArray.push(song);
         });
-        playlistsCollection.findOne({name: obj.name}, (e, pl)=>{
-            if (!pl){
-              var playlist = new Playlist();
+        playlistsCollection.findOne({name: obj.name}, (e, playlist)=>{
+            if (!playlist){
+              playlist = new Playlist();
               playlist._id = Mongo.ObjectID(obj._id);
               playlist.name = obj.name;
               playlist.userId = userId;
@@ -65,13 +65,13 @@ class Playlist {
     });
   } // deletePlaylist
 
-  static addSongs (playlistId, songs, fn) {
+  static addSongs (playlistId, song, fn) {
     var _id = Mongo.ObjectID(playlistId);
     playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
-      songs.forEach(song=>{
-        playlist.songs.push(song);
-      });
-      playlistsCollection.save(playlist, songz=>fn(songz));
+      var playlistLength = playlist.songs.length;
+      song.order = playlistLength++;
+      playlist.songs.push(song);
+      playlistsCollection.save(playlist, playlist=>fn(playlist));
     });
   } //addSongs
 

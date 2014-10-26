@@ -17,6 +17,7 @@
 	width: 100%;
 	height: 100%;
 	position: relative;
+	border: 1px solid black;
 }
 .noUi-origin {
 	position: absolute;
@@ -52,7 +53,8 @@
 /* Slider size and handle placement;
  */
 .noUi-horizontal {
-	height: .75em;
+	height: 3.25em;
+	background-color: rgba(255, 255, 255, 0.25);
 }
 .noUi-horizontal .noUi-handle {
 	width: 3em;
@@ -62,11 +64,11 @@
 }
 
 .noUi-handle-upper {
-	bottom: 2.75em;
+	bottom: 1.5em;
 }
 
 .noUi-handle-lower {
-	top: .25em;
+	top: 1.5em;
 }
 
 .noUi-horizontal.noUi-extended {
@@ -110,6 +112,7 @@
 	border-radius: 4px;
 	border: 1px solid #D3D3D3;
 	box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+	background-color: rgba(255, 255, 255, 0.25);
 }
 .noUi-target.noUi-connect {
 	box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px #BBB;
@@ -120,11 +123,11 @@
 .noUi-dragable {
 	cursor: w-resize;
 }
-.noUi-vertical .noUi-dragable {
+/*.noUi-vertical .noUi-dragable {
 	cursor: n-resize;
-}
+}*/
 .noUi-handle {
-	border: 1px solid #D9D9D9;
+	border: 1px solid black;
 	border-radius: 100%;
 	background: #FFF;
 	cursor: default;
@@ -140,7 +143,7 @@
 
 /* Handle stripes;
  */
-.noUi-handle:before,
+/*.noUi-handle:before,
 .noUi-handle:after {
 	content: "";
 	display: none;
@@ -153,8 +156,8 @@
 }
 .noUi-handle:after {
 	left: 17px;
-}
-.noUi-vertical .noUi-handle:before,
+}*/
+/*.noUi-vertical .noUi-handle:before,
 .noUi-vertical .noUi-handle:after {
 	width: 14px;
 	height: 1px;
@@ -163,7 +166,7 @@
 }
 .noUi-vertical .noUi-handle:after {
 	top: 17px;
-}
+}*/
 
 /* Disabled state;
  */

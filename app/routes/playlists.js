@@ -22,8 +22,8 @@ exports.deletePlaylist = (req, res)=>{
 };
 
 exports.update = (req, res)=>{
-  Playlist.addSongs(req.body.playlistId, req.body.songs, songz=>{
-    res.send({songs : songz});
+  Playlist.addSongs(req.body.playlistId, req.body.song, playlist=>{
+    res.send({playlist : playlist});
   });
 };
 

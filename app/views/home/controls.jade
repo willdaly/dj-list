@@ -4,112 +4,93 @@
       a(data-target='#')#songsButton Songs
     li
       a(data-target='#')#playlistsButton Playlists
-  #songControls
-    .genres
-      label Hip-Hop
-      input(type='checkbox', value='Hip-Hop')
-      label Soul
-      input(type='checkbox', value='Soul')
-      label Jazz
-      input(type='checkbox', value='Jazz')
-      label Rock
-      input(type='checkbox', value='Rock')
-      label Pop
-      input(type='checkbox', value='Pop')
-      label Melodiya
-      input(type='checkbox', value='Melodiya')
-      label OST
-      input(type='checkbox', value='OST')
-      label Electronic
-      input(type='checkbox', value='Electronic')
-      label Battle
-      input(type='checkbox', value='Battle')
-      label 45 King
-      input(type='checkbox', value='45 King')
-      label Beats
-      input(type='checkbox', value='Hip-Hop Instrumental')
-      .btn-group#filter
-        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
-            span.caret
-          ul.dropdown-menu
-            li
-              a(data-target='#')#genreFilter Checked Genres
-            li
-              a(data-target='#')#bpmFilter Genres by BPM
-            li
-              a(data-target='#')#keyFilter Genres by Key
+  #songControls.container
+    .row#newEditSong
+      .btn-group
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Drop Song to Edit
+    .row
+      .col-xs-6#filter
+        .btn-group
+          button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Genres
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
+              span.caret
+            ul.dropdown-menu
+              li
+                a(data-target='#')#genreFilter Checked Genres
+              li
+                a(data-target='#')#bpmFilter Genres by BPM
+              li
+                a(data-target='#')#keyFilter Genres by Key
 
-    .slider
-    .container
-      .row
-        .col-xs-4
-          .input-group#keyinput
-            select.form-control#key
-              option AbM
-              option abm
-              option AM
-              option am
-              option BbM
-              option bbm
-              option BM
-              option bm
-              option CM
-              option cm
-              option C#M
-              option c#m
-              option DM
-              option dm
-              option EbM
-              option ebm
-              option EM
-              option em
-              option FM
-              option fm
-              option F#M
-              option f#m
-              option GM
-              option gm
-              option G#M
-              option g#m
-        .col-xs-4
-          .btn-group
+      .col-xs-6
+        .input-group#keyinput
+          select.form-control#key
+            option AbM
+            option abm
+            option AM
+            option am
+            option BbM
+            option bbm
+            option BM
+            option bm
+            option CM
+            option cm
+            option C#M
+            option c#m
+            option DM
+            option dm
+            option EbM
+            option ebm
+            option EM
+            option em
+            option FM
+            option fm
+            option F#M
+            option f#m
+            option GM
+            option gm
+            option G#M
+            option g#m
+          span.input-group-btn
             button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Transpose
                 span.caret
-              ul#tp.dropdown-menu
-                li(value='-1')
-                  a(data-target='#').transpose -1
-                li(value='1')
-                  a(data-target='#').transpose +1
-                li(value='-2')
-                  a(data-target='#').transpose -2
-                li(value='2')
-                  a(data-target='#').transpose +2
-                li(value='-3')
-                  a(data-target='#').transpose -3
-                li(value='3')
-                  a(data-target='#').transpose +3
-                li(value='-4')
-                  a(data-target='#').transpose -4
-                li(value='4')
-                  a(data-target='#').transpose +4
-                li(value='-5')
-                  a(data-target='#').transpose -5
-                li(value='5')
-                  a(data-target='#').transpose +5
-        .col-xs-4
-          button.btn.btn-default#bpmKeyFilter Search
+            ul#tp.dropdown-menu
+              li(value='-1')
+                a(data-target='#').transpose -1
+              li(value='1')
+                a(data-target='#').transpose +1
+              li(value='-2')
+                a(data-target='#').transpose -2
+              li(value='2')
+                a(data-target='#').transpose +2
+              li(value='-3')
+                a(data-target='#').transpose -3
+              li(value='3')
+                a(data-target='#').transpose +3
+              li(value='-4')
+                a(data-target='#').transpose -4
+              li(value='4')
+                a(data-target='#').transpose +4
+              li(value='-5')
+                a(data-target='#').transpose -5
+              li(value='5')
+                a(data-target='#').transpose +5
+    .row
+      .slider
+        label BPM
 
-      .row#newEditSong
-        .btn-group
-          button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
-          button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Edit Selected Song
+    .row
+      button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
-  #playlistsIndexControls(style='display: none')
-    .input-group
-      input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
-      span.input-group-btn
-        button.btn.btn-default(type='button')#createPlaylist Create Playlist
-  ul#playlists.list-group
-  #showPlaylistControls(style='display: none')
-    button.btn.btn-default(type='button')#deleteFromPlaylist Delete Selected From Playlist
-    button.btn.btn-default#deletePlaylist(type='button') Delete Playlist
+  .container#playlistsIndexControls(style='display: none')
+    .row
+      .input-group
+        input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
+        span.input-group-btn
+          button.btn.btn-default(type='button')#createPlaylist Create Playlist
+    .row
+      ul#playlists.list-group
+      #showPlaylistControls(style='display: none')
+        button.btn.btn-default(type='button')#deleteFromPlaylist Delete Selected From Playlist
+        button.btn.btn-default#deletePlaylist(type='button') Delete Playlist
