@@ -2,6 +2,8 @@
 
 @monoton: 'Monoton', cursive;
 
+@helvetica: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
 @bgc: rgba(255, 255, 255, 0.75);
 
 h1, h2, h3 {
@@ -42,8 +44,12 @@ body {
   margin-top: 70px;
   padding-top: 24px;
   padding-bottom: 24px;
+  h4 {
+    font-family: @helvetica;
+    color: red;
+  }
   button{
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: @helvetica;
     margin-left: 0.5em;
     margin-right: 0.5em;
   }
@@ -52,10 +58,6 @@ body {
 .panel-title {
   text-align: center;
   background-color: @bgc;
-}
-
-.modal-body {
-  font-family: @monoton;
 }
 
 .modal-content {
@@ -68,7 +70,7 @@ body {
   }
 }
 
-.controls, .table {
+.col-md-3, .table {
   background-color: @bgc;
   text-align: center;
   margin-top: 10px;
@@ -113,11 +115,7 @@ ul#searchbar.dropdown-menu {
 }
 
 ul#tp.dropdown-menu {
-  min-width: 100px;
-}
-
-#transpose {
-  margin-left: -1em;
+  min-width: 4.5em;
 }
 
 .row {
@@ -125,44 +123,21 @@ ul#tp.dropdown-menu {
   margin-top: 1.5em;
 }
 
-#keyinput {
-  width: 12.25em;
-}
-
-#key {
-  width: 5em;
-  // height: 5em;
-  // background-color: rgba(255,255,255,.25);
-  font-weight: bold;
-  // font-size: 1em;
-  // color: rgba(0, 0, 0, .5);
-}
-
-#filter {
-  margin-left: -1.5em;
-  // button {
-  //   background-color: rgba(255,255,255,.25);
-    // font-weight: bold;
-  //   font-size: 2em;
-  //   color: rgba(0, 0, 0, .5);
-  // }
-}
-
-#genrebutton {
+#genrebutton, select {
   font-weight: bold;
 }
 
 .slider label {
-  // margin: 0;
-  // padding: 0;
   position: relative;
   float: left;
-  // left: .25em;
   bottom: 1.25em;
-  // font-family: @monoton;
   font-size: 2em;
   color: rgba(0, 0, 0, .5);
 
+}
+
+tr.ui-selected {
+  background-color: red;
 }
 
 @media (max-width:767px) {

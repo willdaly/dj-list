@@ -1,16 +1,16 @@
-.controls.col-md-3
+.col-md-3
   ul( class='nav nav-pills nav-justified', role='tablist')
     li.active
       a(data-target='#')#songsButton Songs
     li
       a(data-target='#')#playlistsButton Playlists
-  #songControls.container
-    .row#newEditSong
+  .container
+    .row.songs
       .btn-group
         button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
-        button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Drop Song to Edit
-    .row
-      .col-xs-6#filter
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Edit Selected Song
+    .row.songs
+      .col-xs-6
         .btn-group
           button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Genres
           button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
@@ -53,7 +53,7 @@
             option G#M
             option g#m
           span.input-group-btn
-            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Transpose
+            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Shift
                 span.caret
             ul#tp.dropdown-menu
               li(value='-1')
@@ -76,21 +76,24 @@
                 a(data-target='#').transpose -5
               li(value='5')
                 a(data-target='#').transpose +5
-    .row
+    .row.songs
       .slider
         label BPM
 
-    .row
+    .row.songs
       button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
-  .container#playlistsIndexControls(style='display: none')
-    .row
+    .row#playlistsIndexControls(style='display: none')
       .input-group
         input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
         span.input-group-btn
           button.btn.btn-default(type='button')#createPlaylist Create Playlist
-    .row
-      ul#playlists.list-group
-      #showPlaylistControls(style='display: none')
-        button.btn.btn-default(type='button')#deleteFromPlaylist Delete Selected From Playlist
-        button.btn.btn-default#deletePlaylist(type='button') Delete Playlist
+      .input-group
+        select.form-control#playlistId
+          option select songs, playlist
+        span.input-group-btn
+          button.btn.btn-default(type='button')#addToPlaylist Add     
+    ul#playlists.list-group
+    .row#showPlaylistControls(style='display: none')
+      button.btn.btn-default(type='button')#deleteFromPlaylist Delete Selected From Playlist
+      button.btn.btn-default#deletePlaylist(type='button') Delete Playlist

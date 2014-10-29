@@ -65,12 +65,15 @@ class Playlist {
     });
   } // deletePlaylist
 
-  static addSongs (playlistId, song, fn) {
+  static addSongs (playlistId, songId, fn) {
     var _id = Mongo.ObjectID(playlistId);
+    var songid = Mongo.ObjectID(songId);
     playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
       var playlistLength = playlist.songs.length;
-      song.order = playlistLength++;
-      playlist.songs.push(song);
+      songsCollection.findOne({_id:songid}, (err, song)=>{
+        song.order = playlistLength++;
+        playlist.songs.push(song);
+      });
       playlistsCollection.save(playlist, playlist=>fn(playlist));
     });
   } //addSongs

@@ -2,8 +2,8 @@
   'use strict';
   $(document).ready(init);
   function init() {
-    $('#keyFilter').click(key);
     displaySlider();
+    $('#keyFilter').click(key);
     $('#bpmFilter').click(bpm);
     $('#bpmKeyFilter').click(bpmKey);
     $('#artistSearch').click(artistSearch);
@@ -19,6 +19,11 @@
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
+    $('#transpose').click((function() {
+      $('.noUi-handle-lower').css('color', 'red');
+      $('.noUi-handle-lower').css('border-color', 'red');
+      $('select').css('color', 'red');
+    }));
   }
   function showPlaylist() {
     var $__0 = this;
@@ -31,12 +36,8 @@
         $('#playlistsIndexControls').hide();
         $('#searchResults').empty();
         $('ul#playlists.list-group li').not($__0).remove();
-        $('#showPlaylistControls').show();
-        if (response.songs !== null) {
-          response.songs.forEach((function(song) {
-            $('#searchResults').append(("<tr value=" + song.order + ", id=" + song._id + "><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
-          }));
-        }
+        $('#showPlaylistControls').toggle();
+        appendPlaylistSongs(response.songs);
       })
     });
   }
@@ -46,11 +47,11 @@
     $('#playlistsButton').parent().removeClass('active');
     $('#playlistsIndexControls').hide();
     $('#showPlaylistControls').hide();
-    $('#songControls').show();
+    $('.songs').show();
   }
   function createPlaylist(e) {
     var songsArray = [];
-    $('#searchResults input:checkbox:checked').each(function() {
+    $('.ui-selectee.ui-selected').each(function() {
       songsArray.push($(this).val());
     });
     var name = $('#name').val();
@@ -67,25 +68,18 @@
     });
     e.preventDefault();
   }
-  function addToPlaylist(song, e) {
-    var id = $(this).val();
-    console.log('id:');
-    console.log(id);
+  function addToPlaylist(song) {
+    var songId = $('tr.ui-selectee.ui-selected').attr('id');
+    var id = $('ul#playlists.list-group li').attr('id');
     $.ajax({
       url: '/addToPlaylist',
       type: 'put',
       data: {
-        song: song,
+        songId: songId,
         playlistId: id
       },
-      success: (function(response) {
-        $('#message').empty().append(("<a href='#'>" + name + " updated</a>"));
-        $('#message a').delay(2500).fadeOut(500, (function() {
-          $('#message a').remove();
-        }));
-      })
+      success: (function(response) {})
     });
-    e.preventDefault();
   }
   function deletePlaylist() {
     var id = $('.list-group-item:visible').attr('id');
@@ -108,21 +102,13 @@
       type: 'POST',
       data: null,
       success: (function(response) {
+        $('.songs').hide();
         $('#showPlaylistControls').hide();
-        $('#songControls').hide();
-        $('#playlistControls').show();
         $('#playlistsIndexControls').show();
         if (response.playlists.length > 0) {
           response.playlists.forEach((function(playlist) {
             $('#playlists').append(("<li class='list-group-item' id=" + playlist._id + ">" + playlist.name + "</li>"));
-            $(("#" + playlist._id)).droppable({
-              accept: '#searchResults > tr',
-              activeClass: 'ui-state-highlight',
-              drop: function(event, ui) {
-                console.log('ui draggable');
-                console.log(ui.draggable);
-              }
-            });
+            $('#playlistId').append(("<option value=" + playlist._id + ">" + playlist.name + "</option>"));
           }));
         }
       })
@@ -130,8 +116,8 @@
   }
   function deleteFromPlaylist(e) {
     var songsIdsArray = [];
-    $('#searchResults input:checkbox:checked').each(function() {
-      songsIdsArray.push($(this).val());
+    $('.ui-selectee.ui-selected').each(function() {
+      songsIdsArray.push($(this).attr('id'));
     });
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
@@ -142,10 +128,7 @@
         playlistId: playlistId
       },
       success: (function(response) {
-        $('#searchResults').empty();
-        response.playlist.songs.forEach((function(song) {
-          $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
-        }));
+        appendPlaylistSongs(response.playlist.songs);
       })
     });
     e.preventDefault();
@@ -174,32 +157,6 @@
     });
     e.preventDefault();
   }
-  function genreFilter(e) {
-    var genreChecked = $('.genres input').is(':checked');
-    if (genreChecked) {
-      var genreArray = [];
-      $('.genres input:checkbox:checked').each(function() {
-        genreArray.push($(this).val());
-      });
-      $.ajax({
-        url: '/genreFilter',
-        type: 'POST',
-        data: {genre: genreArray},
-        success: (function(response) {
-          $('#searchResults').empty();
-          response.songs.forEach((function(song) {
-            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
-          }));
-        })
-      });
-    } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
-    }
-    e.preventDefault();
-  }
   function songSearch(e) {
     var searchInput = $('#searchInput').val();
     $.ajax({
@@ -207,17 +164,7 @@
       type: 'POST',
       data: {Song: searchInput},
       success: (function(response) {
-        if (response.songs.length > 0) {
-          $('#searchResults').empty();
-          response.songs.forEach((function(song) {
-            $('#searchResults').append(("<tr><td><input type=\"checkbox\", value=" + song._id + "></td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
-          }));
-        } else {
-          $('#message').empty().append(("<a href='#'>can't find " + searchInput + "</a>"));
-          $('#message a').delay(2500).fadeOut(500, (function() {
-            $('#message a').remove();
-          }));
-        }
+        appendSearchResults(response.songs);
       })
     });
     e.preventDefault();
@@ -246,119 +193,102 @@
     });
     e.preventDefault();
   }
+  function genreArray() {
+    if ($('.genres input').is(':checked')) {
+      var array = [];
+      $('.genres input:checkbox:checked').each(function() {
+        array.push($(this).val());
+      });
+      return array;
+    } else {
+      $('#message').empty().append("<a href='#'>select at least one genre</a>");
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
+      return null;
+    }
+  }
+  function genreFilter(e) {
+    var array = genreArray();
+    $.ajax({
+      url: '/genreFilter',
+      type: 'POST',
+      data: {genre: array},
+      success: (function(response) {
+        appendSearchResults(response.songs);
+      })
+    });
+    e.preventDefault();
+  }
   function transpose() {
+    var array = genreArray();
     var trans = $(this).parent().val();
     var lowBPM = parseInt($('.noUi-handle-lower > div').text());
     var key = $('#key').val();
-    var genreChecked = $('.genres input').is(':checked');
-    if (genreChecked) {
-      var genreArray = [];
-      $('.genres input:checkbox:checked').each(function() {
-        genreArray.push($(this).val());
-      });
-      $.ajax({
-        url: '/transpose',
-        type: 'POST',
-        data: {
-          trans: trans,
-          BPM: lowBPM,
-          Key: key,
-          genre: genreArray
-        },
-        success: (function(response) {
-          appendSearchResults(response.songs);
-        })
-      });
-    } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
-    }
-  }
-  function bpmKey(e) {
-    var genreChecked = $('.genres input').is(':checked');
-    if (genreChecked) {
-      var genreArray = [];
-      $('.genres input:checkbox:checked').each(function() {
-        genreArray.push($(this).val());
-      });
-      var key = $('#key').val();
-      var lowBPM = parseInt($('.noUi-handle-lower > div').text());
-      var highBPM = parseInt($('.noUi-handle-upper > div').text());
-      $.ajax({
-        url: '/bpmKey',
-        type: 'POST',
-        data: {
-          BPM: [lowBPM, highBPM],
-          Key: key,
-          genre: genreArray
-        },
-        success: (function(response) {
-          appendSearchResults(response.songs);
-        })
-      });
-    } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
-    }
-    e.preventDefault();
+    $.ajax({
+      url: '/transpose',
+      type: 'POST',
+      data: {
+        trans: trans,
+        BPM: lowBPM,
+        Key: key,
+        genre: genreArray
+      },
+      success: (function(response) {
+        appendSearchResults(response.songs);
+      })
+    });
   }
   function key(e) {
-    var genreChecked = $('.genres input').is(':checked');
-    if (genreChecked) {
-      var genreArray = [];
-      $('.genres input:checkbox:checked').each(function() {
-        genreArray.push($(this).val());
-      });
-      var data = $('#key').val();
-      $.ajax({
-        url: '/key',
-        type: 'POST',
-        data: {
-          Key: data,
-          genre: genreArray
-        },
-        success: (function(response) {
-          appendSearchResults(response.songs);
-        })
-      });
-    } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
-    }
+    var array = genreArray();
+    var data = $('#key').val();
+    $.ajax({
+      url: '/key',
+      type: 'POST',
+      data: {
+        Key: data,
+        genre: array
+      },
+      success: (function(response) {
+        appendSearchResults(response.songs);
+      })
+    });
     e.preventDefault();
   }
   function bpm(e) {
-    var genreChecked = $('.genres input').is(':checked');
-    if (genreChecked) {
-      var genreArray = [];
-      $('.genres input:checkbox:checked').each(function() {
-        genreArray.push($(this).val());
-      });
-      var lowBPM = parseInt($('.noUi-handle-lower > div').text());
-      var highBPM = parseInt($('.noUi-handle-upper > div').text());
-      $.ajax({
-        url: '/bpm',
-        type: 'POST',
-        data: {
-          BPM: [lowBPM, highBPM],
-          genre: genreArray
-        },
-        success: (function(response) {
-          appendSearchResults(response.songs);
-        })
-      });
-    } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
-    }
+    var array = genreArray();
+    var lowBPM = parseInt($('.noUi-handle-lower > div').text());
+    var highBPM = parseInt($('.noUi-handle-upper > div').text());
+    $.ajax({
+      url: '/bpm',
+      type: 'POST',
+      data: {
+        BPM: [lowBPM, highBPM],
+        genre: array
+      },
+      success: (function(response) {
+        appendSearchResults(response.songs);
+      })
+    });
+    e.preventDefault();
+  }
+  function bpmKey(e) {
+    var array = genreArray();
+    var key = $('#key').val();
+    var lowBPM = parseInt($('.noUi-handle-lower > div').text());
+    var highBPM = parseInt($('.noUi-handle-upper > div').text());
+    $.ajax({
+      url: '/bpmKey',
+      type: 'POST',
+      data: {
+        BPM: [lowBPM, highBPM],
+        Key: key,
+        genre: array
+      },
+      success: (function(response) {
+        appendSearchResults(response.songs);
+      })
+    });
     e.preventDefault();
   }
   function appendSearchResults(songs) {
@@ -366,18 +296,21 @@
       $('#searchResults').empty();
       songs.forEach((function(song) {
         $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
-        $(("#" + song._id)).draggable({
-          cancel: 'a.ui-icon',
-          revert: 'invalid',
-          containment: 'document',
-          helper: 'clone',
-          cursor: 'move'
-        });
+        $('#searchResults').selectable();
       }));
     } else {
       $('#message').append('<a href="#">didn\'t find anything</a>');
       $('#message a').delay(2500).fadeOut(500, (function() {
         $('#message a').remove();
+      }));
+    }
+  }
+  function appendPlaylistSongs(songs) {
+    if (songs.length > 0) {
+      $('#searchResults').empty();
+      songs.forEach((function(song) {
+        $('#searchResults').append(("<tr value=" + song.order + ", id=" + song._id + "><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').selectable();
       }));
     }
   }

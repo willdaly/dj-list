@@ -7,7 +7,7 @@ exports.bounce = (req, res, next)=>{
   if(res.locals.user){
     next();
   } else {
-    res.redirect('/');
+    res.render('home/index', {message: 'must be signed in'});
   }
 };
 
@@ -17,7 +17,7 @@ exports.login = (req, res)=>{
       req.session.userId = user._id;
       res.redirect('/');
     }else{
-      res.redirect('/');
+      res.render('home/index', {message: 'invalid username/password'});
     }
   });
 };
@@ -31,9 +31,9 @@ exports.create = (req, res)=>{
   User.create(req.body, user=>{
     if(user){
       req.session.userId = user._id;
-      res.redirect('/');
+      res.render('home/index', {message: `user.name account created`});
     }else{
-      res.redirect('/');
+      res.render('home/index', {message: 'already registered'});
     }
   });
 };
