@@ -49,17 +49,22 @@
     $('#showPlaylistControls').hide();
     $('.songs').show();
   }
-  function createPlaylist(e) {
-    var songsArray = [];
-    $('.ui-selectee.ui-selected').each(function() {
-      songsArray.push($(this).val());
+  function selectSongsToAdd() {
+    var fakeArray = $('tr.ui-selectee.ui-selected');
+    var realArray = $.makeArray(fakeArray);
+    var songIdsArray = $.map(realArray, function(row, i) {
+      return row.id;
     });
+    return songIdsArray;
+  }
+  function createPlaylist(e) {
+    var songIdsArray = selectSongsToAdd();
     var name = $('#name').val();
     $.ajax({
       url: '/createPlaylist',
       type: 'POST',
       data: {
-        songIds: songsArray,
+        songIds: songIdsArray,
         name: name
       },
       success: (function(response) {
@@ -69,16 +74,21 @@
     e.preventDefault();
   }
   function addToPlaylist(song) {
-    var songId = $('tr.ui-selectee.ui-selected').attr('id');
+    var songIdsArray = selectSongsToAdd();
     var id = $('ul#playlists.list-group li').attr('id');
     $.ajax({
       url: '/addToPlaylist',
       type: 'put',
       data: {
-        songId: songId,
+        songIds: songIdsArray,
         playlistId: id
       },
-      success: (function(response) {})
+      success: (function(response) {
+        $('#message').empty().append(("<a href='#'>" + name + " updated</a>"));
+        $('#message a').delay(2500).fadeOut(500, (function() {
+          $('#message a').remove();
+        }));
+      })
     });
   }
   function deletePlaylist() {
@@ -106,6 +116,8 @@
         $('#showPlaylistControls').hide();
         $('#playlistsIndexControls').show();
         if (response.playlists.length > 0) {
+          $('#playlistId').empty();
+          $('#playlistId').append("<option>select songs, playlist</option>");
           response.playlists.forEach((function(playlist) {
             $('#playlists').append(("<li class='list-group-item' id=" + playlist._id + ">" + playlist.name + "</li>"));
             $('#playlistId').append(("<option value=" + playlist._id + ">" + playlist.name + "</option>"));
@@ -115,16 +127,13 @@
     });
   }
   function deleteFromPlaylist(e) {
-    var songsIdsArray = [];
-    $('.ui-selectee.ui-selected').each(function() {
-      songsIdsArray.push($(this).attr('id'));
-    });
+    var songIdsArray = selectSongsToAdd();
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: '/deleteFromPlaylist',
       type: 'POST',
       data: {
-        songIds: songsIdsArray,
+        songIds: songIdsArray,
         playlistId: playlistId
       },
       success: (function(response) {

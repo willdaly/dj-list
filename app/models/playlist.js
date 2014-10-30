@@ -4,6 +4,7 @@ var songsCollection = global.nss.db.collection('songs');
 // var traceur = require('traceur');
 // var ListItem = traceur.require(__dirname + '/../models/listItem.js');
 var Mongo = require('mongodb');
+// var _ = require('lodash');
 
 
 class Playlist {
@@ -40,6 +41,28 @@ class Playlist {
     });
   }
 
+  static addSongs (obj, fn) {
+    var _id = Mongo.ObjectID(obj.playlistId);
+    playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
+      var songsArray = [];
+      obj.songIds.forEach(song=>{
+        var mongoid =  Mongo.ObjectID(song);
+        songsArray.push(mongoid);
+      });
+      songsCollection.find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
+        if (songs) {
+          var playlistLength = playlist.songs.length;
+          songs.forEach(song=>{
+            song.order = playlistLength++;
+            playlist.songs.push(song);
+          });
+          playlistsCollection.save(playlist, playlist=>fn(playlist));
+        } else {
+          fn(null);
+        }
+      });
+    }); //findplaylist
+  }
 
 
   static index (userId, fn){
@@ -65,19 +88,6 @@ class Playlist {
     });
   } // deletePlaylist
 
-  static addSongs (playlistId, songId, fn) {
-    var _id = Mongo.ObjectID(playlistId);
-    var songid = Mongo.ObjectID(songId);
-    playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
-      var playlistLength = playlist.songs.length;
-      songsCollection.findOne({_id:songid}, (err, song)=>{
-        song.order = playlistLength++;
-        playlist.songs.push(song);
-      });
-      playlistsCollection.save(playlist, playlist=>fn(playlist));
-    });
-  } //addSongs
-
   static show (playlistId, fn) {
     var _id = Mongo.ObjectID(playlistId);
     playlistsCollection.findOne({_id : _id}, (err, playlist)=>{
@@ -96,56 +106,42 @@ class Playlist {
     });
   } //show
 
-  // static updatePlaylist (songId, order, playlistId, fn){
-  //   var _id = Mongo.ObjectID(playlistId);
-  //   playlistsCollection.findOne({_id : _id }, (err, playlist)=>{
-  //     var o = order;
-  //     playlist.songs.forEach(song=>{
-  //       if (song.order >= o){
-  //         song.order = o +1;
-  //         o++;
-  //       }
-  //     }); //updates songs with orders greater or equal to one that moved
-  //   playlist.songs.forEach(song=>{
-  //     if (song._id.toString() === songId){
-  //       song.order = order;
-  //     }
-  //   }); //updates
-  //
-  //   });
-  // }
-
   static deleteFromPlaylist (songIds, playlistId, fn) {
     var _id = Mongo.ObjectID(playlistId);
     playlistsCollection.findOne({_id : _id }, (err, playlist)=>{
-
-      playlist.songs.forEach(song=>{
-        songIds.forEach(songId=>{
-          if (song._id.toString() === songId){
-            var index = playlist.songs.indexOf(song);
-            playlist.songs.splice(index, 1);
-          }
-        }); //deletes songs
+      var songIdsArray = [];
+      songIds.forEach(songId=>{
+        var mongoid = Mongo.ObjectID(songId);
+        songIdsArray.push(mongoid);
+      });
+      songsCollection.find({_id: {$in: songIdsArray}}).toArray((err, songs)=>{
+        songs.forEach(s=>{
+          playlist.songs.forEach(song=>{
+            if (s.Song === song.Song){
+              var index = playlist.songs.indexOf(song);
+              playlist.songs.splice(index, 1);
+            }
+          });
+        });
         playlist.songs.sort((a, b)=>{
           if (a.order > b.order){
-            return -1;
-          } else if (a.order < b.order ) {
             return 1;
+          } else if (a.order < b.order ) {
+            return -1;
           } else {
             return 0;
           }
         }); //sorts playlist
-      var order = 1;
-      playlist.songs.forEach(song=>{
-        song.order = order;
-        order++;
-      }); //reorders playlist
-      });
-    playlistsCollection.save(playlist, ()=>fn(playlist));
-    });
-  }
+        var order = 1;
+        playlist.songs.forEach(song=>{
+          song.order = order;
+          order++;
+        }); //reorders playlist
+        playlistsCollection.save(playlist, ()=>fn(playlist));
+      }); //songcollection
+    }); //find playlist
+  } //Playlist
 
-} //Playlist
-
+}
 
 module.exports = Playlist;
