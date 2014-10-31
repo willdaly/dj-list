@@ -28,12 +28,12 @@ exports.logout = (req, res)=>{
 };
 
 exports.create = (req, res)=>{
-  User.create(req.body, user=>{
+  User.create(req.body, (user, message)=>{
     if(user){
       req.session.userId = user._id;
       res.render('home/index', {message: `user.name account created`});
     }else{
-      res.render('home/index', {message: 'already registered'});
+      res.render('home/index', {message: message});
     }
   });
 };

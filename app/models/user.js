@@ -6,15 +6,23 @@ var _ = require('lodash');
 
 class User {
   static create (obj, fn){
+    var message;
     userCollection.findOne({email: obj.email}, (e, u)=>{
       if (!u){
-        var user = new User();
-        user._id = Mongo.ObjectID(obj._id);
-        user.email = obj.email;
-        user.password = bcrypt.hashSync(obj.password, 8);
-        userCollection.save(user, ()=>fn(user));
+        if (obj.email.length > 5 &&  obj.password !== 'password' && obj.password.length > 8) {
+          var user = new User();
+          user._id = Mongo.ObjectID(obj._id);
+          user.email = obj.email;
+          user.password = bcrypt.hashSync(obj.password, 8);
+          userCollection.save(user, ()=>fn(user, null));
+        } else {
+          message = 'email or password too short or obvious';
+          fn(null, message);
+        }
+
       }else{
-        fn(null);
+        message = 'already registered';
+        fn(null, message);
       }
     });
     //end of create
