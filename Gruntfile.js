@@ -20,6 +20,7 @@ module.exports = function(grunt){
         'Gruntfile.js',
         'test/**/*.js',
         'app/**/*.js',
+        '!app/static/bootstrap/**/*.js',
         '!app/static/js/vendor/**/*.js',
         '!app/static/js/es6/compiled/**/*.js',
         '!app/static/jquery-ui/*.js',

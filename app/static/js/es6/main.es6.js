@@ -296,7 +296,8 @@
       $('#searchResults').empty();
       songs.forEach(song=>{
         $('#searchResults').append(`<tr id=${song._id}><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        $('#searchResults').selectable();
+        //$('#searchResults').selectable();
+        $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       }); //append songs
     } else {
       $('#message').append('<a href="#">didn\'t find anything</a>');
@@ -309,7 +310,8 @@
       $('#searchResults').empty();
       songs.forEach(song=>{
         $('#searchResults').append(`<tr value=${song.order}, id=${song._id}><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        $( '#searchResults' ).selectable();
+        // $( '#searchResults' ).selectable();
+        $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       });
     }
   }
