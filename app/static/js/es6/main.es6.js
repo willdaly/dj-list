@@ -24,6 +24,7 @@
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
+    $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
     $('#transpose').click(()=>{
       $('.noUi-handle-lower').css('color','red'); //make toggle
       $('.noUi-handle-lower').css('border-color', 'red');
@@ -203,10 +204,10 @@
   } //artistSearch
 
   function genreArray(){
-    if ($('.genres input').is(':checked')){
+    if ($('li').hasClass('ui-selected')){
       var array = [];
-      $('.genres input:checkbox:checked').each(function(){
-        array.push($(this).val());
+      $('li.ui-selected').each(function(){
+        array.push($(this).text());
       });
       return array;
     } else {
@@ -292,11 +293,10 @@
   } //bpmkey
 
   function appendSearchResults(songs){
-    if (songs.length > 0){
+    if (songs !== null){
       $('#searchResults').empty();
       songs.forEach(song=>{
         $('#searchResults').append(`<tr id=${song._id}><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        //$('#searchResults').selectable();
         $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       }); //append songs
     } else {
@@ -310,7 +310,6 @@
       $('#searchResults').empty();
       songs.forEach(song=>{
         $('#searchResults').append(`<tr value=${song.order}, id=${song._id}><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
-        // $( '#searchResults' ).selectable();
         $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       });
     }

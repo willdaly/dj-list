@@ -19,6 +19,9 @@
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
+    $('.genres').bind('mousedown', (function(e) {
+      e.metaKey = true;
+    })).selectable();
     $('#transpose').click((function() {
       $('.noUi-handle-lower').css('color', 'red');
       $('.noUi-handle-lower').css('border-color', 'red');
@@ -203,10 +206,10 @@
     e.preventDefault();
   }
   function genreArray() {
-    if ($('.genres input').is(':checked')) {
+    if ($('li').hasClass('ui-selected')) {
       var array = [];
-      $('.genres input:checkbox:checked').each(function() {
-        array.push($(this).val());
+      $('li.ui-selected').each(function() {
+        array.push($(this).text());
       });
       return array;
     } else {
@@ -301,7 +304,7 @@
     e.preventDefault();
   }
   function appendSearchResults(songs) {
-    if (songs.length > 0) {
+    if (songs !== null) {
       $('#searchResults').empty();
       songs.forEach((function(song) {
         $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
