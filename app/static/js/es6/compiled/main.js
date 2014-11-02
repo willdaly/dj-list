@@ -304,7 +304,7 @@
     e.preventDefault();
   }
   function appendSearchResults(songs) {
-    if (songs !== null) {
+    if (songs.length > 0) {
       $('#searchResults').empty();
       songs.forEach((function(song) {
         $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
@@ -313,6 +313,7 @@
         })).selectable();
       }));
     } else {
+      $('#message').empty();
       $('#message').append('<a href="#">didn\'t find anything</a>');
       $('#message a').delay(2500).fadeOut(500, (function() {
         $('#message a').remove();
