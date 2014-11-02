@@ -50,7 +50,6 @@ class Song {
       factor = factor + 1;
       bpm = obj.BPM * factor;
     }
-    bpm = Math.abs(bpm);
     var lowBPM = Math.floor(bpm);
     var highBPM = Math.ceil(bpm);
     var oldkey = obj.Key;
@@ -81,7 +80,7 @@ class Song {
       }
       key = minorKeyArray[index];
     }
-    var genre = obj.genre;
+    var genre = obj.genre.split(',');
     songCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, songs)=>{
       fn(songs);
     });
