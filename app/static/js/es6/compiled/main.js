@@ -78,7 +78,7 @@
   }
   function addToPlaylist(song) {
     var songIdsArray = selectSongsToAdd();
-    var id = $('ul#playlists.list-group li').attr('id');
+    var id = $('#playlistId option:selected').val();
     $.ajax({
       url: '/addToPlaylist',
       type: 'put',
