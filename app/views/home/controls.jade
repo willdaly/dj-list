@@ -97,7 +97,11 @@
     .row          
       ul#playlists.list-group
       
+    .row.playlistsShow(style='display: none')
+      .btn-group
+        button.btn.btn-default(type='button')#deleteFromPlaylist Remove Selected
+        button.btn.btn-default(type='button')#savePlaylistOrder Save Order 
     .row.playlistsShow(style='display: none') 
-      button.btn.btn-default(type='button')#deleteFromPlaylist Remove Selected
+       
     .row.playlistsShow(style='display: none')    
       button.btn.btn-small.btn-danger#deletePlaylist(type='button') Delete Playlist

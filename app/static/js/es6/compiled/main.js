@@ -99,15 +99,18 @@
   }
   function deletePlaylist() {
     var id = $('.list-group-item:visible').attr('id');
-    $.ajax({
-      url: ("/deletePlaylist/" + id),
-      type: 'DELETE',
-      data: null,
-      success: (function(response) {
-        $('#searchResults').empty();
-        getplaylistindex();
-      })
-    });
+    var sure = confirm('are you sure you want to delete this playlist?');
+    if (sure) {
+      $.ajax({
+        url: ("/deletePlaylist/" + id),
+        type: 'DELETE',
+        data: null,
+        success: (function(response) {
+          $('#searchResults').empty();
+          getplaylistindex();
+        })
+      });
+    }
   }
   function getplaylistindex() {
     $('#songsButton').parent().removeClass('active');
