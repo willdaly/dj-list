@@ -10,13 +10,16 @@ var Mongo = require('mongodb');
 class Playlist {
   static create (obj, userId, fn){
     var songsArray = [];
-    obj.songIds.forEach(song=>{
-      var mongoid =  Mongo.ObjectID(song);
-      songsArray.push(mongoid);
-    });
+    var sArray = [];
+    if (obj.songIds) {
+      obj.songIds.forEach(song=>{
+        var mongoid =  Mongo.ObjectID(song);
+        songsArray.push(mongoid);
+      });
+    }
+
     songsCollection.find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
       if (songs) {
-        var sArray = [];
         var order = 1;
         songs.forEach(song=>{
           song.order = order;
@@ -36,9 +39,21 @@ class Playlist {
             }
           }); //playlist find
       } else {
+        playlistsCollection.findOne({name: obj.name}, (e, playlist)=>{
+            if (!playlist){
+              playlist = new Playlist();
+              playlist._id = Mongo.ObjectID(obj._id);
+              playlist.name = obj.name;
+              playlist.userId = userId;
+              playlist.songs = sArray;
+              playlistsCollection.save(playlist, ()=>fn(playlist));
+            }else{
+              fn(null);
+            }
+          }); //playlist find
         fn(null);
       }
-    });
+    }); //songsfind
   }
 
   static addSongs (obj, fn) {
@@ -51,7 +66,7 @@ class Playlist {
       });
       songsCollection.find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
         if (songs) {
-          var playlistLength = playlist.songs.length;
+          var playlistLength = playlist.songs.length > 0 ? playlist.songs.length : 1;
           songs.forEach(song=>{
             song.order = playlistLength++;
             playlist.songs.push(song);

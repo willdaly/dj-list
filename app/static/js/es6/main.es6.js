@@ -26,7 +26,13 @@
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
     $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
+    $('#controlsToggle').click(controlsToggle);
   } //init
+
+  function controlsToggle() {
+    $('.container').toggle();
+    $('.nav.nav-pills.nav-justified').toggle();
+  }
 
   function showPlaylist() {
     var playlistId = $(this).attr('id');

@@ -154,21 +154,31 @@ li.ui-selected {
   color: red;
 }
 
-@media (max-width:767px) {
-  #songsButton {
-    width: 50%;
-    float: left;
-  }
+.genres li:not(.ui-selected):hover {
+  color: orange;
 }
 
-@media (max-width:767px) {
-  a.navbar-brand {
-    display: none;
-  }
+ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse button.btn-link {
+  margin-top: .5em;
 }
 
-@media (max-width:800px) {
-  a.glyphicon.glyphicon-user {
-    display: none;
-  }
-}
+
+
+// @media (max-width:767px) {
+//   #songsButton {
+//     width: 50%;
+//     float: left;
+//   }
+// }
+//
+// @media (max-width:767px) {
+//   a.navbar-brand {
+//     display: none;
+//   }
+// }
+//
+// @media (max-width:800px) {
+//   a.glyphicon.glyphicon-user {
+//     display: none;
+//   }
+// }

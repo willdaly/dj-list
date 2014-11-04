@@ -23,6 +23,11 @@
     $('.genres').bind('mousedown', (function(e) {
       e.metaKey = true;
     })).selectable();
+    $('#controlsToggle').click(controlsToggle);
+  }
+  function controlsToggle() {
+    $('.container').toggle();
+    $('.nav.nav-pills.nav-justified').toggle();
   }
   function showPlaylist() {
     var $__0 = this;
