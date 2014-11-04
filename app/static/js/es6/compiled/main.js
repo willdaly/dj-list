@@ -14,19 +14,15 @@
     $('#createNewSong').click(createSong);
     $('#createPlaylist').click(createPlaylist);
     $('#addToPlaylist').click(addToPlaylist);
-    $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
+    $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
     $('#deleteFromPlaylist').click(deleteFromPlaylist);
+    $('#songsButton').click(songsControls);
     $('#songsButton').click(songsControls);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
     $('.genres').bind('mousedown', (function(e) {
       e.metaKey = true;
     })).selectable();
-    $('#transpose').click((function() {
-      $('.noUi-handle-lower').css('color', 'red');
-      $('.noUi-handle-lower').css('border-color', 'red');
-      $('select').css('color', 'red');
-    }));
   }
   function showPlaylist() {
     var $__0 = this;
@@ -36,10 +32,12 @@
       type: 'POST',
       data: null,
       success: (function(response) {
-        $('#playlistsIndexControls').hide();
-        $('#searchResults').empty();
+        $('.songs').hide();
+        $('.playlistsIndex').hide();
         $('ul#playlists.list-group li').not($__0).remove();
-        $('#showPlaylistControls').toggle();
+        $('.playlistsShow').toggle();
+        $('#searchResults').empty();
+        $('#orderTableHead').show();
         appendPlaylistSongs(response.songs);
       })
     });
@@ -48,9 +46,14 @@
     $('ul#playlists.list-group').empty();
     $('#songsButton').parent().addClass('active');
     $('#playlistsButton').parent().removeClass('active');
-    $('#playlistsIndexControls').hide();
-    $('#showPlaylistControls').hide();
+    $('.playlistsIndex').hide();
+    $('.playlistsShow').hide();
+    $('#orderTableHead').hide();
+    $('.order').hide();
     $('.songs').show();
+    if ($('.ui-sortable-handle').length !== 0) {
+      $('.ui-sortable-handle').hide();
+    }
   }
   function selectSongsToAdd() {
     var fakeArray = $('tr.ui-selectee.ui-selected');
@@ -110,14 +113,16 @@
     $('#songsButton').parent().removeClass('active');
     $('#playlistsButton').parent().addClass('active');
     $('.list-group-item:visible').remove();
+    $('#orderTableHead').hide();
+    $('.order').hide();
     $.ajax({
       url: '/playlists',
       type: 'POST',
       data: null,
       success: (function(response) {
         $('.songs').hide();
-        $('#showPlaylistControls').hide();
-        $('#playlistsIndexControls').show();
+        $('.playlistsShow').hide();
+        $('.playlistsIndex').show();
         if (response.playlists.length > 0) {
           $('#playlistId').empty();
           $('#playlistId').append("<option>select songs, playlist</option>");
@@ -306,6 +311,7 @@
   function appendSearchResults(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
+      $('#orderTableHead').hide();
       songs.forEach((function(song) {
         $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
@@ -324,11 +330,16 @@
     if (songs.length > 0) {
       $('#searchResults').empty();
       songs.forEach((function(song) {
-        $('#searchResults').append(("<tr value=" + song.order + ", id=" + song._id + "><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all' ,id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
           e.metaKey = true;
         })).selectable();
       }));
+      $('#searchResults').sortable({handle: '.order'});
+      $('#searchResults').selectable({
+        filter: 'tr',
+        cancel: '.order'
+      });
     }
   }
   function displaySlider() {

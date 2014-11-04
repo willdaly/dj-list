@@ -1,7 +1,7 @@
 nav.navbar.navbar-default(role='navigation')
   .container-fluid
       .navbar-header
-        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.collapse.navbar-collapse')
+        button.btn.btn-link.navbar-toggle(type='button', data-toggle='collapse', data-target='.collapse.navbar-collapse')
           span.sr-only Toggle navigation
           span.icon-bar
           span.icon-bar
@@ -31,4 +31,4 @@ nav.navbar.navbar-default(role='navigation')
             a(data-target='#').glyphicon.glyphicon-user #{user.email}
           li
             form(method='POST', action='/logout')
-              button.btn.btn-default.btn-sm logout
+              button.btn.btn-link logout

@@ -1,4 +1,4 @@
-.col-md-3
+.col-sm-3
   ul( class='nav nav-pills nav-justified', role='tablist')
     li.active
       a(data-target='#')#songsButton Songs
@@ -7,8 +7,8 @@
   .container
     .row.songs
       .btn-group
-        button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') Enter New Song
-        button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Edit Selected Song
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') New Song
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#') Edit Selected
     .row.songs
       .col-xs-6
         .btn-group
@@ -83,17 +83,21 @@
     .row.songs
       button.btn.btn-default.btn-lg#bpmKeyFilter Search
 
-    .row#playlistsIndexControls(style='display: none')
+    .row.playlistsIndex(style='display: none')
       .input-group
         input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
         span.input-group-btn
           button.btn.btn-default(type='button')#createPlaylist Create Playlist
+    .row.playlistsIndex(style='display: none')      
       .input-group
         select.form-control#playlistId
           option select songs, playlist
         span.input-group-btn
-          button.btn.btn-default(type='button')#addToPlaylist Add     
-    ul#playlists.list-group
-    .row#showPlaylistControls(style='display: none')
-      button.btn.btn-default(type='button')#deleteFromPlaylist Delete Selected From Playlist
-      button.btn.btn-default#deletePlaylist(type='button') Delete Playlist
+          button.btn.btn-default(type='button')#addToPlaylist Add
+    .row          
+      ul#playlists.list-group
+      
+    .row.playlistsShow(style='display: none') 
+      button.btn.btn-default(type='button')#deleteFromPlaylist Remove Selected
+    .row.playlistsShow(style='display: none')    
+      button.btn.btn-small.btn-danger#deletePlaylist(type='button') Delete Playlist

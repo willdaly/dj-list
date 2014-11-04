@@ -19,18 +19,13 @@
     $('#createNewSong').click(createSong);
     $('#createPlaylist').click(createPlaylist);
     $('#addToPlaylist').click(addToPlaylist);
-    $('#showPlaylistControls').on('click', '#deletePlaylist', deletePlaylist);
+    $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
     $('#deleteFromPlaylist').click(deleteFromPlaylist);
     $('#songsButton').click(songsControls);
+    $('#songsButton').click(songsControls); //new
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'li', showPlaylist);
     $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
-    $('#transpose').click(()=>{
-      $('.noUi-handle-lower').css('color','red'); //make toggle
-      $('.noUi-handle-lower').css('border-color', 'red');
-      $('select').css('color','red');
-    });
-
   } //init
 
   function showPlaylist() {
@@ -40,12 +35,13 @@
       type: 'POST',
       data: null,
       success: response => {
-        $('#playlistsIndexControls').hide();
-        $('#searchResults').empty();
+        $('.songs').hide();
+        $('.playlistsIndex').hide();
         $('ul#playlists.list-group li').not(this).remove();
-        $('#showPlaylistControls').toggle();
+        $('.playlistsShow').toggle();
+        $('#searchResults').empty();
+        $('#orderTableHead').show();
         appendPlaylistSongs(response.songs);
-        // $('thead tr:nth-child(4n)').append('<th>order</th>');
       }
     });
   }
@@ -54,9 +50,14 @@
     $('ul#playlists.list-group').empty();
     $('#songsButton').parent().addClass('active');
     $('#playlistsButton').parent().removeClass('active');
-    $('#playlistsIndexControls').hide();
-    $('#showPlaylistControls').hide();
+    $('.playlistsIndex').hide();
+    $('.playlistsShow').hide();
+    $('#orderTableHead').hide();
+    $('.order').hide();
     $('.songs').show();
+    if ($('.ui-sortable-handle').length !== 0){
+      $('.ui-sortable-handle').hide();
+    }
   }
 
   function selectSongsToAdd () {
@@ -111,14 +112,16 @@
     $('#songsButton').parent().removeClass('active');
     $('#playlistsButton').parent().addClass('active');
     $('.list-group-item:visible').remove();
+    $('#orderTableHead').hide();
+    $('.order').hide();
     $.ajax({
       url: '/playlists',
       type: 'POST',
       data: null,
       success: response => {
         $('.songs').hide();
-        $('#showPlaylistControls').hide();
-        $('#playlistsIndexControls').show();
+        $('.playlistsShow').hide();
+        $('.playlistsIndex').show();
         if (response.playlists.length > 0){
           $('#playlistId').empty();
           $('#playlistId').append(`<option>select songs, playlist</option>`);
@@ -295,6 +298,7 @@
   function appendSearchResults(songs){
     if (songs.length > 0){
       $('#searchResults').empty();
+      $('#orderTableHead').hide();
       songs.forEach(song=>{
         $('#searchResults').append(`<tr id=${song._id}><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
         $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
@@ -310,9 +314,18 @@
     if (songs.length > 0) {
       $('#searchResults').empty();
       songs.forEach(song=>{
-        $('#searchResults').append(`<tr value=${song.order}, id=${song._id}><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
+        $('#searchResults').append(`<tr value=${song.order}, class='ui-corner-all' ,id=${song._id}><td class='order'>${song.order}</td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td>${song.Album}</td><td>${song.genre}</td></tr>`);
         $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       });
+      $('#searchResults').sortable({ handle: '.order' });
+      // $('#searchResults').sortable({
+      //     handle: '.order',
+      //     update: function(){
+      //       var newOrder = $('#searchResults').sortable('toArray');
+      //       var i
+      //     };
+      //   });
+      $('#searchResults').selectable({ filter: 'tr', cancel: '.order' });
     }
   }
 
