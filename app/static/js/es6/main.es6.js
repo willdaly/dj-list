@@ -7,7 +7,13 @@
   $(document).ready(init);
 
   function init(){
+
     displaySlider();
+
+    $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
+    $('#controlsToggle').click(controlsToggle);
+
+    $('#createNewSong').click(createSong);
     $('#keyFilter').click(key);
     $('#bpmFilter').click(bpm);
     $('#bpmKeyFilter').click(bpmKey);
@@ -16,18 +22,30 @@
     $('#songSearch').click(songSearch);
     $('#genreFilter').click(genreFilter);
     $('.transpose').click(transpose);
-    $('#createNewSong').click(createSong);
-    $('#createPlaylist').click(createPlaylist);
-    $('#addToPlaylist').click(addToPlaylist);
-    $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
-    $('#deleteFromPlaylist').click(deleteFromPlaylist);
     $('#songsButton').click(songsControls);
-    $('#songsButton').click(songsControls); //new
+
+    $('#createPlaylist').click(createPlaylist);
     $('#playlistsButton').click(getplaylistindex);
-    $('#playlists').on('click', 'li', showPlaylist);
-    $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
-    $('#controlsToggle').click(controlsToggle);
+    $('#playlists').on('click', 'a', showPlaylist);
+    $('#playlists').on('click', 'button', addToPlaylist);
+    // $('#renamePlaylist').click(renamePlaylist);
+    $('#deleteFromPlaylist').click(deleteFromPlaylist);
+    $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
+
   } //init
+
+  // function renamePlaylist() {
+  //   var newName = $('editPlaylistName').val();
+  //   var id = $('.list-group-item:visible').attr('id');
+  //   $.ajax({
+  //     url: '/renamePlaylist',
+  //     type: 'put',
+  //     data: {newName: newName, playlistId : id},
+  //     success: response => {
+  //       var id = $('.list-group-item:visible a').text(`newName`);
+  //     }
+  //   });
+  // }
 
   function controlsToggle() {
     $('.container').toggle();
@@ -35,7 +53,7 @@
   }
 
   function showPlaylist() {
-    var playlistId = $(this).attr('id');
+    var playlistId = $(this).parent().attr('id');
     $.ajax({
       url: `/playlists/${playlistId}`,
       type: 'POST',
@@ -43,8 +61,8 @@
       success: response => {
         $('.songs').hide();
         $('.playlistsIndex').hide();
-        $('ul#playlists.list-group li').not(this).remove();
-        $('.playlistsShow').toggle();
+        $('ul#playlists.list-group li a').not(this).parent().remove();
+        $('.playlistsShow').show();
         $('#searchResults').empty();
         $('#orderTableHead').show();
         appendPlaylistSongs(response.songs);
@@ -81,7 +99,7 @@
       type: 'POST',
       data: {songIds: songIdsArray, name: name},
       success: response => {
-        $('#playlists').prepend(`<li class='list-group-item' id=${response.playlist._id}>${response.playlist.name}</li>`);
+        $('#playlists').prepend(`<li class='list-group-item clearfix' id=${response.playlist._id}><a data-target='#'>${response.playlist.name}</a><button class='btn pull-right'>add songs</button></li>`);
       }
     });
     e.preventDefault();
@@ -89,7 +107,7 @@
 
   function addToPlaylist (song) {
     var songIdsArray = selectSongsToAdd();
-    var id = $('#playlistId option:selected').val();
+    var id = $(this).parent().attr('id');
     $.ajax({
       url: '/addToPlaylist',
       type: 'put',
@@ -135,8 +153,7 @@
           $('#playlistId').empty();
           $('#playlistId').append(`<option>select songs, playlist</option>`);
           response.playlists.forEach(playlist=>{
-            $('#playlists').append(`<li class='list-group-item' id=${playlist._id}>${playlist.name}</li>`);
-            $('#playlistId').append(`<option value=${playlist._id}>${playlist.name}</option>`);
+            $('#playlists').append(`<li class='list-group-item clearfix' id=${playlist._id}><a data-target='#'>${playlist.name}</a><button class='btn pull-right'>add songs</button></li>`);
           });
         }
       }

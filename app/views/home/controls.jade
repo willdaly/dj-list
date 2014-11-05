@@ -88,21 +88,18 @@
         input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
         span.input-group-btn
           button.btn.btn-default(type='button')#createPlaylist Create Playlist
-    .row.playlistsIndex(style='display: none')      
-      .input-group
-        select.form-control#playlistId
-          option select songs, playlist
-        span.input-group-btn
-          button.btn.btn-default(type='button')#addToPlaylist Add
-    .row          
+    .row      
       ul#playlists.list-group
       
     .row.playlistsShow(style='display: none')
       .btn-group
-        button.btn.btn-default(type='button')#deleteFromPlaylist Remove Selected
+        button.btn.btn-default(type='button')#deleteFromPlaylist Remove Songs
         button.btn.btn-default(type='button')#savePlaylistOrder Save Order 
-    .row.playlistsShow(style='display: none') 
-       
+    .row.playlistsShow(style='display: none')
+      .input-group
+        input.form-control(type='text', id='editPlaylistName')
+        span.input-group-btn
+          button.btn.btn-default(type='button')#renamePlaylist Rename Playlist
     .row.playlistsShow(style='display: none')    
       button.btn.btn-small.btn-warning#deletePlaylist(type='button') Delete Playlist
   button.btn.btn-default#controlsToggle show / hide controls    

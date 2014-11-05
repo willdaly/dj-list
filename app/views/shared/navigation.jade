@@ -27,8 +27,8 @@ nav.navbar.navbar-default(role='navigation')
         li#message
 
         if (user)
-          li
-            a(data-target='#').glyphicon.glyphicon-user #{user.email}
+          //- li
+          //-   a(data-target='#').glyphicon.glyphicon-user #{user.email}
           li
             form(method='POST', action='/logout')
               button.btn.btn-link logout
