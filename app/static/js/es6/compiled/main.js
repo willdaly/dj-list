@@ -27,20 +27,25 @@
   }
   function renamePlaylist() {
     var newName = $('#editPlaylistName').val();
-    console.log(newName);
-    var id = $('.list-group-item:visible').attr('id');
-    console.log(id);
-    $.ajax({
-      url: '/renamePlaylist',
-      type: 'put',
-      data: {
-        newName: newName,
-        playlistId: id
-      },
-      success: (function(response) {
-        var id = $('.list-group-item:visible a').text(newName);
-      })
-    });
+    if (newName.length > 3) {
+      var id = $('.list-group-item:visible').attr('id');
+      $.ajax({
+        url: '/renamePlaylist',
+        type: 'put',
+        data: {
+          newName: newName,
+          playlistId: id
+        },
+        success: (function(response) {
+          var id = $('.list-group-item:visible a').text(newName);
+        })
+      });
+    } else {
+      $('#message').empty().append("<a href='#'>name blank or too short</a>");
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
+    }
   }
   function controlsToggle() {
     $('.container').toggle();
@@ -79,45 +84,61 @@
   }
   function selectSongsToAdd() {
     var fakeArray = $('tr.ui-selectee.ui-selected');
-    var realArray = $.makeArray(fakeArray);
-    var songIdsArray = $.map(realArray, function(row, i) {
-      return row.id;
-    });
-    return songIdsArray;
+    if (fakeArray.length > 0) {
+      var realArray = $.makeArray(fakeArray);
+      var songIdsArray = $.map(realArray, function(row, i) {
+        return row.id;
+      });
+      return songIdsArray;
+    } else {
+      $('#message').empty().append("<a data-target='#'>no songs selected. click on rows to select.</a>");
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
+    }
   }
   function createPlaylist(e) {
     var songIdsArray = selectSongsToAdd();
     var name = $('#name').val();
-    $.ajax({
-      url: '/createPlaylist',
-      type: 'POST',
-      data: {
-        songIds: songIdsArray,
-        name: name
-      },
-      success: (function(response) {
-        $('#playlists').prepend(("<li class='list-group-item clearfix' id=" + response.playlist._id + "><a data-target='#'>" + response.playlist.name + "</a><button class='btn pull-right'>add songs</button></li>"));
-      })
-    });
+    if (name.length > 3) {
+      $.ajax({
+        url: '/createPlaylist',
+        type: 'POST',
+        data: {
+          songIds: songIdsArray,
+          name: name
+        },
+        success: (function(response) {
+          $('#playlists').prepend(("<li class='list-group-item clearfix' id=" + response.playlist._id + "><a data-target='#'>" + response.playlist.name + "</a><button class='btn pull-right'>add songs</button></li>"));
+        })
+      });
+    } else {
+      $('#message').empty().append("<a data-target='#'> playlist name is blank or too short.</a>");
+      $('#message a').delay(2500).fadeOut(500, (function() {
+        $('#message a').remove();
+      }));
+    }
     e.preventDefault();
   }
   function addToPlaylist(song) {
     var songIdsArray = selectSongsToAdd();
-    var id = $(this).parent().attr('id');
-    $.ajax({
-      url: '/addToPlaylist',
-      type: 'put',
-      data: {
-        songIds: songIdsArray,
-        playlistId: id
-      },
-      success: (function(response) {
-        $('#message').empty().append(("<a href='#'>" + name + " updated</a>"));
-        $('#message a').delay(2500).fadeOut(500, (function() {
-          $('#message a').remove();
-        }));
-      })
-    });
+    if (songIdsArray) {
+      var id = $(this).parent().attr('id');
+      $.ajax({
+        url: '/addToPlaylist',
+        type: 'put',
+        data: {
+          songIds: songIdsArray,
+          playlistId: id
+        },
+        success: (function(response) {
+          $('#message').empty().append(("<a data-targer='#'>" + name + " updated</a>"));
+          $('#message a').delay(2500).fadeOut(500, (function() {
+            $('#message a').remove();
+          }));
+        })
+      });
+    }
   }
   function deletePlaylist() {
     var id = $('.list-group-item:visible').attr('id');
@@ -242,7 +263,7 @@
       });
       return array;
     } else {
-      $('#message').empty().append("<a href='#'>select at least one genre</a>");
+      $('#message').empty().append("<a data-target='#'>select at least one genre</a>");
       $('#message a').delay(2500).fadeOut(500, (function() {
         $('#message a').remove();
       }));
