@@ -6,6 +6,8 @@
 
 @bgc: rgba(255, 255, 255, 0.75);
 
+@selected: rgba(215, 44, 44, 0.3);
+
 h1, h2, h3 {
   margin-top: 0px;
   margin-bottom: 10px;
@@ -147,7 +149,7 @@ ul#tp.dropdown-menu {
 
 tr.ui-selected {
   // background-color: red;
-  background-color: rgba(215, 44, 44, 0.3);
+  background-color: @selected;
 }
 
 li.ui-selected {
@@ -162,7 +164,18 @@ ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse button.btn-link {
   margin-top: .5em;
 }
 
+.dropdown-menu li a:hover {
+  color: tomato;
+}
 
+.list-group-item {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.list-group-item:hover {
+  background-color: rgb(230, 230, 255);
+  font-weight: bold;
+}
 
 // @media (max-width:767px) {
 //   #songsButton {

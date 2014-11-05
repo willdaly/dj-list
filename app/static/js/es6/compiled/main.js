@@ -338,7 +338,7 @@
     if (songs.length > 0) {
       $('#searchResults').empty();
       songs.forEach((function(song) {
-        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all' ,id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all', id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
           e.metaKey = true;
         })).selectable();
