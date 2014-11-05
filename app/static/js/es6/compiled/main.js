@@ -316,16 +316,26 @@
     });
     e.preventDefault();
   }
+  function hideAlbumColumn() {
+    if ($('.albumTd:empty').length === $('#searchResults  > tr').length) {
+      $('.albumTd:empty').hide();
+      $('#albumTh').hide();
+    }
+  }
   function appendSearchResults(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
       $('#orderTableHead').hide();
+      if ($('#albumTh').not(':visible')) {
+        $('#albumTh').show();
+      }
       songs.forEach((function(song) {
-        $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').append(("<tr id=" + song._id + "><td>" + song.BPM + "</td><td>" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td class='albumTd'>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
           e.metaKey = true;
         })).selectable();
       }));
+      hideAlbumColumn();
     } else {
       $('#message').empty();
       $('#message').append('<a href="#">didn\'t find anything</a>');
@@ -337,8 +347,11 @@
   function appendPlaylistSongs(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
+      if ($('#albumTh').not(':visible')) {
+        $('#albumTh').show();
+      }
       songs.forEach((function(song) {
-        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all', id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all', id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td class='albumTd'>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
           e.metaKey = true;
         })).selectable();
@@ -348,6 +361,7 @@
         filter: 'tr',
         cancel: '.order'
       });
+      hideAlbumColumn();
     }
   }
   function displaySlider() {
