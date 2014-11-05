@@ -38,6 +38,7 @@ function load(app, fn){
   app.post('/playlists/:id', dbg, playlists.show);
   app.post('/createPlaylist', dbg, playlists.create);
   app.put('/addToPlaylist', dbg, playlists.update);
+  app.put('/renamePlaylist', dbg, playlists.rename);
   app.post('/deleteFromPlaylist', dbg, playlists.deleteFromPlaylist);
   app.delete('/deletePlaylist/:id', dbg, playlists.deletePlaylist);
 

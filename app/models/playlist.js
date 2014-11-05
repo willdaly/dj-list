@@ -79,6 +79,20 @@ class Playlist {
     }); //findplaylist
   }
 
+  static rename (obj, fn) {
+    console.log('hit model');
+    var _id = Mongo.ObjectID(obj.playlistId);
+    playlistsCollection.findOne({_id:_id}, (err,playlist)=>{
+      if (playlist){
+        console.log(playlist.name);
+        playlist.name = obj.newName;
+        playlistsCollection.save(playlist, p=>fn(p));
+      } else {
+        fn(null);
+      }
+    }); //findplaylist
+  }
+
 
   static index (userId, fn){
     playlistsCollection.find({userId : userId}).toArray((e, playlists)=>{

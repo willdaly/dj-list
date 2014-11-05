@@ -28,24 +28,26 @@
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'a', showPlaylist);
     $('#playlists').on('click', 'button', addToPlaylist);
-    // $('#renamePlaylist').click(renamePlaylist);
+    $('#renamePlaylist').click(renamePlaylist);
     $('#deleteFromPlaylist').click(deleteFromPlaylist);
     $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
 
   } //init
 
-  // function renamePlaylist() {
-  //   var newName = $('editPlaylistName').val();
-  //   var id = $('.list-group-item:visible').attr('id');
-  //   $.ajax({
-  //     url: '/renamePlaylist',
-  //     type: 'put',
-  //     data: {newName: newName, playlistId : id},
-  //     success: response => {
-  //       var id = $('.list-group-item:visible a').text(`newName`);
-  //     }
-  //   });
-  // }
+  function renamePlaylist() {
+    var newName = $('#editPlaylistName').val();
+    console.log(newName);
+    var id = $('.list-group-item:visible').attr('id');
+    console.log(id);
+    $.ajax({
+      url: '/renamePlaylist',
+      type: 'put',
+      data: {newName: newName, playlistId : id},
+      success: response => {
+        var id = $('.list-group-item:visible a').text(newName);
+      }
+    });
+  }
 
   function controlsToggle() {
     $('.container').toggle();
