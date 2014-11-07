@@ -1,4 +1,5 @@
 var songCollection = global.nss.db.collection('songs');
+var Mongo = require('mongodb');
 
 class Song {
   static create(obj, fn){
@@ -110,6 +111,37 @@ class Song {
     });
   } //findByGenre
 
-  } //list
+  static editSong (obj, fn){
+    var id = Mongo.ObjectID(obj.Id);
+    songCollection.findOne({_id: id}, (e, song)=>{
+      if (obj.Artist) {
+        song.Artist = obj.Artist;
+        console.log(song.Artist);
+      }
+      if (obj.Album) {
+        song.Album = obj.Album;
+        console.log(song.Album);
+      }
+      if (obj.Title) {
+        song.Song = obj.Title;
+        console.log(song.Song);
+      }
+      if (obj.BPM) {
+        song.BPM = parseInt(obj.BPM);
+        console.log(song.BPM);
+      }
+      if (obj.Key) {
+        song.Key = obj.Key;
+        console.log(song.Key);
+      }
+      if (obj.genre) {
+        song.genre = obj.genre;
+        console.log(song.genre);
+      }
+      songCollection.save(song, ()=>fn(song));
+    });
+  } //editSong
+
+} //song
 
 module.exports = Song;

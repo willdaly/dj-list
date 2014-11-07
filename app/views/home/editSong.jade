@@ -1,0 +1,65 @@
+div(class='modal fade', id='editSong', tabindex='-1', role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header(style='text-align: center;')
+            button.close(type='button', data-dismiss='modal') close
+          .modal-body
+            .input-group
+              span.input-group-addon BPM
+              input.form-control(type='number', name='BPM')#editSongBPM
+            .input-group
+              span.input-group-addon Key
+              select.form-control#editSongKey
+                option AbM
+                option abm
+                option AM
+                option am
+                option BbM
+                option bbm
+                option BM
+                option bm
+                option CM
+                option cm
+                option C#M
+                option c#m
+                option DM
+                option dm
+                option EbM
+                option ebm
+                option EM
+                option em
+                option FM
+                option fm
+                option F#M
+                option f#m
+                option GM
+                option gm
+                option G#M
+                option g#m
+            .input-group
+              span.input-group-addon Title
+              input.form-control(type='text', name='Song')#editSongTitle
+              input(style='display: none')#songId
+            .input-group
+              span.input-group-addon Artist
+              input.form-control(type='text', name='Artist')#editSongArtist
+            .input-group
+              span.input-group-addon Album
+              input.form-control(type='text', name='Album')#editSongAlbum
+            .input-group
+              span.input-group-addon Genre
+              select.form-control#editSongGenre
+                option Hip-Hop
+                option Soul
+                option Jazz
+                option Rock
+                option Pop
+                option Melodiya
+                option OST
+                option Electronic
+                option Battle
+                option 45 King
+                option Hip-Hop Instrumental
+            button.submit.btn.btn-info#editSongSubmit Edit song    
+          //- .modal-footer
+            

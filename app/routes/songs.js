@@ -56,3 +56,9 @@ exports.transpose = (req, res)=>{
     res.send({songs: songs});
   });
 };
+
+exports.editSong = (req, res)=>{
+  Song.editSong(req.body, song=>{
+    res.send({song: song});
+  });
+};

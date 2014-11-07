@@ -17,6 +17,8 @@
     $('#genreFilter').click(genreFilter);
     $('.transpose').click(transpose);
     $('#songsButton').click(songsControls);
+    $('#editSongBtn').click(editSongShow);
+    $('#editSongSubmit').click(editSong);
     $('#createPlaylist').click(createPlaylist);
     $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'a', showPlaylist);
@@ -82,6 +84,62 @@
       $('.ui-sortable-handle').hide();
     }
   }
+  function noSongSelected() {
+    $('#message').empty().append("<a data-target='#'>no songs selected. click on rows to select.</a>");
+    $('#message a').delay(2500).fadeOut(500, (function() {
+      $('#message a').remove();
+    }));
+  }
+  function editSongShow() {
+    if ($('#searchResults .ui-selected').length > 0) {
+      $('#searchResults .ui-selected:gt(0)').removeClass('ui-selected');
+      var id = $('#searchResults .ui-selected:nth(0)').attr('id');
+      var bpm = $('#searchResults .ui-selected:nth(0) td:nth(0)').text();
+      var key = $('#searchResults .ui-selected:nth(0) td:nth(1)').text();
+      var title = $('#searchResults .ui-selected:nth(0) td:nth(2)').text();
+      var artist = $('#searchResults .ui-selected:nth(0) td:nth(3)').text();
+      var album = $('#searchResults .ui-selected:nth(0) td:nth(4)').text();
+      var genre = $('#searchResults .ui-selected:nth(0) td:nth(5)').text();
+      $('#editSongBPM').val(bpm);
+      $('#editSongKey').val(key);
+      $('#editSongTitle').val(title);
+      $('#editSongArtist').val(artist);
+      $('#editSongAlbum').val(album);
+      $('#editsongGenre').val(genre);
+      $('#songId').val(id);
+      $('#editSong').modal('show');
+    } else {
+      noSongSelected();
+    }
+  }
+  function editSong() {
+    var id = $('#songId').val();
+    var bpm = $('#editSongBPM').val().length > 0 ? $('#editSongBPM').val() : null;
+    var key = $('#editSongKey').val().length > 0 ? $('#editSongKey').val() : null;
+    var title = $('#editSongTitle').val().length > 0 ? $('#editSongTitle').val() : null;
+    var artist = $('#editSongArtist').val().length > 0 ? $('#editSongArtist').val() : null;
+    var album = $('#editSongAlbum').val().length > 0 ? $('#editSongAlbum').val() : null;
+    var genre = $('#editSongGenre').val().length > 0 ? $('#editsongGenre').val() : null;
+    $.ajax({
+      url: '/editSong',
+      type: 'put',
+      data: {
+        Id: id,
+        BPM: bpm,
+        Key: key,
+        Title: title,
+        Artist: artist,
+        genre: genre
+      },
+      success: (function(response) {
+        $('#editSong').modal('hide');
+        $('#message').empty().append(("<a data-target='#'>" + response.song.Song + " updated</a>"));
+        $('#message a').delay(2500).fadeOut(500, (function() {
+          $('#message a').remove();
+        }));
+      })
+    });
+  }
   function selectSongsToAdd() {
     var fakeArray = $('tr.ui-selectee.ui-selected');
     if (fakeArray.length > 0) {
@@ -91,10 +149,7 @@
       });
       return songIdsArray;
     } else {
-      $('#message').empty().append("<a data-target='#'>no songs selected. click on rows to select.</a>");
-      $('#message a').delay(2500).fadeOut(500, (function() {
-        $('#message a').remove();
-      }));
+      noSongSelected();
     }
   }
   function createPlaylist(e) {

@@ -34,6 +34,7 @@ function load(app, fn){
   app.post('/songSearch', dbg, songs.songSearch);
   app.post('/genreFilter', dbg, songs.genreFilter);
   app.post('/transpose', dbg, songs.transpose);
+  app.put('/editSong', dbg, songs.editSong);
   app.post('/playlists', dbg, playlists.index);
   app.post('/playlists/:id', dbg, playlists.show);
   app.post('/createPlaylist', dbg, playlists.create);
