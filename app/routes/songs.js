@@ -27,6 +27,12 @@ exports.bpmKey = (req, res)=>{
   });
 };
 
+exports.guessSearch = (req, res)=>{
+  Song.guessSearch(req.body.typed, artists=>{
+    res.send({artists : artists});
+  });
+};
+
 exports.artistSearch = (req, res)=>{
   Song.findByArtist(req.body.Artist, songs=>{
     res.send({songs: songs});

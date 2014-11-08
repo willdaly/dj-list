@@ -26,6 +26,20 @@
     $('#renamePlaylist').click(renamePlaylist);
     $('#deleteFromPlaylist').click(deleteFromPlaylist);
     $('.playlistsShow').on('click', '#deletePlaylist', deletePlaylist);
+    $('#searchInput').keyup(guessSearch);
+  }
+  function guessSearch() {
+    var typed = $('#searchInput').val();
+    if (typed.length > 3) {
+      $.ajax({
+        url: '/guessSearch',
+        type: 'POST',
+        data: {typed: typed},
+        success: (function(response) {
+          $('#searchInput').autocomplete({source: response.artists});
+        })
+      });
+    }
   }
   function renamePlaylist() {
     var newName = $('#editPlaylistName').val();

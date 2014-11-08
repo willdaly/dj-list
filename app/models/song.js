@@ -1,5 +1,6 @@
 var songCollection = global.nss.db.collection('songs');
 var Mongo = require('mongodb');
+var _ = require('lodash');
 
 class Song {
   static create(obj, fn){
@@ -86,6 +87,17 @@ class Song {
       fn(songs);
     });
   }
+
+  static guessSearch (typed, fn){
+    songCollection.find({$text: {$search: typed}}).toArray((err, songs)=>{
+      var artists = [];
+      songs.forEach(song=>{
+        artists.push(song.Artist);
+      });
+      artists = _.uniq(artists);
+      fn(artists);
+    });
+  } //guessSearch
 
   static findByArtist (Artist, fn){
     songCollection.find({'Artist' : { $regex: new RegExp('^' + Artist.toLowerCase(), 'i')  }}).toArray((err, songs)=>{

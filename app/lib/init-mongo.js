@@ -2,6 +2,7 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var mongoUrl = `mongodb://localhost/${process.env.DBNAME}`;
+var assert = require('assert');
 var initialized = false;
 
 module.exports = (req, res, next)=>{
@@ -18,6 +19,11 @@ function load(fn){
     if(err){throw err;}
     global.nss = {};
     global.nss.db = db;
+    global.nss.db.ensureIndex('songs', {
+      Artist: 'text',
+    }, (err, indexname)=>{
+      assert.equal(null, err);
+      });
     console.log('Connected to MongoDB');
     fn();
   });

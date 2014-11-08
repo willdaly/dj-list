@@ -29,6 +29,7 @@ function load(app, fn){
   app.post('/key', dbg, songs.key);
   app.post('/bpm', dbg, songs.bpm);
   app.post('/bpmKey', dbg, songs.bpmKey);
+  app.post('/guessSearch', dbg, songs.guessSearch);
   app.post('/artistSearch', dbg, songs.artistSearch);
   app.post('/albumSearch', dbg, songs.albumSearch);
   app.post('/songSearch', dbg, songs.songSearch);
