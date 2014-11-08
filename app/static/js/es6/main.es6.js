@@ -439,13 +439,15 @@
       // $('#searchResults').sortable({ handle: '.order' });
       $('#searchResults').sortable({
           handle: '.order',
-          update: function(event, ui){
+          update: function(e, ui){
+
             var movedSongId = ui.item.context.id;
             var newOrder = ui.item.context.rowIndex;
             var oldOrder = ui.item.attr('value');
             var title = ui.item.context.children[3].innerText;
 
             updateOrder(title, oldOrder, newOrder);
+            e.preventDefault();
           }
         });
       $('#searchResults').selectable({ filter: 'tr', cancel: '.order' });
