@@ -64,10 +64,11 @@ class Playlist {
       });
       songsCollection.find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
         if (songs) {
-          var playlistLength = playlist.songs.length > 0 ? playlist.songs.length : 1;
+          var order = playlist.songs.length > 0 ? playlist.songs.length + 1 : 1;
           songs.forEach(song=>{
-            song.order = playlistLength++;
+            song.order = order;
             playlist.songs.push(song);
+            order++;
           });
           playlistsCollection.save(playlist, playlist=>fn(playlist));
         } else {
@@ -75,7 +76,46 @@ class Playlist {
         }
       });
     }); //findplaylist
-  }
+  } //addSongs
+
+  static updateOrder (obj, fn) {
+    var _id = Mongo.ObjectID(obj.playlistId);
+    var oldOrder = parseInt(obj.oldOrder);
+    var newOrder = parseInt(obj.newOrder);
+    playlistsCollection.findOne({_id : _id}, (err, playlist)=>{
+      if (playlist) {
+        // var songId = Mongo.ObjectID(obj.movedSongId);
+        var direction = newOrder - oldOrder;
+        playlist.songs.forEach(song=>{
+          if (direction > 0){
+            if (song.order > oldOrder && song.order <= newOrder ) {
+              song.order = song.order-1;
+            }
+            if (song.Song === obj.songTitle){
+              song.order = newOrder;
+            }
+          } else {
+            if (song.order < oldOrder && song.order >= newOrder ) {
+              song.order = song.order+1;
+            }
+            if (song.Song === obj.songTitle){
+              song.order = newOrder;
+            }
+          }
+        }); //playlist.songs.forEach
+        playlist.songs.sort((a, b)=>{
+          if (a.order > b.order){
+            return 1;
+          }else{
+            return -1;
+          }
+        });
+        playlistsCollection.save(playlist, ()=>fn(playlist));
+      } else {
+        fn(null);
+      }
+    });//findplaylist
+  } //updateOrder
 
   static rename (obj, fn) {
     console.log('hit model');

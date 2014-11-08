@@ -27,6 +27,12 @@ exports.update = (req, res)=>{
   });
 };
 
+exports.updateOrder = (req, res)=>{
+  Playlist.updateOrder(req.body, playlist=>{
+    res.send({playlist : playlist});
+  });
+};
+
 exports.rename = (req, res)=>{
   Playlist.rename(req.body, playlist=>{
     res.send({playlist : playlist});

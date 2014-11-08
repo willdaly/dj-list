@@ -436,6 +436,22 @@
       }));
     }
   }
+  function updateOrder(title, oldOrder, newOrder) {
+    var playlistId = $('.list-group-item:visible').attr('id');
+    $.ajax({
+      url: '/updateOrder',
+      type: 'PUT',
+      data: {
+        playlistId: playlistId,
+        songTitle: title,
+        oldOrder: oldOrder,
+        newOrder: newOrder
+      },
+      success: (function(response) {
+        appendPlaylistSongs(response.playlist.songs);
+      })
+    });
+  }
   function appendPlaylistSongs(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
@@ -443,12 +459,21 @@
         $('#albumTh').show();
       }
       songs.forEach((function(song) {
-        $('#searchResults').append(("<tr value=" + song.order + ", class='ui-corner-all', id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td class='albumTd'>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
+        $('#searchResults').append(("<tr value=" + song.order + " class='ui-corner-all', id=" + song._id + "><td class='order'>" + song.order + "</td><td value=" + song.BPM + ">" + song.BPM + "</td><td value=" + song.Key + ">" + song.Key + "</td><td>" + song.Song + "</td><td>" + song.Artist + "</td><td class='albumTd'>" + song.Album + "</td><td>" + song.genre + "</td></tr>"));
         $('#searchResults').bind('mousedown', (function(e) {
           e.metaKey = true;
         })).selectable();
       }));
-      $('#searchResults').sortable({handle: '.order'});
+      $('#searchResults').sortable({
+        handle: '.order',
+        update: function(event, ui) {
+          var movedSongId = ui.item.context.id;
+          var newOrder = ui.item.context.rowIndex;
+          var oldOrder = ui.item.attr('value');
+          var title = ui.item.context.children[3].innerText;
+          updateOrder(title, oldOrder, newOrder);
+        }
+      });
       $('#searchResults').selectable({
         filter: 'tr',
         cancel: '.order'
