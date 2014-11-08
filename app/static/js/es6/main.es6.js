@@ -417,9 +417,9 @@
   function updateOrder (title, oldOrder, newOrder) {
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
-      url: '/updateOrder',
-      type: 'POST',
-      data: {playlistId: playlistId, songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
+      url: `/updateOrder/${playlistId}`,
+      type: 'put',
+      data: {songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
       success: response => {
         appendPlaylistSongs(response.playlist.songs);
       }

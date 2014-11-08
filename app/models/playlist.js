@@ -78,8 +78,8 @@ class Playlist {
     }); //findplaylist
   } //addSongs
 
-  static updateOrder (obj, fn) {
-    var _id = Mongo.ObjectID(obj.playlistId);
+  static updateOrder (obj, playlistId, fn) {
+    var _id = Mongo.ObjectID(playlistId);
     var oldOrder = parseInt(obj.oldOrder);
     var newOrder = parseInt(obj.newOrder);
     playlistsCollection.findOne({_id : _id}, (err, playlist)=>{

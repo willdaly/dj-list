@@ -28,7 +28,7 @@ exports.update = (req, res)=>{
 };
 
 exports.updateOrder = (req, res)=>{
-  Playlist.updateOrder(req.body, playlist=>{
+  Playlist.updateOrder(req.body, req.params.id, playlist=>{
     res.send({playlist : playlist});
   });
 };
