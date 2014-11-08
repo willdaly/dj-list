@@ -112,7 +112,7 @@
       noSongSelected();
     }
   }
-  function editSong() {
+  function editSong(e) {
     var id = $('#songId').val();
     var bpm = $('#editSongBPM').val().length > 0 ? $('#editSongBPM').val() : null;
     var key = $('#editSongKey').val().length > 0 ? $('#editSongKey').val() : null;
@@ -139,6 +139,7 @@
         }));
       })
     });
+    e.preventDefault();
   }
   function selectSongsToAdd() {
     var fakeArray = $('tr.ui-selectee.ui-selected');
@@ -436,22 +437,6 @@
       }));
     }
   }
-  function updateOrder(e, title, oldOrder, newOrder) {
-    var playlistId = $('.list-group-item:visible').attr('id');
-    $.ajax({
-      url: ("/updateOrder/" + playlistId),
-      type: 'POST',
-      data: {
-        songTitle: title,
-        oldOrder: oldOrder,
-        newOrder: newOrder
-      },
-      success: (function(response) {
-        appendPlaylistSongs(response.playlist.songs);
-      })
-    });
-    e.preventDefault();
-  }
   function appendPlaylistSongs(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
@@ -467,11 +452,24 @@
       $('#searchResults').sortable({
         handle: '.order',
         update: function(e, ui) {
-          var movedSongId = ui.item.context.id;
           var newOrder = ui.item.context.rowIndex;
           var oldOrder = ui.item.attr('value');
           var title = ui.item.context.children[3].innerText;
-          updateOrder(e, title, oldOrder, newOrder);
+          var playlistId = $('.list-group-item:visible').attr('id');
+          $.ajax({
+            url: ("/reorder/" + playlistId),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              songTitle: title,
+              oldOrder: oldOrder,
+              newOrder: newOrder
+            },
+            success: (function(response) {
+              appendPlaylistSongs(response.playlist.songs);
+            })
+          });
+          e.preventDefault();
         }
       });
       $('#searchResults').selectable({

@@ -448,8 +448,9 @@
             var title = ui.item.context.children[3].innerText;
             var playlistId = $('.list-group-item:visible').attr('id');
             $.ajax({
-              url: `/updateOrder/${playlistId}`,
+              url: `/reorder/${playlistId}`,
               type: 'POST',
+              dataType: 'json',
               data: {songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
               success: response => {
                 appendPlaylistSongs(response.playlist.songs);
