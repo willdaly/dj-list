@@ -436,7 +436,7 @@
       }));
     }
   }
-  function updateOrder(title, oldOrder, newOrder) {
+  function updateOrder(e, title, oldOrder, newOrder) {
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: ("/updateOrder/" + playlistId),
@@ -450,6 +450,7 @@
         appendPlaylistSongs(response.playlist.songs);
       })
     });
+    e.preventDefault();
   }
   function appendPlaylistSongs(songs) {
     if (songs.length > 0) {
@@ -470,8 +471,7 @@
           var newOrder = ui.item.context.rowIndex;
           var oldOrder = ui.item.attr('value');
           var title = ui.item.context.children[3].innerText;
-          updateOrder(title, oldOrder, newOrder);
-          e.preventDefault();
+          updateOrder(e, title, oldOrder, newOrder);
         }
       });
       $('#searchResults').selectable({
