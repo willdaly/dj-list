@@ -415,18 +415,18 @@
     }
   }
 
-  // function updateOrder (e, title, oldOrder, newOrder) {
-  //   var playlistId = $('.list-group-item:visible').attr('id');
-  //   $.ajax({
-  //     url: `/updateOrder/${playlistId}`,
-  //     type: 'POST',
-  //     data: {songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
-  //     success: response => {
-  //       appendPlaylistSongs(response.playlist.songs);
-  //     }
-  //   });
-  //   e.preventDefault();
-  // }
+  function updateOrder (e, title, oldOrder, newOrder) {
+    var playlistId = $('.list-group-item:visible').attr('id');
+    $.ajax({
+      url: `/updateOrder/${playlistId}`,
+      type: 'PUT',
+      data: {songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
+      success: response => {
+        appendPlaylistSongs(response.playlist.songs);
+      }
+    });
+    e.preventDefault();
+  }
 
   function appendPlaylistSongs(songs){
     if (songs.length > 0) {
@@ -438,26 +438,13 @@
         $('#searchResults').append(`<tr value=${song.order} class='ui-corner-all', id=${song._id}><td class='order'>${song.order}</td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td class='albumTd'>${song.Album}</td><td>${song.genre}</td></tr>`);
         $('#searchResults').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
       });
-      // $('#searchResults').sortable({ handle: '.order' });
       $('#searchResults').sortable({
           handle: '.order',
           update: function(e, ui){
-            // var movedSongId = ui.item.context.id;
             var newOrder = ui.item.context.rowIndex;
             var oldOrder = ui.item.attr('value');
             var title = ui.item.context.children[3].innerText;
-            var playlistId = $('.list-group-item:visible').attr('id');
-            $.ajax({
-              url: `/reorder/${playlistId}`,
-              type: 'POST',
-              dataType: 'json',
-              data: {songTitle: title, oldOrder: oldOrder, newOrder: newOrder},
-              success: response => {
-                appendPlaylistSongs(response.playlist.songs);
-              }
-            });
-            e.preventDefault();
-            // updateOrder(e, title, oldOrder, newOrder);
+            updateOrder(e, title, oldOrder, newOrder);
           }
         });
       $('#searchResults').selectable({ filter: 'tr', cancel: '.order' });

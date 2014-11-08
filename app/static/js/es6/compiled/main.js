@@ -437,6 +437,22 @@
       }));
     }
   }
+  function updateOrder(e, title, oldOrder, newOrder) {
+    var playlistId = $('.list-group-item:visible').attr('id');
+    $.ajax({
+      url: ("/updateOrder/" + playlistId),
+      type: 'PUT',
+      data: {
+        songTitle: title,
+        oldOrder: oldOrder,
+        newOrder: newOrder
+      },
+      success: (function(response) {
+        appendPlaylistSongs(response.playlist.songs);
+      })
+    });
+    e.preventDefault();
+  }
   function appendPlaylistSongs(songs) {
     if (songs.length > 0) {
       $('#searchResults').empty();
@@ -455,21 +471,7 @@
           var newOrder = ui.item.context.rowIndex;
           var oldOrder = ui.item.attr('value');
           var title = ui.item.context.children[3].innerText;
-          var playlistId = $('.list-group-item:visible').attr('id');
-          $.ajax({
-            url: ("/reorder/" + playlistId),
-            type: 'POST',
-            dataType: 'json',
-            data: {
-              songTitle: title,
-              oldOrder: oldOrder,
-              newOrder: newOrder
-            },
-            success: (function(response) {
-              appendPlaylistSongs(response.playlist.songs);
-            })
-          });
-          e.preventDefault();
+          updateOrder(e, title, oldOrder, newOrder);
         }
       });
       $('#searchResults').selectable({
