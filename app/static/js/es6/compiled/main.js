@@ -440,7 +440,7 @@
     var playlistId = $('.list-group-item:visible').attr('id');
     $.ajax({
       url: '/updateOrder',
-      type: 'PUT',
+      type: 'POST',
       data: {
         playlistId: playlistId,
         songTitle: title,
