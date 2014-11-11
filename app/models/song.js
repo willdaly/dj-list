@@ -44,7 +44,6 @@ class Song {
   static transpose (obj, fn){
     var trans = obj.trans;
     var factor = Math.abs(trans) * 0.06;
-    factor = factor * Math.abs(trans);
     factor = factor + 1;
     var bpm;
     if (trans < 0){

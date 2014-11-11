@@ -272,21 +272,28 @@
     var artist = $('#newSongArtist').val();
     var album = $('#newSongAlbum').val();
     var genre = $('#newSongGenre').val();
-    $.ajax({
-      url: '/createSong',
-      type: 'POST',
-      data: {
-        BPM: bpm,
-        Key: key,
-        Title: title,
-        Artist: artist,
-        Album: album,
-        genre: genre
-      },
-      success: (function(response) {
-        $('#createSong').modal('hide');
-      })
-    });
+    if (title !== '' && artist !== '') {
+      $.ajax({
+        url: '/createSong',
+        type: 'POST',
+        data: {
+          BPM: bpm,
+          Key: key,
+          Title: title,
+          Artist: artist,
+          Album: album,
+          genre: genre
+        },
+        success: (function(response) {
+          $('#createSong').modal('hide');
+        })
+      });
+    } else {
+      $('.modal-header').append("<p>must enter an artist and title to add a song</p>");
+      $('.modal-header p').delay(2500).fadeOut(500, (function() {
+        $('.modal-header p').remove();
+      }));
+    }
     e.preventDefault();
   }
   function songSearch(e) {
