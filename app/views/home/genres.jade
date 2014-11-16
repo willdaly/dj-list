@@ -1,27 +1,47 @@
 div(class='modal fade', id='genres', tabindex='-1', role='dialog')
       .modal-dialog
         .modal-content
+          .modal-header    
+            button.close(type='button', data-dismiss='modal') &times;
+            h4.modal-title#myModalLabel Click Genres to Search
           .modal-body.container
-            .row
-              h4.modal-title#myModalLabel Select Genres to Search
-            .row
-              .col-xs-4
-                ul.genres
-                  li.ui-selected Hip-Hop
-                  li Hip-Hop Instrumental
-                  li Battle
-                  li 45 King
-              .col-xs-4  
-                ul.genres
-                  li Soul
-                  li Jazz
-                  li Rock
-                  li Pop
+            //- .row
+            //-   h4.modal-title#myModalLabel Select Genres to Search
+            //- .row
+            //-   .col-xs-4
+            //-     ul.genres
+            //-       li.ui-selected Hip-Hop
+            //-       li Hip-Hop Instrumental
+            //-       li Battle
+            //-       li 45 King
+            //-   .col-xs-4  
+            //-     ul.genres
+            //-       li Soul
+            //-       li Jazz
+            //-       li Rock
+            //-       li Pop
+            //-       
+            //-     button.btn.btn-default(type='button', data-dismiss='modal') Close 
+            //-       
+            //-   .col-xs-4  
+            //-     ul.genres
+            //-       li(value='Electronic') Electronic
+            //-       li(value='Melodiya') Melodiya
+            //-       li(value='OST') OST
+              
+            ul.genres
+              li.ui-selected Hip-Hop
+              li Hip-Hop Instrumental
+              li Battle
+              li 45 King
+              li Soul
+              li Jazz
+              li Rock
+              li Pop
+              li(value='Electronic') Electronic
+              li(value='Melodiya') Melodiya
+              li(value='OST') OST
                   
-                button.btn.btn-default(type='button', data-dismiss='modal') Close 
+              button.btn.btn-default(type='button', data-dismiss='modal') Close 
                   
-              .col-xs-4  
-                ul.genres
-                  li(value='Electronic') Electronic
-                  li(value='Melodiya') Melodiya
-                  li(value='OST') OST
+                  

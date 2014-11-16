@@ -297,39 +297,30 @@
     e.preventDefault();
   }
   function songSearch(e) {
-    var searchInput = $('#searchInput').val();
-    $.ajax({
-      url: '/songSearch',
-      type: 'POST',
-      data: {Song: searchInput},
-      success: (function(response) {
+    var song = $('#searchInput').val();
+    if (song.length > 0) {
+      ajax('/songSearch', 'POST', {Song: song}, (function(response) {
         appendSearchResults(response.songs);
-      })
-    });
+      }));
+    }
     e.preventDefault();
   }
   function albumSearch(e) {
     var album = $('#searchInput').val();
-    $.ajax({
-      url: '/albumSearch',
-      type: 'POST',
-      data: {Album: album},
-      success: (function(response) {
+    if (album.length > 0) {
+      ajax('/albumSearch', 'POST', {Album: album}, (function(response) {
         appendSearchResults(response.songs);
-      })
-    });
+      }));
+    }
     e.preventDefault();
   }
   function artistSearch(e) {
     var searchInput = $('#searchInput').val();
-    $.ajax({
-      url: '/artistSearch',
-      type: 'POST',
-      data: {Artist: searchInput},
-      success: (function(response) {
+    if (searchInput.length > 0) {
+      ajax('/artistSearch', 'POST', {Artist: searchInput}, (function(response) {
         appendSearchResults(response.songs);
-      })
-    });
+      }));
+    }
     e.preventDefault();
   }
   function genreArray() {
@@ -349,14 +340,9 @@
   }
   function genreFilter(e) {
     var array = genreArray();
-    $.ajax({
-      url: '/genreFilter',
-      type: 'POST',
-      data: {genre: array},
-      success: (function(response) {
-        appendSearchResults(response.songs);
-      })
-    });
+    ajax('/genreFilter', 'POST', {genre: array}, (function(response) {
+      appendSearchResults(response.songs);
+    }));
     e.preventDefault();
   }
   function transpose() {
@@ -381,17 +367,12 @@
   function key(e) {
     var array = genreArray();
     var data = $('#key').val();
-    $.ajax({
-      url: '/key',
-      type: 'POST',
-      data: {
-        Key: data,
-        genre: array
-      },
-      success: (function(response) {
-        appendSearchResults(response.songs);
-      })
-    });
+    ajax('/key', 'POST', {
+      Key: data,
+      genre: array
+    }, (function(response) {
+      appendSearchResults(response.songs);
+    }));
     e.preventDefault();
   }
   function bpm(e) {
@@ -520,6 +501,18 @@
     });
     $('.slider').Link('lower').to('-inline-');
     $('.slider').Link('upper').to('-inline-');
+  }
+  function ajax(url, type) {
+    var data = arguments[2] !== (void 0) ? arguments[2] : {};
+    var success = arguments[3] !== (void 0) ? arguments[3] : (function(r) {
+      return console.log(r);
+    });
+    $.ajax({
+      url: url,
+      type: type,
+      data: data,
+      success: success
+    });
   }
 })();
 

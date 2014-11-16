@@ -7,83 +7,96 @@
   .container
     .row.songs
       .btn-group
-        button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') New Song
-        //- button.btn.btn-default(type='button' data-toggle='modal', data-target='#editSong') Edit Selected
-        button.btn.btn-default(type='button')#editSongBtn Edit Song
-    .row.songs
-      .col-xs-6
-        .btn-group
-          button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Genres
-          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
-              span.caret
-            ul.dropdown-menu
-              li
-                a(data-target='#')#genreFilter Checked Genres
-              li
-                a(data-target='#')#bpmFilter Genres by BPM
-              li
-                a(data-target='#')#keyFilter Genres by Key
+        button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Pick Genres
+        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
+            span.caret
+          ul.dropdown-menu
+            li
+              a(data-target='#')#genreFilter Checked Genres
+            li
+              a(data-target='#')#bpmFilter Genres by BPM
+            li
+              a(data-target='#')#keyFilter Genres by Key
 
-      .col-xs-6
-        .input-group#keyinput
-          select.form-control#key
-            option AbM
-            option abm
-            option AM
-            option am
-            option BbM
-            option bbm
-            option BM
-            option bm
-            option CM
-            option cm
-            option C#M
-            option c#m
-            option DM
-            option dm
-            option EbM
-            option ebm
-            option EM
-            option em
-            option FM
-            option fm
-            option F#M
-            option f#m
-            option GM
-            option gm
-            option G#M
-            option g#m
-          span.input-group-btn
-            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Shift
-                span.caret
-            ul#tp.dropdown-menu
-              li(value='-1')
-                a(data-target='#').transpose -1
-              li(value='1')
-                a(data-target='#').transpose +1
-              li(value='-2')
-                a(data-target='#').transpose -2
-              li(value='2')
-                a(data-target='#').transpose +2
-              li(value='-3')
-                a(data-target='#').transpose -3
-              li(value='3')
-                a(data-target='#').transpose +3
-              li(value='-4')
-                a(data-target='#').transpose -4
-              li(value='4')
-                a(data-target='#').transpose +4
-              li(value='-5')
-                a(data-target='#').transpose -5
-              li(value='5')
-                a(data-target='#').transpose +5
+    .row.songs
+      .input-group#keyinput
+        select.form-control#key
+          option AbM
+          option abm
+          option AM
+          option am
+          option BbM
+          option bbm
+          option BM
+          option bm
+          option CM
+          option cm
+          option C#M
+          option c#m
+          option DM
+          option dm
+          option EbM
+          option ebm
+          option EM
+          option em
+          option FM
+          option fm
+          option F#M
+          option f#m
+          option GM
+          option gm
+          option G#M
+          option g#m
+        span.input-group-btn
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Transpose
+              span.caret
+          ul#tp.dropdown-menu
+            li(value='-1')
+              a(data-target='#').transpose -1
+            li(value='1')
+              a(data-target='#').transpose +1
+            li(value='-2')
+              a(data-target='#').transpose -2
+            li(value='2')
+              a(data-target='#').transpose +2
+            li(value='-3')
+              a(data-target='#').transpose -3
+            li(value='3')
+              a(data-target='#').transpose +3
+            li(value='-4')
+              a(data-target='#').transpose -4
+            li(value='4')
+              a(data-target='#').transpose +4
+            li(value='-5')
+              a(data-target='#').transpose -5
+            li(value='5')
+              a(data-target='#').transpose +5
     .row.songs
       .slider
         label BPM
 
     .row.songs
-      button.btn.btn-default.btn-lg#bpmKeyFilter Search
-
+      button.btn.btn-default.btn-lg#bpmKeyFilter Search by Genre/Key/BPM
+    
+    .row.songs
+      .input-group
+        input.form-control(type='text', name='search', placeholder='Artist, Album, Song')#searchInput
+        .input-group-btn
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
+              span.caret
+            ul#searchbar.dropdown-menu(role='menu')
+              li
+                a(data-target='#')#artistSearch Artist
+              li
+                a(data-target='#')#albumSearch Album
+              li
+                a(data-target='#')#songSearch Song    
+      
+    .row.songs
+      .btn-group
+        button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') New Song
+        button.btn.btn-default(type='button')#editSongBtn Edit Song          
+          
     .row.playlistsIndex(style='display: none')
       .input-group
         input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')

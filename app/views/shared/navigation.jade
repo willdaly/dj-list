@@ -1,34 +1,10 @@
 nav.navbar.navbar-default(role='navigation')
   .container-fluid
-      .navbar-header
-        button.btn.btn-link.navbar-toggle(type='button', data-toggle='collapse', data-target='.collapse.navbar-collapse')
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(data-target='#') DJ List
-
-        ul.nav.navbar-nav.collapse.navbar-collapse
-        if (user)
-          form.navbar-form.navbar-left.dropdown(role='search')
-            .form-group
-              input.form-control(type='text', name='search', placeholder='Artist, Album, Song, Genre')#searchInput
-              button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
-                  span.caret
-                ul#searchbar.dropdown-menu
-                  li
-                    a(data-target='#')#artistSearch Artist
-                  li
-                    a(data-target='#')#albumSearch Album
-                  li
-                    a(data-target='#')#songSearch Song
-
-      ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
-        li#message
-
-        if (user)
-          //- li
-          //-   a(data-target='#').glyphicon.glyphicon-user #{user.email}
-          li
-            form(method='POST', action='/logout')
-              button.btn.btn-link logout
+    a.navbar-brand.pull-left(data-target='#') DJ List
+      
+    ul.nav.navbar-nav.pull-right
+      li#message
+      if (user)
+        li
+          form(method='POST', action='/logout')
+            button.btn.btn-link logout

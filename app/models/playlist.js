@@ -1,8 +1,6 @@
 var playlistsCollection = global.nss.db.collection('playlists');
 var songsCollection = global.nss.db.collection('songs');
-// var traceur = require('traceur');
 var Mongo = require('mongodb');
-// var _ = require('lodash');
 
 
 class Playlist {

@@ -15,9 +15,13 @@ class Song {
   } //create
 
   static findByKey(obj, fn) {
-    var Key = obj.Key;
+    var keyArray = [];
+    keyArray.push(obj.Key);
+    var ambig = obj.Key.substr(0, obj.Key.length-1);
+    keyArray.push(ambig.toLowerCase());
+    keyArray.push(ambig.toUpperCase());
     var genre = obj.genre;
-    songCollection.find({Key:Key, genre:{$in: genre}}).toArray((err, list)=>{
+    songCollection.find({Key:{$in: keyArray}, genre:{$in: genre}}).toArray((err, list)=>{
       fn(list);
       });
     } //findByKey
@@ -34,9 +38,13 @@ class Song {
   static findByBpmKey (obj, fn){
     var lowBPM = +obj.BPM[0];
     var highBPM = +obj.BPM[1];
-    var key = obj.Key;
+    var keyArray = [];
+    keyArray.push(obj.Key);
+    var ambig = obj.Key.substr(0, obj.Key.length-1);
+    keyArray.push(ambig.toLowerCase());
+    keyArray.push(ambig.toUpperCase());
     var genre = obj.genre;
-    songCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, list)=>{
+    songCollection.find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray((err, list)=>{
       fn(list);
     });
   }
@@ -54,9 +62,8 @@ class Song {
     var lowBPM = Math.floor(bpm);
     var highBPM = Math.ceil(bpm);
     var oldkey = obj.Key;
-    var oldkeyLength = oldkey.length;
-    var tonality = oldkey.substr(oldkeyLength -1, 1);
-    var majorKeyArray = ['AbM', 'AM',' BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
+    var tonality = oldkey.substr(oldkey.length-1, 1);
+    var majorKeyArray = ['AbM', 'AM', 'BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
     var minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
     var key;
     var index;
@@ -82,7 +89,12 @@ class Song {
       key = minorKeyArray[index];
     }
     var genre = obj.genre.split(',');
-    songCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: key, genre: {$in: genre}}).toArray((err, songs)=>{
+    var keyArray = [];
+    keyArray.push(key);
+    var ambig = key.substr(0, key.length-1);
+    keyArray.push(ambig.toLowerCase());
+    keyArray.push(ambig.toUpperCase());
+    songCollection.find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray((err, songs)=>{
       fn(songs);
     });
   }

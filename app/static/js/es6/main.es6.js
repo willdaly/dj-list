@@ -284,41 +284,36 @@
   }
 
   function songSearch (e) {
-    var searchInput = $('#searchInput').val();
-    $.ajax({
-      url: '/songSearch',
-      type: 'POST',
-      data: {Song: searchInput},
-      success: response => {
+    var song = $('#searchInput').val();
+    if (song.length > 0) {
+      ajax('/songSearch', 'POST', {Song: song}, response=>{
         appendSearchResults(response.songs);
-      }
-    });
+      });
+    }
     e.preventDefault();
   } //songSearch
 
+
+
   function albumSearch (e) {
     var album = $('#searchInput').val();
-    $.ajax({
-      url: '/albumSearch',
-      type: 'POST',
-      data: {Album: album},
-      success: response => {
+    if (album.length > 0) {
+      ajax('/albumSearch', 'POST', {Album: album}, response=>{
         appendSearchResults(response.songs);
-      }
-    });
+      });
+    }
     e.preventDefault();
   } //albumSearch
 
+
+
   function artistSearch (e) {
     var searchInput = $('#searchInput').val();
-    $.ajax({
-      url: '/artistSearch',
-      type: 'POST',
-      data: {Artist: searchInput},
-      success: response => {
+    if (searchInput.length > 0) {
+      ajax('/artistSearch', 'POST', {Artist: searchInput}, response=>{
         appendSearchResults(response.songs);
-      }
-    });
+      });
+    }
     e.preventDefault();
   } //artistSearch
 
@@ -338,13 +333,8 @@
 
   function genreFilter(e){
     var array = genreArray();
-    $.ajax({
-      url: '/genreFilter',
-      type: 'POST',
-      data: {genre: array},
-      success: response => {
-        appendSearchResults(response.songs);
-      }
+    ajax('/genreFilter', 'POST', {genre: array}, response=>{
+      appendSearchResults(response.songs);
     });
     e.preventDefault();
   } //genre filter
@@ -367,13 +357,8 @@
   function key(e){
     var array = genreArray();
     var data = $('#key').val();
-    $.ajax({
-      url: '/key',
-      type: 'POST',
-      data: {Key:data, genre: array},
-      success: response => {
-        appendSearchResults(response.songs);
-      }
+    ajax('/key', 'POST', {Key:data, genre: array}, response=>{
+      appendSearchResults(response.songs);
     });
     e.preventDefault();
   } //key
@@ -495,5 +480,9 @@
     $('.slider').Link('lower').to('-inline-');
     $('.slider').Link('upper').to('-inline-');
   } //displaySlider
+
+  function ajax(url, type, data={}, success=r=>console.log(r)){
+    $.ajax({url:url, type:type, data:data, success:success});
+  }
 
 })();

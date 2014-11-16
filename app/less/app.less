@@ -43,7 +43,6 @@ body {
   font-family: @monoton;
   text-align: center;
   background-color: @bgc;
-  margin-top: 70px;
   padding-top: 24px;
   padding-bottom: 24px;
   h4 {
@@ -108,14 +107,6 @@ footer {
   font-weight: bold;
 }
 
-input#searchInput.form-control{
-  width: 200px;
-}
-
-ul#searchbar.dropdown-menu {
-  left: 46%;
-}
-
 ul#tp.dropdown-menu {
   min-width: 4.5em;
 }
@@ -176,8 +167,22 @@ ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse button.btn-link {
   margin-top: 1em;
 }
 
-@media (max-width:767px) {
-  a.navbar-brand {
-    display: none;
+.close {
+  font-size: 2em;
+}
+
+@media (max-width:768px) {
+  .jumbotron {
+    margin-top: 2em;
+  }
+  #songsButton, #playlistsButton {
+    float: left;
+    width: 50%;
+  }
+}
+
+@media (min-width:992px) {
+  .jumbotron {
+    margin-top: 70px;
   }
 }
