@@ -1,0 +1,12 @@
+extends ../shared/template
+
+block content
+  .panel.panel-default
+    .panel-heading
+      h1.panel-title verify your account
+    .panel-body
+      form(method='post', action='/verify/' + user._id)
+        .input-group
+          span.input-group-addon password
+          input.form-control(type='password', name='password', placeholder='Enter Password')
+        button.btn.btn-default.submit Set Password

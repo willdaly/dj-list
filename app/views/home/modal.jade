@@ -19,13 +19,8 @@ div(class='modal fade', id='registermodal', tabindex='-1', role='dialog')
       .modal-header
         button.close(type='button', data-dismiss='modal') &times;
       .modal-body
-        p password must be 9 characters or longer
         form(action='/users', method='post')
           .input-group
             span.input-group-addon Email
             input.form-control(type='email', name='email', placeholder='email')
-
-          .input-group
-            span.input-group-addon password
-            input.form-control(type='password', name='password', placeholder='password')
-          button.submit Register
+          button.submit Send Verification Email

@@ -23,6 +23,8 @@ function load(app, fn){
   app.get('/', dbg, home.index);
   app.post('/login', dbg, users.login);
   app.post('/users', dbg, users.create);
+  app.get('/verify/:id', dbg, users.verify);
+  app.post('/verify/:id', dbg, users.password);
   app.all('*', users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
   app.post('/createSong', dbg, songs.create);

@@ -31,7 +31,8 @@
     "cookie-session":  "*",
     "cookies":         "*",
     "async":           "*",
-    "request":         "*"
+    "request":         "*",
+    "mailgun-js":      "*"
   },
   "devDependencies": {
     "grunt":                "*",

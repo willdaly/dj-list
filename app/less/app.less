@@ -56,16 +56,12 @@ body {
   }
 }
 
-.panel-title {
-  text-align: center;
-  background-color: @bgc;
-}
-
 .modal-content {
   background-color: @bgc;
   text-align: center;
   .submit {
-    font-family: @monoton;
+    margin-top: 1em;
+    font-weight: bold;
     padding: 1em;
     border-radius: 6px;
   }
@@ -169,6 +165,23 @@ ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse button.btn-link {
 
 .close {
   font-size: 2em;
+}
+
+.panel-title {
+  background-color: @bgc;
+  text-align: center;
+}
+
+.panel.panel-default {
+  background-color: @bgc;
+  margin: 0 auto;
+  text-align: center;
+  button {
+    margin-top: 5px;
+  }
+  p {
+    color: red;
+  }
 }
 
 @media (max-width:768px) {

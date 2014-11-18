@@ -11,13 +11,25 @@ exports.bounce = (req, res, next)=>{
   }
 };
 
+exports.verify = (req, res)=>{
+  User.findById(req.params.id, user=>{
+    res.render('users/verify', {user: user});
+  });
+};
+
+exports.password = (req, res)=>{
+  User.findById(req.params.id, user=>{
+    user.changePassword(req.body.password, ()=>res.redirect('/', {message: 'account verified. now you can sign in'}));
+  });
+};
+
 exports.login = (req, res)=>{
-  User.login(req.body, user=>{
+  User.login(req.body, (user, message)=>{
     if (user){
       req.session.userId = user._id;
       res.redirect('/');
     }else{
-      res.render('home/index', {message: 'invalid username/password'});
+      res.render('home/index', {message: message});
     }
   });
 };
@@ -30,8 +42,7 @@ exports.logout = (req, res)=>{
 exports.create = (req, res)=>{
   User.create(req.body, (user, message)=>{
     if(user){
-      req.session.userId = user._id;
-      res.render('home/index', {message: `user.name account created`});
+      res.render('home/index', {message: message});
     }else{
       res.render('home/index', {message: message});
     }
