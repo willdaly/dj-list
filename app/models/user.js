@@ -78,8 +78,8 @@ function sendVerificationEmail(user, fn){
   form.append('from', 'postmaster@dj-list.willdaly.co');
   form.append('to', user.email);
   form.append('subject', 'verify your DJ-List account');
-  form.append('html', `<a href="http://localhost:3000/verify/${user._id}">Click to verify your DJ-List account</a>`);
-  // form.append('html', `<a href="http://dj-list.willdaly.co/verify/${user._id}">Click to verify your DJ-List account</a>`);
+  // form.append('html', `<a href="http://localhost:3000/verify/${user._id}">Click to verify your DJ-List account</a>`);
+  form.append('html', `<a href="http://dj-list.willdaly.co/verify/${user._id}">Click to verify your DJ-List account</a>`);
 }
 
 module.exports = User;
