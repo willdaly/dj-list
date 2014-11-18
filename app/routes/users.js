@@ -19,7 +19,7 @@ exports.verify = (req, res)=>{
 
 exports.password = (req, res)=>{
   User.findById(req.params.id, user=>{
-    user.changePassword(req.body.password, ()=>res.redirect('/', {message: 'account verified. now you can sign in'}));
+    user.changePassword(req.body.password, ()=>res.render('home/index', {message: 'account verified. now you can sign in'}));
   });
 };
 
