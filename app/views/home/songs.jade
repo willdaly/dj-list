@@ -10,10 +10,11 @@
         th(ng-show="songs.songs.Album") album
         th genre
     tbody#searchResults
-      td(ng-show="songs.songs.order")
-      td {{songs.songs.BPM}}
-      td {{songs.songs.Key}}
-      td {{songs.songs.Song}}
-      td {{songs.songs.Artist}}
-      td(ng-show="songs.songs.Album") {{songs.songs.Album}}
-      td {{songs.songs.genre}}       
+      tr(ng-repeat="song in songs.songs | orderBy:['BPM', 'Key']")
+        td(ng-show="song.order")
+        td {{song.BPM}}
+        td {{song.Key}}
+        td {{song.Song}}
+        td {{song.Artist}}
+        td(ng-show="song.Album") {{song.Album}}
+        td {{song.genre}}       

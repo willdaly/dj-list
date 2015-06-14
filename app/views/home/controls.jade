@@ -1,10 +1,10 @@
-.col-sm-3
+.col-sm-3(ng-controller="ControlsController as controls")
   ul( class='nav nav-pills nav-justified', role='tablist')
-    li.active
-      a(data-target='#')#songsButton Songs
-    li
-      a(data-target='#')#playlistsButton Playlists
-  .container
+    li(ng-class="{ active:controls.isSelected('songs')}")
+      a(data-target ng-click="controls.selectTab('songs')")#songsButton Songs
+    li(ng-class="{ active:controls.isSelected('playlists')}")
+      a(data-target ng-click="controls.selectTab('playlists')")#playlistsButton Playlists
+  .container(ng-show="controls.tab === 'songs'" ng-controller="SongController as songs")
     .row.songs
       .btn-group
         button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Pick Genres
@@ -20,7 +20,7 @@
 
     .row.songs
       .input-group#keyinput
-        select.form-control#key
+        select(ng-model="songs.key").form-control#key
           option AbM
           option abm
           option AM
@@ -72,7 +72,7 @@
             li(value='5')
               a(data-target='#').transpose +5
     .row.songs
-      .slider
+      .slider(ng-model="songs .BPM")
         label BPM
 
     .row.songs
@@ -96,8 +96,8 @@
       .btn-group
         button.btn.btn-default(type='button' data-toggle='modal', data-target='#createSong') New Song
         button.btn.btn-default(type='button')#editSongBtn Edit Song          
-          
-    .row.playlistsIndex(style='display: none')
+  .container(ng-show="controls.tab === 'playlists'")        
+    .row.playlistsIndex
       .input-group
         input.form-control(type='text', name='name', id='name', placeholder='check songs, enter name')
         span.input-group-btn
@@ -105,14 +105,14 @@
     .row      
       ul#playlists.list-group
       
-    .row.playlistsShow(style='display: none')
+    .row.playlistsShow
       .btn-group
         button.btn.btn-default(type='button')#deleteFromPlaylist Remove Songs 
-    .row.playlistsShow(style='display: none')
+    .row.playlistsShow
       .input-group
         input.form-control(type='text', id='editPlaylistName')
         span.input-group-btn
           button.btn.btn-default(type='button')#renamePlaylist Rename Playlist
-    .row.playlistsShow(style='display: none')    
+    .row.playlistsShow   
       button.btn.btn-small.btn-warning#deletePlaylist(type='button') Delete Playlist
-  button.btn.btn-default#controlsToggle show / hide controls    
+  button.btn.btn-default(ng-click="controls.selectTab('hide')")#controlsToggle show / hide controls    

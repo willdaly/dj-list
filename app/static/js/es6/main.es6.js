@@ -4,27 +4,25 @@
 (function(){
 
   'use strict';
-  var app = angular.module('dj-list', [ ]);
+  var app = angular.module('dj-list', ['songs']);
 
   $(document).ready(init);
 
-  app.controller('SongController', ['$scope', '$http', function($scope, $http){
-    //var songsObject = $http.post('/albumSearch', {Album: 'Another Voyage'});
-    var songsObject = $http({
-      method: 'post',
-      url: '/albumSearch',
-      data: {Album: 'Another Voyage'}
-    });
-    this.songs = songsObject;
-  }]);
+  app.controller('ControlsController', function(){
+    this.tab = 'songs';
+    this.selectTab = function(setTab) {
+      this.tab = setTab;
+    };
+    this.isSelected = function(checkTab){
+      return this.tab === checkTab;
+    };
+  });
 
   function init(){
 
     displaySlider();
 
     $('.genres').bind('mousedown', e=>{ e.metaKey = true; }).selectable();
-    $('#controlsToggle').click(controlsToggle);
-
     $('#createNewSong').click(createSong);
     $('#keyFilter').click(key);
     $('#bpmFilter').click(bpm);
@@ -34,12 +32,10 @@
     $('#songSearch').click(songSearch);
     $('#genreFilter').click(genreFilter);
     $('.transpose').click(transpose);
-    $('#songsButton').click(songsControls);
     $('#editSongBtn').click(editSongShow);
     $('#editSongSubmit').click(editSong);
 
     $('#createPlaylist').click(createPlaylist);
-    $('#playlistsButton').click(getplaylistindex);
     $('#playlists').on('click', 'a', showPlaylist);
     $('#playlists').on('click', 'button', addToPlaylist);
     $('#renamePlaylist').click(renamePlaylist);
@@ -82,11 +78,6 @@
     }
   }
 
-  function controlsToggle() {
-    $('.container').toggle();
-    $('.nav.nav-pills.nav-justified').toggle();
-  }
-
   function showPlaylist() {
     var playlistId = $(this).parent().attr('id');
     $.ajax({
@@ -103,20 +94,6 @@
         appendPlaylistSongs(response.songs);
       }
     });
-  }
-
-  function songsControls() {
-    $('ul#playlists.list-group').empty();
-    $('#songsButton').parent().addClass('active');
-    $('#playlistsButton').parent().removeClass('active');
-    $('.playlistsIndex').hide();
-    $('.playlistsShow').hide();
-    $('#orderTableHead').hide();
-    $('.order').hide();
-    $('.songs').show();
-    if ($('.ui-sortable-handle').length !== 0){
-      $('.ui-sortable-handle').hide();
-    }
   }
 
   function noSongSelected() {
