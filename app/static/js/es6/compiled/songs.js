@@ -4,7 +4,7 @@
   app.controller('SongController', ['$http', function($http) {
     var songs = this;
     songs.songs = [];
-    $http.post('/albumSearch', {body: {Album: 'Another Voyage'}}).success(function(data) {
+    $http.post('/albumSearch', {Album: 'The Payback'}).success(function(data) {
       songs.songs = data;
     });
   }]);
