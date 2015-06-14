@@ -1,5 +1,5 @@
 doctype html
-html
+html(ng-app='dj-list')
   head
     meta(name='viewport', content='width=device-width, initial-scale=1.0') 
     meta(charset='utf-8')
@@ -12,7 +12,9 @@ html
   body
     include navigation
     block content
-
+    include footer
+    include google_analytics  
+    script(src='/js/vendor/angular.js')  
     script(src='/js/vendor/jquery-2.1.1.js')
     script(src="/jquery-ui/jquery-ui.min.js")
     script(src='/js/vendor/lodash-2.4.1.js')

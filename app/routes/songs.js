@@ -40,9 +40,11 @@ exports.artistSearch = (req, res)=>{
 };
 
 exports.albumSearch = (req, res)=>{
-  Song.findByAlbum(req.body.Album, songs=>{
-    res.send({songs: songs});
-  });
+  console.log('LOOKY HERE');
+  console.log(req.data);
+  // Song.findByAlbum(req.data.Album, songs=>{
+  //   res.send({songs: songs});
+  // });
 };
 
 exports.songSearch = (req, res)=>{

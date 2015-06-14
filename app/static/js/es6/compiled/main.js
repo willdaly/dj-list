@@ -1,6 +1,15 @@
 (function() {
   'use strict';
+  var app = angular.module('dj-list', []);
   $(document).ready(init);
+  app.controller('SongController', ['$scope', '$http', function($scope, $http) {
+    var songsObject = $http({
+      method: 'post',
+      url: '/albumSearch',
+      data: {Album: 'Another Voyage'}
+    });
+    this.songs = songsObject;
+  }]);
   function init() {
     displaySlider();
     $('.genres').bind('mousedown', (function(e) {

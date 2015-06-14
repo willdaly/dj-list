@@ -1,10 +1,22 @@
+/* global angular */
 /* jshint unused:false */
 
 (function(){
 
   'use strict';
+  var app = angular.module('dj-list', [ ]);
 
   $(document).ready(init);
+
+  app.controller('SongController', ['$scope', '$http', function($scope, $http){
+    //var songsObject = $http.post('/albumSearch', {Album: 'Another Voyage'});
+    var songsObject = $http({
+      method: 'post',
+      url: '/albumSearch',
+      data: {Album: 'Another Voyage'}
+    });
+    this.songs = songsObject;
+  }]);
 
   function init(){
 

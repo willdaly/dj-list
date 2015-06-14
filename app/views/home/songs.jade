@@ -1,12 +1,19 @@
 .col-sm-9
-  table.table.table-bordered.table-hover.table-condensed#selectable
+  table.table.table-bordered.table-hover.table-condensed#selectable(ng-controller="SongController as songs")
     thead
       tr
-        th(style='display: none')#orderTableHead order
+        th(ng-show="songs.songs.order") order
         th bpm
         th key
         th song
         th artist
-        th#albumTh album
+        th(ng-show="songs.songs.Album") album
         th genre
     tbody#searchResults
+      td(ng-show="songs.songs.order")
+      td {{songs.songs.BPM}}
+      td {{songs.songs.Key}}
+      td {{songs.songs.Song}}
+      td {{songs.songs.Artist}}
+      td(ng-show="songs.songs.Album") {{songs.songs.Album}}
+      td {{songs.songs.genre}}       
