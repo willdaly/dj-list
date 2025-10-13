@@ -19,13 +19,13 @@ function load(app, fn){
   var songs = traceur.require(__dirname + '/../routes/songs.js');
   var playlists = traceur.require(__dirname + '/../routes/playlists.js');
 
-  app.all('*', users.lookup);
+  app.use(users.lookup);
   app.get('/', dbg, home.index);
   app.post('/login', dbg, users.login);
   app.post('/users', dbg, users.create);
   app.get('/verify/:id', dbg, users.verify);
   app.post('/verify/:id', dbg, users.password);
-  app.all('*', users.bounce); //bounce
+ app.use(users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
   app.post('/createSong', dbg, songs.create);
   app.post('/key', dbg, songs.key);

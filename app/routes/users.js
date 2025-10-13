@@ -50,12 +50,17 @@ exports.create = (req, res)=>{
 };
 
 exports.lookup = (req, res, next)=>{
-  User.findById(req.session.userId, user=>{
-    if(user){
-      res.locals.user = user;
-    }else{
-      res.locals.user = null;
-    }
+  if(req.session.userId){
+    User.findById(req.session.userId, user=>{
+      if(user){
+        res.locals.user = user;
+      }else{
+        res.locals.user = null;
+      }
+      next();
+    });
+  }else{
+    res.locals.user = null;
     next();
-  });
+  }
 };

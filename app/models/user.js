@@ -1,21 +1,27 @@
-var userCollection = global.nss.db.collection('users');
 var Mongo = require('mongodb');
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var request = require('request');
 
+var getUserCollection = function() {
+  if (!global.nss || !global.nss.db) {
+    throw new Error('Database not initialized');
+  }
+  return global.nss.db.collection('users');
+};
+
 class User {
   static create (obj, fn){
     var message;
-    userCollection.findOne({email: obj.email}, (e, u)=>{
+    getUserCollection().findOne({email: obj.email}, (e, u)=>{
       if (!u){
         var user = new User();
-        user._id = Mongo.ObjectID(obj._id);
+        user._id = new Mongo.ObjectId(obj._id);
         user.email = obj.email;
         user.password = '';
         user.joinedOn = new Date();
         user.isValid = false;
-        userCollection.save(user, ()=>{
+        getUserCollection().save(user, ()=>{
           sendVerificationEmail(user, fn);
         });
       }else{
@@ -26,34 +32,41 @@ class User {
     //end of create
   }
 
-  static login (obj, fn){
-    var message;
-    userCollection.findOne({email: obj.email}, (e,u)=>{
-      if (u){
-        var isMatch = bcrypt.compareSync(obj.password, u.password);
-        if (isMatch && u.isValid){
-          fn(u);
-        }else{
-          message = u.isValid ? 'incorrect password' : 'unverified account, please respond to the verification email sent when you registered';
-          fn(null, message);
-        }
+static login (obj, fn){
+  var message;
+  console.log('LOGIN ATTEMPT:', obj.email);
+  getUserCollection().findOne({email: obj.email}, (e,u)=>{
+    console.log('USER FOUND:', u ? 'yes' : 'no');
+    if (u){
+      console.log('COMPARING PASSWORDS');
+      var isMatch = bcrypt.compareSync(obj.password, u.password);
+      console.log('PASSWORD MATCH:', isMatch);
+      console.log('IS VALID:', u.isValid);
+      if (isMatch && u.isValid){
+        fn(u);
       }else{
-        message = 'no user registered with ' + obj.email;
+        message = u.isValid ? 'incorrect password' : 'unverified account, please respond to the verification email sent when you registered';
+        console.log('LOGIN FAILED:', message);
         fn(null, message);
       }
-    });
-  } //end of login
+    }else{
+      message = 'no user registered with ' + obj.email;
+      console.log('NO USER FOUND');
+      fn(null, message);
+    }
+  });
+}
 
   changePassword(password, fn){
     this.password = bcrypt.hashSync(password, 8);
     this.isValid = true;
-    userCollection.save(this, fn);
+    getUserCollection().save(this, fn);
   }
 
   static findById (id, fn) {
 
-    id = Mongo.ObjectID(id);
-    userCollection.findOne({_id:id}, (e, u)=>{
+    id = new Mongo.ObjectId(id);
+    getUserCollection().findOne({_id:id}, (e, u)=>{
       if (u) {
         u = _.create(User.prototype, u);
         fn(u);
