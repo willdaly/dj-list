@@ -1,6 +1,8 @@
 'use strict';
 
 var Cookies = require('cookies');
+var getSessionKeys = require(__dirname + '/session-keys.js');
+var sessionKeys = getSessionKeys();
 
 exports.connection = function(socket){
   addUserToSocket(socket);
@@ -11,7 +13,7 @@ exports.connection = function(socket){
 /* -------------------------------------------------------------------------- */
 
 function addUserToSocket(socket){
-  var cookies = new Cookies(socket.handshake, {}, ['SEC123', '321CES']);
+  var cookies = new Cookies(socket.handshake, {}, sessionKeys);
   var encoded = cookies.get('express:sess');
   var decoded;
 

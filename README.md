@@ -70,7 +70,7 @@ db.createCollection("users")
 exit
 
 # Run the application
-DBNAME=dj-list npm start
+DBNAME=dj-list SESSION_KEYS=change-me-1,change-me-2 npm start
 The app will be available at http://localhost:4000
 Creating a User
 To create a user with a hashed password, use the MongoDB shell:

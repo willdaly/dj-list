@@ -7,8 +7,10 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var cookieSession  = require('cookie-session');
 var loadRoutes      = require(__dirname + '/lib/init-routes.js');
+var getSessionKeys  = require(__dirname + '/lib/session-keys.js');
 
 function createApp() {
+  var sessionKeys = getSessionKeys();
   var app = express();
   app.set('views', __dirname + '/views');
   app.set('view engine', 'pug');
@@ -18,7 +20,7 @@ function createApp() {
   app.use('/less', less(__dirname + '/less'));
   app.use(bodyParser.urlencoded({extended:true}));
   app.use(methodOverride());
-  app.use(cookieSession({keys:['SEC123', '321CES']}));
+  app.use(cookieSession({keys: sessionKeys}));
 
   loadRoutes(app);
   return app;
