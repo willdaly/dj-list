@@ -6,9 +6,6 @@
   },
   "version": "0.0.1",
   "private": true,
-  "bin": {
-    "coveralls": "./node_modules/coveralls/bin/coveralls.js"
-  },
   "scripts": {
     "start": "npm run build:styles && node server.js",
     "build:styles": "lessc app/less/app.less app/static/css/app.css",
@@ -16,8 +13,7 @@
     "dev:frontend": "vite",
     "setup": "npm install",
     "test": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000",
-    "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch",
-    "coveralls": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require test/helpers/mocha-hooks.js test/types --recursive -r blanket -R mocha-lcov-reporter | coveralls"
+    "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch"
   },
   "dependencies": {
     "async": "^3.2.6",
@@ -42,22 +38,14 @@
     "wnumb": "^1.2.0"
   },
   "devDependencies": {
-    "blanket": "^1.2.3",
     "chai": "^6.2.0",
-    "coveralls": "^3.1.1",
     "grunt": "^1.6.1",
     "grunt-contrib-jshint": "^3.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "jshint-stylish": "^2.2.1",
     "mocha": "^11.7.4",
-    "mocha-lcov-reporter": "^1.3.0",
     "superagent": "^10.2.3",
     "supertest": "^7.1.4",
     "vite": "^7.1.7"
-  },
-  "config": {
-    "blanket": {
-      "pattern": "/app/"
-    }
   }
 }
