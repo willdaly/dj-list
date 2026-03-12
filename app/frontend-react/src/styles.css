@@ -9,7 +9,7 @@ body {
 }
 
 .app-shell {
-  max-width: 720px;
+  max-width: 980px;
   margin: 64px auto;
   padding: 24px;
   background: #ffffff;
@@ -21,13 +21,35 @@ body {
   color: #6b7280;
 }
 
-.search-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
+.panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 14px;
 }
 
-.search-row input {
+.panel h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search-row input,
+.search-row select,
+.controls-grid select,
+.controls-grid input {
   flex: 1;
   min-width: 0;
   border: 1px solid #d1d5db;
@@ -35,7 +57,9 @@ body {
   padding: 8px 10px;
 }
 
-.search-row button {
+.search-row button,
+.controls-actions button,
+.user-row button {
   border: 1px solid #4b5563;
   border-radius: 6px;
   background: #111827;
@@ -44,7 +68,8 @@ body {
   padding: 8px 14px;
 }
 
-.search-row button.secondary {
+.search-row button.secondary,
+.user-row button.secondary {
   background: #f3f4f6;
   color: #111827;
 }
@@ -53,9 +78,66 @@ body {
   margin: 12px 0 8px;
 }
 
-.results {
-  margin: 0;
-  padding-left: 18px;
+.genres-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.genre-pill {
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #f9fafb;
+  cursor: pointer;
+  padding: 4px 10px;
+}
+
+.genre-pill.selected {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #7f1d1d;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.controls-grid label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  gap: 6px;
+}
+
+.controls-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.results-wrap {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 8px;
+}
+
+.results-table th {
+  background: #f9fafb;
+  font-weight: 600;
 }
 
 .spotify-link {

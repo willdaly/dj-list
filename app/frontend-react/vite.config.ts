@@ -9,6 +9,9 @@ export default defineConfig({
     proxy: {
       '/api/session': 'http://127.0.0.1:4000',
       '/search': 'http://127.0.0.1:4000',
+      '/artistSearch': 'http://127.0.0.1:4000',
+      '/albumSearch': 'http://127.0.0.1:4000',
+      '/songSearch': 'http://127.0.0.1:4000',
       '/guessSearch': 'http://127.0.0.1:4000',
       '/genreFilter': 'http://127.0.0.1:4000',
       '/bpm': 'http://127.0.0.1:4000',

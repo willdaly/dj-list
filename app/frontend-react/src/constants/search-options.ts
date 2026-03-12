@@ -1,0 +1,42 @@
+export const GENRE_OPTIONS = [
+  'Hip-Hop',
+  'Hip-Hop Instrumental',
+  'Battle',
+  '45 King',
+  'Soul',
+  'Jazz',
+  'Rock',
+  'Pop',
+  'Electronic',
+  'Melodiya',
+  'OST'
+] as const;
+
+export const KEY_OPTIONS = [
+  'AbM',
+  'abm',
+  'AM',
+  'am',
+  'BbM',
+  'bbm',
+  'BM',
+  'bm',
+  'CM',
+  'cm',
+  'C#M',
+  'c#m',
+  'DM',
+  'dm',
+  'EbM',
+  'ebm',
+  'EM',
+  'em',
+  'FM',
+  'fm',
+  'F#M',
+  'f#m',
+  'GM',
+  'gm',
+  'G#M',
+  'g#m'
+] as const;

@@ -25,6 +25,33 @@ export const apiClient = {
     );
   },
 
+  searchByArtist(artist: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/artistSearch',
+      data: { Artist: artist },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  searchByAlbum(album: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/albumSearch',
+      data: { Album: album },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  searchBySong(song: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/songSearch',
+      data: { Song: song },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
   guessArtistNames(typed: string): Promise<string[]> {
     return request({
       method: 'POST',
