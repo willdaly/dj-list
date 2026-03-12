@@ -1,4 +1,4 @@
-/* global describe, before, beforeEach, it */
+/* global describe, before, beforeEach, afterEach, it */
 'use strict';
 
 process.env.DBNAME = 'dj-list';
@@ -10,14 +10,20 @@ var dbState = require(__dirname + '/../../../app/lib/db.js');
 var app = require('../../../app/app');
 var request = require('supertest');
 
-var User;
-
 describe('users', function(){
+  var originalSpotifyClientId;
+  var originalSpotifyRedirectUri;
 
   before(async function(){
     await db();
-    User = require(__dirname + '/../../../app/models/user.js');
+    originalSpotifyClientId = process.env.SPOTIFY_CLIENT_ID;
+    originalSpotifyRedirectUri = process.env.SPOTIFY_REDIRECT_URI;
   }); //end of before
+
+  afterEach(function(){
+    process.env.SPOTIFY_CLIENT_ID = originalSpotifyClientId;
+    process.env.SPOTIFY_REDIRECT_URI = originalSpotifyRedirectUri;
+  });
 
   beforeEach(async function(){
     try {
@@ -28,50 +34,52 @@ describe('users', function(){
     await factory('user');
   }); //end of beforeEach
 
-  describe('GET /login', function(){
-    it('should show the login page', function(done){
+  describe('GET /', function(){
+    it('should show the landing page', function(done){
       request(app)
-      .get('/login')
+      .get('/')
       .end(function(err, res){
         expect(res.status).to.equal(200);
         done();
       });
     });
-  }); //end of login page
+  }); //end of landing page
 
-  describe('POST /login', function(){
-    it('should login an existing user', function(done){
+  describe('GET /auth/spotify', function(){
+    it('should redirect to spotify when configured', function(done){
+      process.env.SPOTIFY_CLIENT_ID = 'test-client-id';
+      process.env.SPOTIFY_REDIRECT_URI = 'http://localhost:4000/auth/spotify/callback';
       request(app)
-      .post('/login')
-      .send('email=will@nss.com')
-      .send('password=password')
+      .get('/auth/spotify')
       .end(function(err, res){
         expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/');
+        expect(res.headers.location).to.contain('https://accounts.spotify.com/authorize?');
         done();
       });
-    }); // login user success
-    it('should not login an existing user, bad email', function(done){
+    });
+
+    it('should fail when spotify env is missing', function(done){
+      delete process.env.SPOTIFY_CLIENT_ID;
+      delete process.env.SPOTIFY_REDIRECT_URI;
       request(app)
-      .post('/login')
-      .send('email=willyd@nss.com')
-      .send('password=password')
+      .get('/auth/spotify')
       .end(function(err, res){
-        expect(res.status).to.equal(200);
+        expect(res.status).to.equal(500);
         done();
       });
-    }); //login user fail bad email
-    it('should not login an existing user, bad password', function(done){
+    });
+  });
+
+  describe('GET /auth/spotify/callback', function(){
+    it('should reject callback without valid state', function(done){
       request(app)
-      .post('/login')
-      .send('email=will@nss.com')
-      .send('password=wrong')
+      .get('/auth/spotify/callback?code=abc&state=wrong')
       .end(function(err, res){
-        expect(res.status).to.equal(200);
+        expect(res.status).to.equal(400);
         done();
       });
-    }); // login user fail bad password
-  }); // login a user
+    });
+  });
 
   describe('POST /logout', function(){
     it('should logout an existing user', function(done){
@@ -83,29 +91,5 @@ describe('users', function(){
       });
     }); //logout success
   }); //logout
-
-  describe('POST /users', function(){
-    it('should create a new user', function(done){
-      request(app)
-      .post('/users')
-      .send('email=rwd@nss.com')
-      .send('password=password')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        done();
-      });
-    }); // .create success
-    it('should not create a new user', function(done){
-      request(app)
-      .post('/users')
-      .send('email=will@nss.com')
-      .send('password=whatever')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        done();
-      });
-    }); // .create fail, user already exists
-
-  }); //end of create
 
 }); //end of users

@@ -1,15 +1,13 @@
 extends ../shared/template
 
 block content
-  include modal
   if (!user)
     .jumbotron
       h1= title
       h2 Curated Hip-Hop Database
       h3 A better way to search for the perfect beat
       h4 #{message}
-      button.btn.btn-primary.btn-lg(type='button', data-toggle='modal', data-target='#registermodal') Register
-      button.btn.btn-primary.btn-lg(type='button', data-toggle='modal', data-target='#signinmodal') Sign In
+      a.btn.btn-primary.btn-lg(href='/auth/spotify') Sign In with Spotify
     footer
       p &copy 2014 Will Daly. All Rights Reserved.
   if (user)

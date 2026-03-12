@@ -10,10 +10,8 @@ module.exports = function loadRoutes(app){
 
   app.use(users.lookup);
   app.get('/', dbg, home.index);
-  app.post('/login', dbg, users.login);
-  app.post('/users', dbg, users.create);
-  app.get('/verify/:id', dbg, users.verify);
-  app.post('/verify/:id', dbg, users.password);
+  app.get('/auth/spotify', dbg, users.spotifyStart);
+  app.get('/auth/spotify/callback', dbg, users.spotifyCallback);
  app.use(users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
   app.post('/createSong', dbg, songs.create);

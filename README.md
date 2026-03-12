@@ -38,6 +38,9 @@ The app runs at [http://localhost:4000](http://localhost:4000).
 ### Required environment variables
 
 - `SESSION_KEYS` - comma-separated cookie-signing keys (at least two), e.g. `key1,key2`
+- `SPOTIFY_CLIENT_ID` - Spotify app client ID
+- `SPOTIFY_CLIENT_SECRET` - Spotify app client secret
+- `SPOTIFY_REDIRECT_URI` - OAuth callback URL (for local dev: `http://localhost:4000/auth/spotify/callback`)
 
 ### Optional environment variables
 
@@ -74,25 +77,9 @@ Watch mode:
 npm run watch
 ```
 
-## Create a Local User (Manual)
+## Authentication
 
-If you need a known login user in local dev, generate a bcrypt hash and insert a document:
-
-```bash
-node -e "require('bcrypt').hash('password', 8).then(h => console.log(h))"
-```
-
-Then in `mongosh`:
-
-```javascript
-use dj-list
-db.users.insertOne({
-  email: "you@example.com",
-  password: "<paste bcrypt hash>",
-  isValid: true,
-  joinedOn: new Date()
-})
-```
+The app now uses Spotify OAuth for sign-in. Click **Sign In with Spotify** on the home page.
 
 ## Project History
 
