@@ -43,7 +43,7 @@ async function seedUsers(records, fn) {
     }
 
     // Allow plaintext in fixtures while storing secure hashes in DB.
-    if (record.password && record.password.indexOf('$2') === 0) {
+    if (record.password && record.password.startsWith('$2')) {
       user.password = record.password;
     } else {
       user.password = bcrypt.hashSync(record.password || 'password', 8);
