@@ -27,10 +27,17 @@ npm install
 ## Running Locally
 
 1. Start MongoDB (if not already running).
-2. Start the app:
+2. Create a local env file from the example:
 
 ```bash
-DBNAME=dj-list SESSION_KEYS=change-me-1,change-me-2 npm start
+cp .env.example .env
+```
+
+3. Fill in your Spotify credentials in `.env`.
+4. Start the app:
+
+```bash
+npm start
 ```
 
 The app runs at [http://localhost:4000](http://localhost:4000).

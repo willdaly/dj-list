@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 var dbname = process.env.DBNAME || 'default-db';
 var port = process.env.PORT || 4000;
 
