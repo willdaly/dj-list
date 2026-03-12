@@ -1,6 +1,4 @@
 /* global describe, before, beforeEach */
-/* jshint expr:true */
-// pulled out it
 'use strict';
 
 process.env.DBNAME = 'dj-list';
