@@ -4,9 +4,7 @@ import {
   key,
   bpm,
   bpmKey,
-  artistSearch,
-  albumSearch,
-  songSearch,
+  search,
   genreFilter,
   transpose
 } from './search-actions';
@@ -36,9 +34,7 @@ export function initApp() {
   $('#keyFilter').click(key);
   $('#bpmFilter').click(bpm);
   $('#bpmKeyFilter').click(bpmKey);
-  $('#artistSearch').click(artistSearch);
-  $('#albumSearch').click(albumSearch);
-  $('#songSearch').click(songSearch);
+  $('#searchButton').click(search);
   $('#genreFilter').click(genreFilter);
   $('.transpose').click(transpose);
   $('#songsButton').click(songsControls);

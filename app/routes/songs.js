@@ -78,6 +78,15 @@ exports.songSearch = async (req, res)=>{
   }
 };
 
+exports.search = async (req, res)=>{
+  try {
+    var songs = await Song.findBySearchTerm(req.body.query);
+    res.send({songs: songs});
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
+};
+
 exports.genreFilter = async (req, res)=>{
   try {
     var songs = await Song.findByGenre(req.body.genre);

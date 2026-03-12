@@ -84,15 +84,7 @@
       .input-group
         input.form-control(type='text', name='search', placeholder='Artist, Album, Song')#searchInput
         .input-group-btn
-          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
-            span.caret
-          ul#searchbar.dropdown-menu(role='menu')
-              li
-                a(data-target='#')#artistSearch Artist
-              li
-                a(data-target='#')#albumSearch Album
-              li
-                a(data-target='#')#songSearch Song    
+          button.btn.btn-default(type='button')#searchButton Search
       
     .row.playlistsIndex(style='display: none')
       .input-group

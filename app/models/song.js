@@ -120,6 +120,37 @@ class Song {
     return getSongCollection().find({'Song' : { $regex: new RegExp('^' + title.toLowerCase(), 'i')  }}).toArray();
   }
 
+  static async findBySearchTerm(term){
+    var query = (term || '').trim();
+    if (!query) {
+      return [];
+    }
+
+    var tokens = query.split(/\s+/).filter(function(token) {
+      return token.length > 0;
+    }).map(function(token) {
+      return token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    });
+
+    if (tokens.length === 0) {
+      return [];
+    }
+
+    var makeFieldConditions = function(field) {
+      return tokens.map(function(token) {
+        return {[field]: {$regex: new RegExp(token, 'i')}};
+      });
+    };
+
+    return getSongCollection().find({
+      $or: [
+        {$and: makeFieldConditions('Artist')},
+        {$and: makeFieldConditions('Album')},
+        {$and: makeFieldConditions('Song')}
+      ]
+    }).toArray();
+  }
+
   static async findByGenre (genre){
     return getSongCollection().find({genre: {$in: genre}}).toArray();
   }

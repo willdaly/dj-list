@@ -25,6 +25,7 @@ module.exports = function loadRoutes(app){
   app.post('/artistSearch', dbg, songs.artistSearch);
   app.post('/albumSearch', dbg, songs.albumSearch);
   app.post('/songSearch', dbg, songs.songSearch);
+  app.post('/search', dbg, songs.search);
   app.post('/genreFilter', dbg, songs.genreFilter);
   app.post('/transpose', dbg, songs.transpose);
   app.put('/editSong', dbg, songs.editSong);

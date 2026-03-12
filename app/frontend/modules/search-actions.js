@@ -39,6 +39,16 @@ export function songSearch(e) {
   e.preventDefault();
 }
 
+export function search(e) {
+  var query = $('#searchInput').val();
+  if (query.length > 0) {
+    ajax('/search', 'POST', { query: query }, (response) => {
+      appendSearchResults(response.songs);
+    });
+  }
+  e.preventDefault();
+}
+
 export function albumSearch(e) {
   var album = $('#searchInput').val();
   if (album.length > 0) {
