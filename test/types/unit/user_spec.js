@@ -6,9 +6,8 @@
 process.env.DBNAME = 'dj-list';
 
 var expect = require('chai').expect;
-var traceur = require('traceur');
-var db = traceur.require(__dirname + '/../../helpers/db.js');
-var factory = traceur.require(__dirname + '/../../helpers/factory.js');
+var db = require(__dirname + '/../../helpers/db.js');
+var factory = require(__dirname + '/../../helpers/factory.js');
 var Mongo = require('mongodb');
 
 var User;
@@ -16,7 +15,7 @@ var User;
 describe('User', function(){
   before(function(done){
     db(function(){
-      User = traceur.require(__dirname + '/../../../app/models/user.js');
+      User = require(__dirname + '/../../../app/models/user.js');
       done();
     });
   }); //end of before
@@ -36,7 +35,8 @@ describe('User', function(){
         expect(u).to.be.ok;
         expect(u).to.be.an.instanceof(User);
         expect(u._id).to.be.an.instanceof(Mongo.ObjectID);
-        expect(u.password).to.have.length.above(59);
+        expect(u.password).to.equal('');
+        expect(u.isValid).to.equal(false);
         done();
       });
     }); //end of create success

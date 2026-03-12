@@ -14,10 +14,6 @@ var getSongsCollection = function() {
   return global.nss.db.collection('songs');
 };
 
-var getSongsCollection = function() {
-  return global.nss.db.collection('songs');
-};
-
 class Playlist {
   static create (obj, userId, fn){
     var songsArray = [];
@@ -44,7 +40,7 @@ class Playlist {
               playlist.name = obj.name;
               playlist.userId = userId;
               playlist.songs = sArray;
-              getPlaylistsCollection().save(playlist, ()=>fn(playlist));
+              getPlaylistsCollection().insertOne(playlist, ()=>fn(playlist));
             }else{
               fn(null);
             }
@@ -57,7 +53,7 @@ class Playlist {
               playlist.name = obj.name;
               playlist.userId = userId;
               playlist.songs = sArray;
-              getPlaylistsCollection().save(playlist, ()=>fn(playlist));
+              getPlaylistsCollection().insertOne(playlist, ()=>fn(playlist));
             }else{
               fn(null);
             }
@@ -83,7 +79,7 @@ class Playlist {
             playlist.songs.push(song);
             order++;
           });
-          getPlaylistsCollection().save(playlist, playlist=>fn(playlist));
+          getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
         } else {
           fn(null);
         }
@@ -122,7 +118,7 @@ class Playlist {
             return -1;
           }
         });
-        getPlaylistsCollection().save(playlist, ()=>fn(playlist));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
       } else {
         fn(null);
       }
@@ -136,7 +132,7 @@ class Playlist {
       if (playlist){
         console.log(playlist.name);
         playlist.name = obj.newName;
-        getPlaylistsCollection().save(playlist, p=>fn(p));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
       } else {
         fn(null);
       }
@@ -155,7 +151,7 @@ class Playlist {
 
   static deletePlaylist (id, userId, fn){
     var _id = new Mongo.ObjectId(id);
-    getPlaylistsCollection().findAndRemove({_id:_id}, ()=>{
+    getPlaylistsCollection().findOneAndDelete({_id:_id}, ()=>{
       getPlaylistsCollection().find({userId : userId}).toArray((e, playlists)=>{
         if (playlists) {
           fn(playlists);
@@ -215,7 +211,7 @@ class Playlist {
           song.order = order;
           order++;
         });
-        getPlaylistsCollection().save(playlist, ()=>fn(playlist));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
       });
     });
   }

@@ -1,7 +1,6 @@
 'use strict';
 
-var traceur = require('traceur');
-var Song = traceur.require(__dirname + '/../models/song.js');
+var Song = require(__dirname + '/../models/song.js');
 
 exports.create = (req, res)=>{
   Song.create(req.body, song=>{

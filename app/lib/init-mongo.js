@@ -15,7 +15,7 @@ module.exports = (req, res, next)=>{
 };
 
 function load(fn){
-  MongoClient.connect(mongoUrl, (err, db)=>{
+  MongoClient.connect(mongoUrl, {useUnifiedTopology: true}, (err, db)=>{
     if(err){throw err;}
     global.nss = {};
     global.nss.db = db;

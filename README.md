@@ -34,7 +34,7 @@ Custom CSS
 Build Tools:
 
 Grunt task runner
-Traceur for ES6 transpilation
+Native ES6 (no transpilation step required)
 LESS CSS preprocessing
 
 Data Model

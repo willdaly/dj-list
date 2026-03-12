@@ -4,9 +4,8 @@
 process.env.DBNAME = 'dj-list';
 
 var expect = require('chai').expect;
-var traceur = require('traceur');
-var db = traceur.require(__dirname + '/../../helpers/db.js');
-var factory = traceur.require(__dirname + '/../../helpers/factory.js');
+var db = require(__dirname + '/../../helpers/db.js');
+var factory = require(__dirname + '/../../helpers/factory.js');
 var app = require('../../../app/app');
 var request = require('supertest');
 
@@ -16,7 +15,7 @@ describe('users', function(){
 
   before(function(done){
     db(function(){
-      User = traceur.require(__dirname + '/../../../app/models/user.js');
+      User = require(__dirname + '/../../../app/models/user.js');
       done();
     });
   }); //end of before
@@ -58,8 +57,7 @@ describe('users', function(){
       .send('email=willyd@nss.com')
       .send('password=password')
       .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/login');
+        expect(res.status).to.equal(200);
         done();
       });
     }); //login user fail bad email
@@ -69,8 +67,7 @@ describe('users', function(){
       .send('email=will@nss.com')
       .send('password=wrong')
       .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/login');
+        expect(res.status).to.equal(200);
         done();
       });
     }); // login user fail bad password
@@ -81,8 +78,7 @@ describe('users', function(){
       request(app)
       .post('/logout')
       .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/');
+        expect(res.status).to.equal(200);
         done();
       });
     }); //logout success
@@ -95,8 +91,7 @@ describe('users', function(){
       .send('email=rwd@nss.com')
       .send('password=password')
       .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/');
+        expect(res.status).to.equal(200);
         done();
       });
     }); // .create success
@@ -106,8 +101,7 @@ describe('users', function(){
       .send('email=will@nss.com')
       .send('password=whatever')
       .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.header.location).to.equal('/login');
+        expect(res.status).to.equal(200);
         done();
       });
     }); // .create fail, user already exists

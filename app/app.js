@@ -3,15 +3,12 @@
 var dbname = process.env.DBNAME || 'default-db';
 var port = process.env.PORT || 4000;
 
-var traceur        = require('traceur');
 var express        = require('express');
 var less           = require('express-less');
 var morgan         = require('morgan');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var cookieSession  = require('cookie-session');
-var initMongo      = traceur.require(__dirname + '/lib/init-mongo.js');
-var initRoutes     = traceur.require(__dirname + '/lib/init-routes.js');
 
 /* --- configuration    */
 var app = express();
@@ -19,7 +16,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 /* --- pipeline         */
-app.use(morgan({format: 'dev'}));
+app.use(morgan('dev'));
 app.use(express.static(__dirname + '/static'));
 app.use('/less', less(__dirname + '/less'));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -28,21 +25,20 @@ app.use(cookieSession({keys:['SEC123', '321CES']}));
 
 /* --- http server      */
 var MongoClient = require('mongodb').MongoClient;
-var mongoUrl = `mongodb://localhost/dj-list`;
+var mongoUrl = `mongodb://localhost/${dbname}`;
 
-MongoClient.connect(mongoUrl).then(function(client){
+MongoClient.connect(mongoUrl, {useUnifiedTopology: true}).then(function(client){
   global.nss = {};
-  global.nss.db = client.db('dj-list');
+  global.nss.db = client.db(dbname);
   
   console.log('Connected to MongoDB');
   
   // Load routes
-  var traceur = require('traceur');
-  var home = traceur.require(__dirname + '/routes/home.js');
-  var users = traceur.require(__dirname + '/routes/users.js');
-  var songs = traceur.require(__dirname + '/routes/songs.js');
-  var playlists = traceur.require(__dirname + '/routes/playlists.js');
-  var dbg = traceur.require(__dirname + '/lib/route-debugger.js');
+  var home = require(__dirname + '/routes/home.js');
+  var users = require(__dirname + '/routes/users.js');
+  var songs = require(__dirname + '/routes/songs.js');
+  var playlists = require(__dirname + '/routes/playlists.js');
+  var dbg = require(__dirname + '/lib/route-debugger.js');
 
   app.use(users.lookup);
   app.get('/', dbg, home.index);
@@ -76,11 +72,11 @@ MongoClient.connect(mongoUrl).then(function(client){
   
   var server = require('http').createServer(app);
   server.listen(port, function(){
-    console.log('Node server listening. Port: ' + port + ', Database: dj-list');
+    console.log('Node server listening. Port: ' + port + ', Database: ' + dbname);
   });
 
   /* --- socket.io        */
-  var sockets = traceur.require(__dirname + '/lib/sockets.js');
+  var sockets = require(__dirname + '/lib/sockets.js');
   var io = require('socket.io')(server);
   io.of('/app').on('connection', sockets.connection);
   

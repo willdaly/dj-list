@@ -17,7 +17,7 @@ class ListItem {
           li.bpm = song.BPM;
           li.key = song.Key;
           li.genre = song.genre;
-          listItemsCollection.save(li, li=>{
+          listItemsCollection.insertOne(li, ()=>{
             fn(li);
           });
         });
@@ -28,11 +28,11 @@ class ListItem {
   } //create
 
   static destroyListItem (playlistId, songIds, fn) {
-    songIds.map((id)=>{ return Mongo.ObjectID(id);  });
+    songIds = songIds.map((id)=>new Mongo.ObjectId(id));
     console.log('songIds');
     console.log(songIds);
-    listItemsCollection.findAndRemove({songId : { $in: songIds }}, listItems=>{
-      fn(listItems);
+    listItemsCollection.deleteMany({songId : { $in: songIds }}, (err, result)=>{
+      fn({deletedCount: result ? result.deletedCount : 0});
     });
 
     // playlistCollection.findOne({_id:_id}, (err,playlist)=>{

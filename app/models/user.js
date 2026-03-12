@@ -21,7 +21,7 @@ class User {
         user.password = '';
         user.joinedOn = new Date();
         user.isValid = false;
-        getUserCollection().save(user, ()=>{
+        getUserCollection().insertOne(user, ()=>{
           sendVerificationEmail(user, fn);
         });
       }else{
@@ -60,7 +60,9 @@ static login (obj, fn){
   changePassword(password, fn){
     this.password = bcrypt.hashSync(password, 8);
     this.isValid = true;
-    getUserCollection().save(this, fn);
+    getUserCollection().updateOne({_id: this._id}, {$set: {password: this.password, isValid: this.isValid}}, ()=>{
+      fn();
+    });
   }
 
   static findById (id, fn) {
@@ -80,6 +82,12 @@ static login (obj, fn){
 
 function sendVerificationEmail(user, fn){
   'use strict';
+  if (process.env.NODE_ENV === 'test') {
+    var testMessage = `an account verification email has been sent to ${user.email}`;
+    fn(user, testMessage);
+    return;
+  }
+
   var key = process.env.MAILGUN;
   var url = 'https://api:' + key + '@api.mailgun.net/v2/sandboxf8003fd796e54c60bc6cc0b82a62f4e8.mailgun.org/messages';
   var post = request.post(url, function(err, response, body){

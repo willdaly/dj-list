@@ -8,9 +8,6 @@ var getSongCollection = function() {
   return global.nss.db.collection('songs');
 };
 
-var Mongo = require('mongodb');
-var _ = require('lodash');
-
 class Song {
   static create(obj, fn){
     var song = new Song();
@@ -20,7 +17,7 @@ class Song {
     song.BPM = parseInt(obj.BPM);
     song.Key = obj.Key;
     song.genre = obj.genre;
-    getSongCollection().save(song, ()=>fn(song));
+    getSongCollection().insertOne(song, ()=>fn(song));
   }
 
   static findByKey(obj, fn) {
@@ -172,7 +169,7 @@ static guessSearch (typed, fn){
         song.genre = obj.genre;
         console.log(song.genre);
       }
-      getSongCollection().save(song, ()=>fn(song));
+      getSongCollection().replaceOne({_id: song._id}, song, ()=>fn(song));
     });
   }
 }

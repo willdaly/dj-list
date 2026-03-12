@@ -1,7 +1,6 @@
 'use strict';
 
-var traceur = require('traceur');
-var dbg = traceur.require(__dirname + '/route-debugger.js');
+var dbg = require(__dirname + '/route-debugger.js');
 var initialized = false;
 
 module.exports = (req, res, next)=>{
@@ -14,10 +13,10 @@ module.exports = (req, res, next)=>{
 };
 
 function load(app, fn){
-  var home = traceur.require(__dirname + '/../routes/home.js');
-  var users = traceur.require(__dirname + '/../routes/users.js');
-  var songs = traceur.require(__dirname + '/../routes/songs.js');
-  var playlists = traceur.require(__dirname + '/../routes/playlists.js');
+  var home = require(__dirname + '/../routes/home.js');
+  var users = require(__dirname + '/../routes/users.js');
+  var songs = require(__dirname + '/../routes/songs.js');
+  var playlists = require(__dirname + '/../routes/playlists.js');
 
   app.use(users.lookup);
   app.get('/', dbg, home.index);

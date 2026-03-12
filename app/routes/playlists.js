@@ -1,7 +1,6 @@
 'use strict';
 
-var traceur = require('traceur');
-var Playlist = traceur.require(__dirname + '/../models/playlist.js');
+var Playlist = require(__dirname + '/../models/playlist.js');
 
 exports.index = (req, res)=>{
   Playlist.index(req.session.userId, playlists=>{

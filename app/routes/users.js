@@ -1,7 +1,6 @@
 'use strict';
 
-var traceur = require('traceur');
-var User = traceur.require(__dirname + '/../models/user.js');
+var User = require(__dirname + '/../models/user.js');
 
 exports.bounce = (req, res, next)=>{
   if(res.locals.user){
