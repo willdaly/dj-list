@@ -165,8 +165,8 @@ export function App() {
     }
   }
 
-  async function runTextSearch() {
-    const trimmed = query.trim();
+  async function runTextSearch(queryOverride?: string) {
+    const trimmed = (queryOverride ?? query).trim();
     if (!trimmed) {
       setStatus('Enter search text.');
       return;
@@ -392,7 +392,7 @@ export function App() {
                 mode={textSearchMode}
                 onQueryChange={setQuery}
                 onModeChange={setTextSearchMode}
-                onSearch={() => void runTextSearch()}
+                onSearch={(override) => void runTextSearch(override)}
               />
 
               <ResultsTable
