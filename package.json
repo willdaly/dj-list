@@ -27,7 +27,6 @@
     "cookies": "^0.9.1",
     "express": "^5.1.0",
     "jquery": "^3.7.1",
-    "jquery-ui-dist": "^1.13.3",
     "less": "^4.6.3",
     "lodash": "^4.17.21",
     "mailgun-js": "^0.22.0",
@@ -39,6 +38,7 @@
     "request": "^2.88.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.3",
+    "sortablejs": "^1.15.7",
     "wnumb": "^1.2.0"
   },
   "devDependencies": {

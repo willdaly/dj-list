@@ -1,4 +1,7 @@
-import { bindSelectableRows, showMessage } from './ui-common';
+import Sortable from 'sortablejs';
+import { showMessage } from './ui-common';
+
+var resultsSortable = null;
 
 function hideAlbumColumn() {
   if ($('.albumTd:empty').length === $('#searchResults  > tr').length) {
@@ -21,6 +24,11 @@ function updateOrder(e, title, oldOrder, newOrder) {
 }
 
 export function appendSearchResults(songs) {
+  if (resultsSortable) {
+    resultsSortable.destroy();
+    resultsSortable = null;
+  }
+
   if (songs.length > 0) {
     $('#searchResults').empty();
     $('#orderTableHead').hide();
@@ -29,7 +37,6 @@ export function appendSearchResults(songs) {
     }
     songs.forEach((song) => {
       $('#searchResults').append(`<tr id=${song._id}><td>${song.BPM}</td><td>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td class='albumTd'>${song.Album}</td><td>${song.genre}</td></tr>`);
-      bindSelectableRows();
     });
     hideAlbumColumn();
   } else {
@@ -44,19 +51,25 @@ export function appendPlaylistSongs(songs) {
       $('#albumTh').show();
     }
     songs.forEach((song) => {
-      $('#searchResults').append(`<tr value=${song.order} class='ui-corner-all', id=${song._id}><td class='order'>${song.order}</td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td class='albumTd'>${song.Album}</td><td>${song.genre}</td></tr>`);
-      bindSelectableRows();
+      $('#searchResults').append(`<tr value=${song.order} id=${song._id}><td class='order'>${song.order}</td><td value=${song.BPM}>${song.BPM}</td><td value=${song.Key}>${song.Key}</td><td>${song.Song}</td><td>${song.Artist}</td><td class='albumTd'>${song.Album}</td><td>${song.genre}</td></tr>`);
     });
-    $('#searchResults').sortable({
+
+    if (resultsSortable) {
+      resultsSortable.destroy();
+    }
+
+    resultsSortable = Sortable.create(document.getElementById('searchResults'), {
       handle: '.order',
-      update: function(event, ui) {
-        var newOrder = ui.item.context.rowIndex;
-        var oldOrder = ui.item.attr('value');
-        var title = ui.item.context.children[3].innerText;
-        updateOrder(event, title, oldOrder, newOrder);
+      animation: 150,
+      onEnd: function(evt) {
+        var row = evt.item;
+        var newOrder = evt.newIndex + 1;
+        var oldOrder = row.getAttribute('value');
+        var title = row.children[3].innerText;
+        updateOrder(evt, title, oldOrder, newOrder);
       }
     });
-    $('#searchResults').selectable({ filter: 'tr', cancel: '.order' });
+
     hideAlbumColumn();
   }
 }

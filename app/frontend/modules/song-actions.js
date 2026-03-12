@@ -1,15 +1,15 @@
 import { noSongSelected, showModalHeaderMessage, showMessage } from './ui-common';
 
 export function editSongShow() {
-  if ($('#searchResults .ui-selected').length > 0) {
-    $('#searchResults .ui-selected:gt(0)').removeClass('ui-selected');
-    var id = $('#searchResults .ui-selected:nth(0)').attr('id');
-    var bpm = $('#searchResults .ui-selected:nth(0) td:nth(0)').text();
-    var key = $('#searchResults .ui-selected:nth(0) td:nth(1)').text();
-    var title = $('#searchResults .ui-selected:nth(0) td:nth(2)').text();
-    var artist = $('#searchResults .ui-selected:nth(0) td:nth(3)').text();
-    var album = $('#searchResults .ui-selected:nth(0) td:nth(4)').text();
-    var genre = $('#searchResults .ui-selected:nth(0) td:nth(5)').text();
+  if ($('#searchResults .is-selected').length > 0) {
+    $('#searchResults .is-selected:gt(0)').removeClass('is-selected');
+    var id = $('#searchResults .is-selected:nth(0)').attr('id');
+    var bpm = $('#searchResults .is-selected:nth(0) td:nth(0)').text();
+    var key = $('#searchResults .is-selected:nth(0) td:nth(1)').text();
+    var title = $('#searchResults .is-selected:nth(0) td:nth(2)').text();
+    var artist = $('#searchResults .is-selected:nth(0) td:nth(3)').text();
+    var album = $('#searchResults .is-selected:nth(0) td:nth(4)').text();
+    var genre = $('#searchResults .is-selected:nth(0) td:nth(5)').text();
     $('#editSongBPM').val(bpm);
     $('#editSongKey').val(key);
     $('#editSongTitle').val(title);

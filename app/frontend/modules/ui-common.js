@@ -13,7 +13,7 @@ export function noSongSelected() {
 }
 
 export function getSelectedSongIds() {
-  var fakeArray = $('tr.ui-selectee.ui-selected');
+  var fakeArray = $('#searchResults tr.is-selected');
   if (fakeArray.length > 0) {
     var realArray = $.makeArray(fakeArray);
     return $.map(realArray, function(row) { return row.id; });
@@ -24,9 +24,9 @@ export function getSelectedSongIds() {
 }
 
 export function getSelectedGenres() {
-  if ($('li').hasClass('ui-selected')) {
+  if ($('.genres li').hasClass('is-selected')) {
     var array = [];
-    $('li.ui-selected').each(function() {
+    $('.genres li.is-selected').each(function() {
       array.push($(this).text());
     });
     return array;
@@ -36,6 +36,24 @@ export function getSelectedGenres() {
   return null;
 }
 
-export function bindSelectableRows() {
-  $('#searchResults').bind('mousedown', (e) => { e.metaKey = true; }).selectable();
+export function initGenreSelection() {
+  $('.genres').on('click', 'li', function() {
+    $(this).toggleClass('is-selected');
+  });
+}
+
+export function initResultSelection() {
+  $('#searchResults').on('click', 'tr', function(event) {
+    if ($(event.target).closest('.order').length) {
+      return;
+    }
+
+    if (event.metaKey || event.ctrlKey) {
+      $(this).toggleClass('is-selected');
+      return;
+    }
+
+    $('#searchResults tr.is-selected').removeClass('is-selected');
+    $(this).addClass('is-selected');
+  });
 }

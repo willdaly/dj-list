@@ -3,6 +3,13 @@ import { getBpmRange } from './slider';
 import { appendSearchResults } from './ui-results';
 import { getSelectedGenres } from './ui-common';
 
+function ensureSuggestionList() {
+  if ($('#searchSuggestions').length === 0) {
+    $('#searchInput').attr('list', 'searchSuggestions');
+    $('#searchInput').after('<datalist id="searchSuggestions"></datalist>');
+  }
+}
+
 export function guessSearch() {
   var typed = $('#searchInput').val();
   if (typed.length > 3) {
@@ -11,8 +18,11 @@ export function guessSearch() {
       type: 'POST',
       data: { typed: typed },
       success: (response) => {
-        $('#searchInput').autocomplete({
-          source: response.artists
+        ensureSuggestionList();
+        var uniqueArtists = Array.from(new Set(response.artists || []));
+        $('#searchSuggestions').empty();
+        uniqueArtists.forEach((artist) => {
+          $('#searchSuggestions').append($('<option>').attr('value', artist));
         });
       }
     });

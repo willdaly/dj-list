@@ -45,9 +45,6 @@ export function songsControls() {
   $('#orderTableHead').hide();
   $('.order').hide();
   $('.songs').show();
-  if ($('.ui-sortable-handle').length !== 0) {
-    $('.ui-sortable-handle').hide();
-  }
 }
 
 export function createPlaylist(e) {

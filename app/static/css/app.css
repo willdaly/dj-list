@@ -114,14 +114,15 @@ select {
 .genres li {
   margin: 0em 0 1.5em 0;
   font-size: 1.5em;
+  cursor: pointer;
 }
-tr.ui-selected {
+tr.is-selected {
   background-color: rgba(215, 44, 44, 0.3);
 }
-li.ui-selected {
+li.is-selected {
   color: red;
 }
-.genres li:not(.ui-selected):hover {
+.genres li:not(.is-selected):hover {
   color: orange;
 }
 ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse button.btn-link {

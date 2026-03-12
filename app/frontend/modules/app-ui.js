@@ -21,6 +21,7 @@ import {
   deletePlaylist
 } from './playlist-actions';
 import { createSong, editSongShow, editSong } from './song-actions';
+import { initGenreSelection, initResultSelection } from './ui-common';
 
 function controlsToggle() {
   $('.container').toggle();
@@ -29,8 +30,8 @@ function controlsToggle() {
 
 export function initApp() {
   initSlider();
-
-  $('.genres').bind('mousedown', (e) => { e.metaKey = true; }).selectable();
+  initGenreSelection();
+  initResultSelection();
   $('#controlsToggle').click(controlsToggle);
 
   $('#createNewSong').click(createSong);

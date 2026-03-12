@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import 'jquery-ui-dist/jquery-ui.css';
 import 'nouislider/dist/nouislider.css';
 
 import $ from 'jquery';
@@ -11,7 +10,6 @@ window.jQuery = $;
 window._ = _;
 window.moment = moment;
 
-import 'jquery-ui-dist/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 
 import { initApp } from './modules/app-ui';
