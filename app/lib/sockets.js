@@ -14,12 +14,7 @@ exports.connection = function(socket){
 
 function addUserToSocket(socket){
   var cookies = new Cookies(socket.handshake, {}, sessionKeys);
-  var encoded = cookies.get('express:sess');
-  var decoded;
-
-  if(encoded){
-    decoded = decode(encoded);
-  }
+  cookies.get('express:sess');
 
   // 1. Find user in DB
   // 2. Add user to socket
@@ -33,12 +28,6 @@ function addUserToSocket(socket){
   //   });
   // });
 
-  console.log(decoded);
-}
-
-function decode(string) {
-  var body = Buffer.from(string, 'base64').toString('utf8');
-  return JSON.parse(body);
 }
 
 /* -------------------------------------------------------------------------- */
