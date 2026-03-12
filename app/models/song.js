@@ -21,7 +21,7 @@ class Song {
   static async findByKey(obj) {
     const keyArray = [];
     keyArray.push(obj.Key);
-    const ambig = obj.Key.substr(0, obj.Key.length-1);
+    const ambig = obj.Key.slice(0, -1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
     const genre = obj.genre;
@@ -40,7 +40,7 @@ class Song {
     const highBPM = +obj.BPM[1];
     const keyArray = [];
     keyArray.push(obj.Key);
-    const ambig = obj.Key.substr(0, obj.Key.length-1);
+    const ambig = obj.Key.slice(0, -1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
     const genre = obj.genre;
@@ -60,7 +60,7 @@ class Song {
     const lowBPM = Math.floor(bpm);
     const highBPM = Math.ceil(bpm);
     const oldkey = obj.Key;
-    const tonality = oldkey.substr(oldkey.length-1, 1);
+    const tonality = oldkey.slice(-1);
     const majorKeyArray = ['AbM', 'AM', 'BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
     const minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
     let key;
@@ -89,7 +89,7 @@ class Song {
     const genre = obj.genre.split(',');
     const keyArray = [];
     keyArray.push(key);
-    const ambig = key.substr(0, key.length-1);
+    const ambig = key.slice(0, -1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
     return getSongCollection().find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray();
