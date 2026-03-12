@@ -6,10 +6,9 @@ A web app for cataloging and searching records with DJ-focused metadata (BPM, ke
 
 - **Backend:** Node.js, Express, MongoDB driver v6, Socket.IO
 - **Views:** Pug templates
-- **Frontend build:** Vite (bundle output in `app/static/assets`)
-- **Frontend libs:** jQuery, Bootstrap 3, noUiSlider, SortableJS, lodash, moment
-- **Styles:** LESS source in `app/less/app.less`, compiled to `app/static/css/app.css`
-- **Tests:** Mocha, Chai, Supertest
+- **Frontend:** React, TypeScript, Vite (bundle output in `app/static/assets-react`)
+- **UI:** Tailwind CSS v4, SortableJS
+- **Tests:** Mocha, Chai, Supertest (backend); Playwright (smoke + integration)
 
 ## Prerequisites
 
@@ -62,21 +61,17 @@ The app runs at [http://localhost:4000](http://localhost:4000).
 npm run build:frontend
 ```
 
-- Run Vite dev server (frontend-only):
+- Run Vite dev server (frontend-only, with API proxy):
 
 ```bash
 npm run dev:frontend
 ```
 
-`npm start` compiles LESS and starts the Node server. If you change frontend JS modules, run `npm run build:frontend` to refresh bundled assets.
-
-### Legacy frontend stabilization note
-
-The current jQuery-based frontend modules in `app/frontend/modules` are in stabilization mode. Treat them as bugfix-only while the React migration is planned/executed.
+`npm start` builds the frontend and starts the Node server.
 
 ## Tests
 
-Run the full suite:
+- Backend (Mocha):
 
 ```bash
 npm test
@@ -88,7 +83,7 @@ Watch mode:
 npm run watch
 ```
 
-Browser smoke test (controls/search baseline):
+- Browser tests (Playwright – smoke + integration):
 
 ```bash
 npm run test:smoke
