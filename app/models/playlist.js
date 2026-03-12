@@ -34,7 +34,7 @@ class Playlist {
       });
     }
 
-    const existing = await getPlaylistsCollection().findOne({name: obj.name});
+    const existing = await getPlaylistsCollection().findOne({ name: obj.name, userId: userId });
     if (existing) {
       return null;
     }
