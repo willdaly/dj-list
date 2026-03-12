@@ -6,7 +6,7 @@ module.exports = function(grunt){
     // ---------------------------------------------------------------------- //
     watch: {
       code: {
-        files: ['Gruntfile.js', 'test/**/*.js', 'app/**/*.js', '!app/static/js/vendor/**/*.js'],
+        files: ['Gruntfile.js', 'test/**/*.js', 'app/**/*.js'],
         tasks: ['jshint:all']
       }
     },
@@ -20,10 +20,7 @@ module.exports = function(grunt){
         'Gruntfile.js',
         'test/**/*.js',
         'app/**/*.js',
-        '!app/static/bootstrap/**/*.js',
-        '!app/static/js/vendor/**/*.js',
-        '!app/static/jquery-ui/*.js',
-        '!app/static/jquery-ui/external/jquery/*.js'
+        '!app/static/bootstrap/**/*.js'
       ]
     }
     // ---------------------------------------------------------------------- //
