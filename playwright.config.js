@@ -1,6 +1,7 @@
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 module.exports = {
-  testDir: './test/smoke',
+  testDir: './test',
+  testMatch: ['**/smoke/**/*.spec.js', '**/integration/**/*.spec.js'],
   timeout: 30000,
   retries: 0,
   use: {

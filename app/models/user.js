@@ -1,5 +1,4 @@
 var ObjectId = require('mongodb').ObjectId;
-var _ = require('lodash');
 var db = require(__dirname + '/../lib/db.js');
 
 var getUserCollection = function() {
@@ -15,7 +14,7 @@ class User {
 
     var existing = await getUserCollection().findOne({spotifyId: spotifyId});
     if (existing) {
-      return _.create(User.prototype, existing);
+      return Object.assign(Object.create(User.prototype), existing);
     }
 
     if (profile.email) {
@@ -28,7 +27,7 @@ class User {
         emailMatch.spotifyId = spotifyId;
         emailMatch.displayName = profile.display_name || emailMatch.displayName || null;
         emailMatch.isValid = true;
-        return _.create(User.prototype, emailMatch);
+        return Object.assign(Object.create(User.prototype), emailMatch);
       }
     }
 
@@ -49,7 +48,7 @@ class User {
     if (!user) {
       return null;
     }
-    return _.create(User.prototype, user);
+    return Object.assign(Object.create(User.prototype), user);
   }
 
 } //end of user

@@ -5,12 +5,10 @@ html
     meta(charset='utf-8')
     link(rel='shortcut icon', href='/img/favicon.ico')
     title= title
-    link(href='/assets/app.css', rel='stylesheet')
-    link(href='/css/app.css', rel='stylesheet')
+    link(href='/assets-react/app.css', rel='stylesheet')
   body
-    include navigation
     block content
 
-    script(type='module', src='/assets/app.js')
+    script(type='module', src='/assets-react/app.js')
 
     block scripts

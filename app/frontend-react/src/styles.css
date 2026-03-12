@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Inter, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply min-h-screen text-gray-900;
+    background-color: #f3f4f6;
+    background-image: url('/img/bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+  }
+}
+
+/* Sortable.js order cell - keep grab cursor */
+.order-cell {
+  @apply cursor-grab select-none;
+}
+.order-cell:active {
+  @apply cursor-grabbing;
+}

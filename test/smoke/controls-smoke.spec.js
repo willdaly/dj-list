@@ -21,9 +21,10 @@ test('can search and render results, then open playlists', async ({ page }) => {
   expect(createResponse.status()).toBe(200);
 
   await page.goto('/');
-  await page.click('#bpmKeyFilter');
-  await expect(page.locator('#searchResults')).toContainText(song);
+  await expect(page.getByRole('tab', { name: 'Songs' })).toBeVisible();
+  await page.getByRole('button', { name: 'Genres + BPM + Key' }).click();
+  await expect(page.getByText(song)).toBeVisible();
 
-  await page.click('#playlistsButton');
-  await expect(page.locator('.playlistsIndex')).toBeVisible();
+  await page.getByRole('tab', { name: 'Playlists' }).click();
+  await expect(page.getByRole('heading', { name: 'Playlists' })).toBeVisible();
 });

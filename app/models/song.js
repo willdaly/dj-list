@@ -1,5 +1,4 @@
 var ObjectId = require('mongodb').ObjectId;
-var _ = require('lodash');
 var db = require(__dirname + '/../lib/db.js');
 
 var getSongCollection = function() {
@@ -103,7 +102,7 @@ class Song {
       songs.forEach(song=>{
         artists.push(song.Artist);
       });
-      artists = _.uniq(artists);
+      artists = [...new Set(artists)];
     }
     return artists;
   }

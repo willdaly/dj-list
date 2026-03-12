@@ -113,6 +113,23 @@ exports.testLogin = async (req, res)=>{
   }
 };
 
+exports.session = (req, res)=>{
+  if (!res.locals.user) {
+    return res.send({authenticated: false, user: null});
+  }
+
+  return res.send({
+    authenticated: true,
+    user: {
+      _id: String(res.locals.user._id),
+      spotifyId: res.locals.user.spotifyId || null,
+      email: res.locals.user.email || null,
+      displayName: res.locals.user.displayName || null,
+      isValid: Boolean(res.locals.user.isValid)
+    }
+  });
+};
+
 exports.logout = (req, res)=>{
   req.session = null;
   res.redirect('/');

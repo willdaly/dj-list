@@ -35,15 +35,16 @@ describe('users', function(){
   }); //end of beforeEach
 
   describe('GET /', function(){
-    it('should show the landing page', function(done){
+    it('should render react shell', function(done){
       request(app)
       .get('/')
       .end(function(err, res){
         expect(res.status).to.equal(200);
+        expect(res.text).to.contain('/assets-react/app.js');
         done();
       });
     });
-  }); //end of landing page
+  });
 
   describe('GET /auth/spotify', function(){
     it('should redirect to spotify when configured', function(done){
@@ -77,6 +78,35 @@ describe('users', function(){
       .end(function(err, res){
         expect(res.status).to.equal(400);
         done();
+      });
+    });
+  });
+
+  describe('GET /api/session', function(){
+    it('should return unauthenticated state for anonymous requests', function(done){
+      request(app)
+      .get('/api/session')
+      .end(function(err, res){
+        expect(res.status).to.equal(200);
+        expect(res.body.authenticated).to.equal(false);
+        expect(res.body.user).to.equal(null);
+        done();
+      });
+    });
+
+    it('should return authenticated state for logged in users', function(done){
+      var agent = request.agent(app);
+      agent.get('/test/login').end(function(loginErr, loginRes){
+        expect(loginRes.status).to.equal(204);
+        agent
+        .get('/api/session')
+        .end(function(err, res){
+          expect(res.status).to.equal(200);
+          expect(res.body.authenticated).to.equal(true);
+          expect(res.body.user).to.be.an('object');
+          expect(res.body.user.spotifyId).to.equal('smoke-test-user');
+          done();
+        });
       });
     });
   });
