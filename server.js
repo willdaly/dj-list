@@ -17,7 +17,7 @@ async function start() {
     console.log('Connected to MongoDB');
 
     const server = http.createServer(app);
-    server.listen(port, function() {
+    server.listen(port, () => {
       console.log('Node server listening. Port: ' + port + ', Database: ' + dbname);
     });
   } catch (err) {

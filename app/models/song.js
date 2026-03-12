@@ -125,21 +125,17 @@ class Song {
       return [];
     }
 
-    const tokens = query.split(/\s+/).filter(function(token) {
-      return token.length > 0;
-    }).map(function(token) {
-      return token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    });
+    const tokens = query
+      .split(/\s+/)
+      .filter((token) => token.length > 0)
+      .map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 
     if (tokens.length === 0) {
       return [];
     }
 
-    const makeFieldConditions = function(field) {
-      return tokens.map(function(token) {
-        return {[field]: {$regex: new RegExp(token, 'i')}};
-      });
-    };
+    const makeFieldConditions = (field) =>
+      tokens.map((token) => ({ [field]: { $regex: new RegExp(token, 'i') } }));
 
     return getSongCollection().find({
       $or: [

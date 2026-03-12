@@ -10,7 +10,7 @@ function redactValue(value) {
 
   if (value && typeof value === 'object') {
     const output = {};
-    Object.keys(value).forEach(function(key) {
+    Object.keys(value).forEach((key) => {
       if (SENSITIVE_KEY_REGEX.test(key)) {
         output[key] = '[REDACTED]';
         return;

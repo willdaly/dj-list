@@ -4,11 +4,10 @@ module.exports = function getSessionKeys() {
   const rawKeys = process.env.SESSION_KEYS;
 
   if (rawKeys) {
-    const keys = rawKeys.split(',').map(function(key) {
-      return key.trim();
-    }).filter(function(key) {
-      return key.length > 0;
-    });
+    const keys = rawKeys
+      .split(',')
+      .map((key) => key.trim())
+      .filter((key) => key.length > 0);
 
     if (keys.length >= 2) {
       return keys;

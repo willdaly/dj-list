@@ -2,21 +2,21 @@
 
 let activeDb = null;
 
-exports.setDb = function(db) {
+exports.setDb = (db) => {
   activeDb = db;
 };
 
-exports.getDb = function() {
+exports.getDb = () => {
   if (!activeDb) {
     throw new Error('Database not initialized');
   }
   return activeDb;
 };
 
-exports.getCollection = function(name) {
+exports.getCollection = (name) => {
   return exports.getDb().collection(name);
 };
 
-exports.hasDb = function() {
+exports.hasDb = () => {
   return !!activeDb;
 };
