@@ -6,7 +6,7 @@ html
     link(rel='shortcut icon', href='/img/favicon.ico')
     title= title
     link(href='/assets-react/app.css', rel='stylesheet')
-  body
+  body(data-initial-error=message || '')
     block content
 
     script(type='module', src='/assets-react/app.js')

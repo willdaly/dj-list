@@ -91,7 +91,9 @@ npm run test:smoke
 
 ## Authentication
 
-The app now uses Spotify OAuth for sign-in. Click **Sign In with Spotify** on the home page.
+The app uses Spotify OAuth for sign-in. Click **Sign In with Spotify** on the home page.
+
+**Important:** `SPOTIFY_REDIRECT_URI` must match the host you use in the browser Spotify often accepts `http://127.0.0.1:4000/...` but rejects `http://localhost:4000/...`, so use **127.0.0.1** in both your `.env` and your browser URL. Add that URI to your [Spotify app’s redirect URIs](https://developer.spotify.com/dashboard).
 
 ## Project History
 

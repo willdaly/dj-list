@@ -1,5 +1,5 @@
 'use strict';
 
 exports.index = (req, res)=>{
-  res.render('home/index', {title: 'DJ List', reactPage: true});
+  res.render('home/index', {title: 'DJ List'});
 };

@@ -35,6 +35,14 @@ export function App() {
   }
 
   useEffect(() => {
+    const initialError = document.body.dataset.initialError;
+    if (initialError) {
+      document.body.dataset.initialError = '';
+      toast.notify(initialError, 'error');
+    }
+  }, [toast]);
+
+  useEffect(() => {
     async function bootstrapSession() {
       try {
         const currentSession = await apiClient.session();

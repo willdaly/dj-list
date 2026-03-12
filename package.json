@@ -8,7 +8,6 @@
   "private": true,
   "scripts": {
     "start": "npm run build:frontend && node server.js",
-    "build:styles": "lessc app/less/app.less app/static/css/app.css",
     "build:frontend": "vite build --config app/frontend-react/vite.config.ts",
     "dev:frontend": "vite --config app/frontend-react/vite.config.ts",
     "typecheck:frontend": "tsc --project app/frontend-react/tsconfig.json --noEmit",
@@ -28,7 +27,6 @@
     "cookies": "^0.9.1",
     "dotenv": "^17.3.1",
     "express": "^5.1.0",
-    "less": "^4.6.3",
     "mongodb": "^6.20.0",
     "morgan": "^1.10.1",
     "pug": "^3.0.3",
