@@ -24,7 +24,7 @@ function redactValue(value) {
   return value;
 }
 
-module.exports = (req, res, next)=>{
+function debugMiddleware(req, res, next) {
   console.log('---NEW REQUEST FROM BROWSER---');
   console.log(util.format('%s: %s', 'URL    ', req.url));
   console.log(util.format('%s: %s', 'VERB   ', req.method));
@@ -33,4 +33,10 @@ module.exports = (req, res, next)=>{
   console.log(util.format('%s: %s', 'QUERY  ', util.inspect(redactValue(req.query))));
   console.log(util.format('%s: %s', 'BODY   ', util.inspect(redactValue(req.body))));
   next();
-};
+}
+
+function noopMiddleware(req, res, next) {
+  next();
+}
+
+module.exports = process.env.NODE_ENV === 'production' ? noopMiddleware : debugMiddleware;
