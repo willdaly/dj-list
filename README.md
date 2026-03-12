@@ -50,7 +50,7 @@ The app runs at [http://localhost:4000](http://localhost:4000).
 
 ### Optional environment variables
 
-- `DBNAME` - MongoDB database name (default: `default-db`)
+- `DBNAME` - MongoDB database name (default: `dj-list`)
 - `PORT` - server port (default: `4000`)
 
 ### Production deployment

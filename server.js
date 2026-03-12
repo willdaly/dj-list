@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 
-const dbname = process.env.DBNAME || 'default-db';
+const dbname = process.env.DBNAME || 'dj-list';
 const port = process.env.PORT || 4000;
 
 const http = require('http');
@@ -18,7 +18,7 @@ async function start() {
 
     const server = http.createServer(app);
     server.listen(port, () => {
-      console.log('Node server listening. Port: ' + port + ', Database: ' + dbname);
+      console.log(`Node server listening. Port: ${port}, Database: ${dbname}`);
     });
   } catch (err) {
     console.error('MongoDB connection error:', err);
