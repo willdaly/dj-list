@@ -1,0 +1,26 @@
+[
+  {
+    "Artist": "Test Artist One",
+    "Album": "Test Album",
+    "Title": "Test Song A",
+    "BPM": 100,
+    "Key": "AbM",
+    "genre": "Hip-Hop"
+  },
+  {
+    "Artist": "Test Artist Two",
+    "Album": "Another Album",
+    "Title": "Test Song B",
+    "BPM": 95,
+    "Key": "Cm",
+    "genre": "Hip-Hop"
+  },
+  {
+    "Artist": "Test Artist One",
+    "Album": "Second Album",
+    "Title": "Test Song C",
+    "BPM": 88,
+    "Key": "GM",
+    "genre": "Hip-Hop"
+  }
+]
