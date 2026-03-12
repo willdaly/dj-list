@@ -3,7 +3,7 @@
 const path = require('path');
 const User = require(path.join(__dirname, '..', 'models', 'user.js'));
 const crypto = require('crypto');
-const logAndRenderError = require(path.join(__dirname, '..', 'lib', 'errors.js')).logAndRenderError;
+const { logAndRenderError, asyncHandler } = require(path.join(__dirname, '..', 'lib', 'errors.js'));
 
 exports.bounce = (req, res, next)=>{
   if(res.locals.user){
@@ -13,103 +13,91 @@ exports.bounce = (req, res, next)=>{
   }
 };
 
-exports.spotifyStart = (req, res)=>{
-  try {
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-    if (!clientId || !redirectUri) {
-      return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
-    }
-
-    const state = crypto.randomBytes(16).toString('hex');
-    req.session.spotifyState = state;
-
-    const params = new URLSearchParams({
-      response_type: 'code',
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      scope: 'user-read-email',
-      state: state
-    });
-
-    return res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
-  } catch (err) {
-    return logAndRenderError(res, err);
+exports.spotifyStart = asyncHandler((req, res) => {
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+  if (!clientId || !redirectUri) {
+    return res.status(500).render('home/index', { message: 'spotify oauth not configured' });
   }
-};
 
-exports.spotifyCallback = async (req, res)=>{
-  try {
-    if (req.query.error) {
-      return res.status(400).render('home/index', {message: 'spotify login cancelled'});
-    }
+  const state = crypto.randomBytes(16).toString('hex');
+  req.session.spotifyState = state;
 
-    if (!req.query.code || !req.query.state || req.query.state !== req.session.spotifyState) {
-      return res.status(400).render('home/index', {message: 'invalid oauth state'});
-    }
+  const params = new URLSearchParams({
+    response_type: 'code',
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    scope: 'user-read-email',
+    state: state
+  });
 
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-    if (!clientId || !clientSecret || !redirectUri) {
-      return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
-    }
+  return res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
+}, logAndRenderError);
 
-    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
-      },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        code: req.query.code,
-        redirect_uri: redirectUri
-      }).toString()
-    });
-
-    if (!tokenResponse.ok) {
-      return res.status(400).render('home/index', {message: 'spotify token exchange failed'});
-    }
-
-    const tokenData = await tokenResponse.json();
-    const profileResponse = await fetch('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: 'Bearer ' + tokenData.access_token
-      }
-    });
-
-    if (!profileResponse.ok) {
-      return res.status(400).render('home/index', {message: 'spotify profile fetch failed'});
-    }
-
-    const profile = await profileResponse.json();
-    const user = await User.findOrCreateFromSpotify(profile);
-    req.session.userId = user._id;
-    req.session.spotifyState = null;
-    return res.redirect('/');
-  } catch (err) {
-    return logAndRenderError(res, err);
+exports.spotifyCallback = asyncHandler(async (req, res) => {
+  if (req.query.error) {
+    return res.status(400).render('home/index', { message: 'spotify login cancelled' });
   }
-};
 
-exports.testLogin = async (req, res)=>{
+  if (!req.query.code || !req.query.state || req.query.state !== req.session.spotifyState) {
+    return res.status(400).render('home/index', { message: 'invalid oauth state' });
+  }
+
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+  if (!clientId || !clientSecret || !redirectUri) {
+    return res.status(500).render('home/index', { message: 'spotify oauth not configured' });
+  }
+
+  const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code: req.query.code,
+      redirect_uri: redirectUri
+    }).toString()
+  });
+
+  if (!tokenResponse.ok) {
+    return res.status(400).render('home/index', { message: 'spotify token exchange failed' });
+  }
+
+  const tokenData = await tokenResponse.json();
+  const profileResponse = await fetch('https://api.spotify.com/v1/me', {
+    headers: {
+      Authorization: 'Bearer ' + tokenData.access_token
+    }
+  });
+
+  if (!profileResponse.ok) {
+    return res.status(400).render('home/index', { message: 'spotify profile fetch failed' });
+  }
+
+  const profile = await profileResponse.json();
+  const user = await User.findOrCreateFromSpotify(profile);
+  req.session.userId = user._id;
+  req.session.spotifyState = null;
+  return res.redirect('/');
+}, logAndRenderError);
+
+exports.testLogin = asyncHandler(async (req, res) => {
   if (process.env.NODE_ENV !== 'test') {
     return res.status(404).send('not found');
   }
 
-  try {
-    const user = await User.findOrCreateFromSpotify({
-      id: 'smoke-test-user',
-      email: 'smoke-test-user@example.com',
-      display_name: 'Smoke Test User'
-    });
-    req.session.userId = user._id;
-    return res.status(204).send();
-  } catch (err) {
-    return logAndRenderError(res, err);
-  }
-};
+  const user = await User.findOrCreateFromSpotify({
+    id: 'smoke-test-user',
+    email: 'smoke-test-user@example.com',
+    display_name: 'Smoke Test User'
+  });
+  req.session.userId = user._id;
+  return res.status(204).send();
+}, logAndRenderError);
 
 exports.session = (req, res)=>{
   if (!res.locals.user) {
@@ -133,21 +121,12 @@ exports.logout = (req, res)=>{
   res.redirect('/');
 };
 
-exports.lookup = async (req, res, next)=>{
-  if(req.session.userId){
-    try {
-      const user = await User.findById(req.session.userId);
-      if(user){
-        res.locals.user = user;
-      }else{
-        res.locals.user = null;
-      }
-      return next();
-    } catch (err) {
-      return logAndRenderError(res, err);
-    }
-  }else{
-    res.locals.user = null;
+exports.lookup = asyncHandler(async (req, res, next) => {
+  if (req.session.userId) {
+    const user = await User.findById(req.session.userId);
+    res.locals.user = user || null;
     return next();
   }
-};
+  res.locals.user = null;
+  return next();
+}, logAndRenderError);

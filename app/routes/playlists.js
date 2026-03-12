@@ -2,76 +2,44 @@
 
 const path = require('path');
 const Playlist = require(path.join(__dirname, '..', 'models', 'playlist.js'));
-const logAndSendError = require(path.join(__dirname, '..', 'lib', 'errors.js')).logAndSendError;
+const { logAndSendError, asyncHandler } = require(path.join(__dirname, '..', 'lib', 'errors.js'));
 
-exports.index = async (req, res)=>{
-  try {
-    const playlists = await Playlist.index(req.session.userId);
-    res.send({playlists : playlists});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.index = asyncHandler(async (req, res) => {
+  const playlists = await Playlist.index(req.session.userId);
+  res.send({ playlists });
+}, logAndSendError);
 
-exports.create = async (req, res)=>{
-  try {
-    const playlist = await Playlist.create(req.body, req.session.userId);
-    res.send({playlist : playlist});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.create = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.create(req.body, req.session.userId);
+  res.send({ playlist });
+}, logAndSendError);
 
-exports.deletePlaylist = async (req, res)=>{
-  try {
-    const playlists = await Playlist.deletePlaylist(req.params.id, req.session.userId);
-    res.send({playlists: playlists});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.deletePlaylist = asyncHandler(async (req, res) => {
+  const playlists = await Playlist.deletePlaylist(req.params.id, req.session.userId);
+  res.send({ playlists });
+}, logAndSendError);
 
-exports.update = async (req, res)=>{
-  try {
-    const playlist = await Playlist.addSongs(req.body, req.session.userId);
-    res.send({playlist : playlist});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.update = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.addSongs(req.body, req.session.userId);
+  res.send({ playlist });
+}, logAndSendError);
 
-exports.updateOrder = async (req, res)=>{
-  try {
-    const playlist = await Playlist.updateOrder(req.body, req.params.id, req.session.userId);
-    res.send({playlist : playlist});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.updateOrder = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.updateOrder(req.body, req.params.id, req.session.userId);
+  res.send({ playlist });
+}, logAndSendError);
 
-exports.rename = async (req, res)=>{
-  try {
-    const playlist = await Playlist.rename(req.body, req.session.userId);
-    res.send({playlist : playlist});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.rename = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.rename(req.body, req.session.userId);
+  res.send({ playlist });
+}, logAndSendError);
 
-exports.deleteFromPlaylist = async (req, res)=>{
-  try {
-    const playlist = await Playlist.deleteFromPlaylist(req.body.songIds, req.body.playlistId, req.session.userId);
-    res.send({playlist : playlist});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.deleteFromPlaylist = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.deleteFromPlaylist(req.body.songIds, req.body.playlistId, req.session.userId);
+  res.send({ playlist });
+}, logAndSendError);
 
-exports.show = async (req, res) =>{
-  try {
-    const songs = await Playlist.show(req.params.id, req.session.userId);
-    res.send({songs : songs});
-  } catch (err) {
-    return logAndSendError(res, err);
-  }
-};
+exports.show = asyncHandler(async (req, res) => {
+  const songs = await Playlist.show(req.params.id, req.session.userId);
+  res.send({ songs });
+}, logAndSendError);
