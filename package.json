@@ -1,8 +1,8 @@
 {
-  "name": "server-template",
+  "name": "dj-list",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nss-cohort-2014-04-07/server-template"
+    "url": "https://github.com/willdaly/dj-list"
   },
   "version": "0.0.1",
   "private": true,
