@@ -72,8 +72,8 @@ exports.spotifyCallback = async (req, res)=>{
       return res.status(400).render('home/index', {message: 'spotify token exchange failed'});
     }
 
-    var tokenData = await tokenResponse.json();
-    var profileResponse = await fetch('https://api.spotify.com/v1/me', {
+    const tokenData = await tokenResponse.json();
+    const profileResponse = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         Authorization: 'Bearer ' + tokenData.access_token
       }

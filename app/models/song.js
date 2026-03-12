@@ -97,8 +97,8 @@ class Song {
   }
 
   static async guessSearch (typed){
-    var songs = await getSongCollection().find({$text: {$search: typed}}).toArray();
-    var artists = [];
+    const songs = await getSongCollection().find({$text: {$search: typed}}).toArray();
+    let artists = [];
     if (songs) {
       songs.forEach(song=>{
         artists.push(song.Artist);

@@ -1,10 +1,10 @@
 'use strict';
 
-var db = require('../../app/lib/db.js');
-var connectMongo = require('../../app/lib/connect-mongo.js');
-var dbname = process.env.DBNAME || 'dj-list';
-var initPromise;
-var activeClient;
+const db = require('../../app/lib/db.js');
+const connectMongo = require('../../app/lib/connect-mongo.js');
+const dbname = process.env.DBNAME || 'dj-list';
+let initPromise;
+let activeClient;
 
 function initDb(fn){
   if (db.hasDb()) {

@@ -3,14 +3,14 @@
 
 process.env.DBNAME = 'dj-list';
 
-var path = require('path');
-var expect = require('chai').expect;
-var db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
-var factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
-var dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
-var Mongo = require('mongodb');
+const path = require('path');
+const expect = require('chai').expect;
+const db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
+const factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
+const dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
+const Mongo = require('mongodb');
 
-var User;
+let User;
 
 describe('User', function(){
   before(async function(){
@@ -30,7 +30,7 @@ describe('User', function(){
 
   describe('.findOrCreateFromSpotify', function(){
     it('should create a new user for a new spotify profile', async function(){
-      var u = await User.findOrCreateFromSpotify({
+      const u = await User.findOrCreateFromSpotify({
         id: 'spotify-user-1',
         email: 'willyd@nss.com',
         display_name: 'Will Daly'
@@ -51,7 +51,7 @@ describe('User', function(){
         display_name: 'Will'
       });
 
-      var u = await User.findOrCreateFromSpotify({
+      const u = await User.findOrCreateFromSpotify({
         id: 'spotify-user-existing',
         email: 'ignored@nss.com',
         display_name: 'Ignored'
@@ -63,7 +63,7 @@ describe('User', function(){
     });
 
     it('should link an existing email user to spotify', async function(){
-      var u = await User.findOrCreateFromSpotify({
+      const u = await User.findOrCreateFromSpotify({
         id: 'spotify-linked',
         email: 'will@nss.com',
         display_name: 'Linked User'
@@ -78,16 +78,16 @@ describe('User', function(){
 
   describe('.findById', function(){
     it('should successfully find a user', async function(){
-      var u = await User.findById('1234567890abcdef12345678');
+      const u = await User.findById('1234567890abcdef12345678');
       expect(u).to.be.instanceof(User);
       expect(u.email).to.equal('will@nss.com');
     }); //end of successfully find user
     it('should NOT successfully find a user - Bad Id', async function(){
-      var u = await User.findById('132435465768abcdef098765');
+      const u = await User.findById('132435465768abcdef098765');
       expect(u).to.be.null;
     }); //end of unsuccessfully find user bad id
     it ('should NOT successfully find a user - user doesnt exist', async function(){
-      var u = await User.findById('0987654321abcdef09876543');
+      const u = await User.findById('0987654321abcdef09876543');
       expect(u).to.be.null;
     }); //end of unsuccessfully find user, doesnt exist
   }); //end of findById

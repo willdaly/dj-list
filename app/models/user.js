@@ -13,7 +13,7 @@ class User {
       throw new Error('spotify profile missing id');
     }
 
-    var existing = await getUserCollection().findOne({spotifyId: spotifyId});
+    const existing = await getUserCollection().findOne({ spotifyId });
     if (existing) {
       return Object.assign(Object.create(User.prototype), existing);
     }

@@ -1,15 +1,15 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var ObjectId = require('mongodb').ObjectId;
-var bcrypt = require('bcrypt');
-var db = require(path.join(__dirname, '..', '..', 'app', 'lib', 'db.js'));
-var Model;
+const fs = require('fs');
+const path = require('path');
+const ObjectId = require('mongodb').ObjectId;
+const bcrypt = require('bcrypt');
+const db = require(path.join(__dirname, '..', '..', 'app', 'lib', 'db.js'));
+let Model;
 
 module.exports = async (model, fn)=>{
-  var fixturePath = path.join(__dirname, '..', 'fixtures', model + '.json');
-  var records = fs.readFileSync(fixturePath, 'utf8');
+  const fixturePath = path.join(__dirname, '..', 'fixtures', model + '.json');
+  let records = fs.readFileSync(fixturePath, 'utf8');
   records = JSON.parse(records);
 
   if (model === 'user') {
@@ -17,7 +17,7 @@ module.exports = async (model, fn)=>{
   }
 
   Model = require(path.join(__dirname, '..', '..', 'app', 'models', model + '.js'));
-  var objs = await Promise.all(records.map(iterator));
+  const objs = await Promise.all(records.map(iterator));
   if (fn) {
     fn(objs);
   }
@@ -29,8 +29,8 @@ async function iterator(record){
 }
 
 async function seedUsers(records, fn) {
-  var users = records.map(function(record) {
-    var user = {
+  const users = records.map(function(record) {
+    const user = {
       email: record.email,
       isValid: record.isValid !== false,
       joinedOn: record.joinedOn ? new Date(record.joinedOn) : new Date()

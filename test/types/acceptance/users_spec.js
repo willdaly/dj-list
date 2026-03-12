@@ -3,17 +3,17 @@
 
 process.env.DBNAME = 'dj-list';
 
-var path = require('path');
-var expect = require('chai').expect;
-var db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
-var factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
-var dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
-var app = require('../../../app/app');
-var request = require('supertest');
+const path = require('path');
+const expect = require('chai').expect;
+const db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
+const factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
+const dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
+const app = require('../../../app/app');
+const request = require('supertest');
 
 describe('users', function(){
-  var originalSpotifyClientId;
-  var originalSpotifyRedirectUri;
+  let originalSpotifyClientId;
+  let originalSpotifyRedirectUri;
 
   before(async function(){
     await db();
@@ -96,7 +96,7 @@ describe('users', function(){
     });
 
     it('should return authenticated state for logged in users', function(done){
-      var agent = request.agent(app);
+      const agent = request.agent(app);
       agent.get('/test/login').end(function(loginErr, loginRes){
         expect(loginRes.status).to.equal(204);
         agent
