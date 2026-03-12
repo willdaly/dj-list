@@ -1,12 +1,12 @@
 'use strict';
 
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 module.exports = async function connectMongo(dbname) {
-  var mongoUrl = 'mongodb://localhost/' + dbname;
-  var client = new MongoClient(mongoUrl);
+  const mongoUrl = 'mongodb://localhost/' + dbname;
+  const client = new MongoClient(mongoUrl);
   await client.connect();
-  var db = client.db(dbname);
+  const db = client.db(dbname);
   await db.collection('songs').createIndex({Artist: 'text'});
   return {client: client, db: db};
 };

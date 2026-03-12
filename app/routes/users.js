@@ -1,8 +1,8 @@
 'use strict';
 
-var User = require(__dirname + '/../models/user.js');
-var crypto = require('crypto');
-var logAndRenderError = require(__dirname + '/../lib/errors.js').logAndRenderError;
+const User = require(__dirname + '/../models/user.js');
+const crypto = require('crypto');
+const logAndRenderError = require(__dirname + '/../lib/errors.js').logAndRenderError;
 
 exports.bounce = (req, res, next)=>{
   if(res.locals.user){
@@ -14,16 +14,16 @@ exports.bounce = (req, res, next)=>{
 
 exports.spotifyStart = (req, res)=>{
   try {
-    var clientId = process.env.SPOTIFY_CLIENT_ID;
-    var redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
     if (!clientId || !redirectUri) {
       return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
     }
 
-    var state = crypto.randomBytes(16).toString('hex');
+    const state = crypto.randomBytes(16).toString('hex');
     req.session.spotifyState = state;
 
-    var params = new URLSearchParams({
+    const params = new URLSearchParams({
       response_type: 'code',
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -47,14 +47,14 @@ exports.spotifyCallback = async (req, res)=>{
       return res.status(400).render('home/index', {message: 'invalid oauth state'});
     }
 
-    var clientId = process.env.SPOTIFY_CLIENT_ID;
-    var clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    var redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
     if (!clientId || !clientSecret || !redirectUri) {
       return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
     }
 
-    var tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+    const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -82,8 +82,8 @@ exports.spotifyCallback = async (req, res)=>{
       return res.status(400).render('home/index', {message: 'spotify profile fetch failed'});
     }
 
-    var profile = await profileResponse.json();
-    var user = await User.findOrCreateFromSpotify(profile);
+    const profile = await profileResponse.json();
+    const user = await User.findOrCreateFromSpotify(profile);
     req.session.userId = user._id;
     req.session.spotifyState = null;
     return res.redirect('/');
@@ -98,7 +98,7 @@ exports.testLogin = async (req, res)=>{
   }
 
   try {
-    var user = await User.findOrCreateFromSpotify({
+    const user = await User.findOrCreateFromSpotify({
       id: 'smoke-test-user',
       email: 'smoke-test-user@example.com',
       display_name: 'Smoke Test User'
@@ -135,7 +135,7 @@ exports.logout = (req, res)=>{
 exports.lookup = async (req, res, next)=>{
   if(req.session.userId){
     try {
-      var user = await User.findById(req.session.userId);
+      const user = await User.findById(req.session.userId);
       if(user){
         res.locals.user = user;
       }else{

@@ -1,13 +1,13 @@
-var ObjectId = require('mongodb').ObjectId;
-var db = require(__dirname + '/../lib/db.js');
+const ObjectId = require('mongodb').ObjectId;
+const db = require(__dirname + '/../lib/db.js');
 
-var getUserCollection = function() {
+function getUserCollection() {
   return db.getCollection('users');
-};
+}
 
 class User {
   static async findOrCreateFromSpotify(profile){
-    var spotifyId = profile.id;
+    const spotifyId = profile.id;
     if (!spotifyId) {
       throw new Error('spotify profile missing id');
     }
@@ -18,7 +18,7 @@ class User {
     }
 
     if (profile.email) {
-      var emailMatch = await getUserCollection().findOne({email: profile.email});
+      const emailMatch = await getUserCollection().findOne({email: profile.email});
       if (emailMatch) {
         await getUserCollection().updateOne(
           {_id: emailMatch._id},
@@ -31,7 +31,7 @@ class User {
       }
     }
 
-    var user = new User();
+    const user = new User();
     user._id = new ObjectId();
     user.spotifyId = spotifyId;
     user.email = profile.email || null;
@@ -44,7 +44,7 @@ class User {
   }
 
   static async findById (id) {
-    var user = await getUserCollection().findOne({_id: new ObjectId(id)});
+    const user = await getUserCollection().findOne({_id: new ObjectId(id)});
     if (!user) {
       return null;
     }

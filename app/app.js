@@ -1,14 +1,14 @@
 'use strict';
 
-var express        = require('express');
-var morgan         = require('morgan');
-var cookieSession  = require('cookie-session');
-var loadRoutes      = require(__dirname + '/lib/init-routes.js');
-var getSessionKeys  = require(__dirname + '/lib/session-keys.js');
+const express = require('express');
+const morgan = require('morgan');
+const cookieSession = require('cookie-session');
+const loadRoutes = require(__dirname + '/lib/init-routes.js');
+const getSessionKeys = require(__dirname + '/lib/session-keys.js');
 
 function createApp() {
-  var sessionKeys = getSessionKeys();
-  var app = express();
+  const sessionKeys = getSessionKeys();
+  const app = express();
   app.set('views', __dirname + '/views');
   app.set('view engine', 'pug');
 

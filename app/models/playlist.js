@@ -1,28 +1,28 @@
-var ObjectId = require('mongodb').ObjectId;
-var db = require(__dirname + '/../lib/db.js');
+const ObjectId = require('mongodb').ObjectId;
+const db = require(__dirname + '/../lib/db.js');
 
-var getPlaylistsCollection = function() {
+function getPlaylistsCollection() {
   return db.getCollection('playlists');
-};
+}
 
-var getSongsCollection = function() {
+function getSongsCollection() {
   return db.getCollection('songs');
-};
+}
 
 class Playlist {
   static async create (obj, userId){
-    var songsArray = [];
-    var sArray = [];
+    const songsArray = [];
+    const sArray = [];
     if (obj.songIds) {
       obj.songIds.forEach(song=>{
-        var mongoid =  new ObjectId(song);
+        const mongoid = new ObjectId(song);
         songsArray.push(mongoid);
       });
     }
 
-    var songs = await getSongsCollection().find({_id: {$in: songsArray}}).toArray();
+    const songs = await getSongsCollection().find({_id: {$in: songsArray}}).toArray();
     if (songs) {
-      var order = 1;
+      let order = 1;
       songs.forEach(song=>{
         song.order = order;
         order++;
@@ -30,12 +30,12 @@ class Playlist {
       });
     }
 
-    var existing = await getPlaylistsCollection().findOne({name: obj.name});
+    const existing = await getPlaylistsCollection().findOne({name: obj.name});
     if (existing) {
       return null;
     }
 
-    var playlist = new Playlist();
+    const playlist = new Playlist();
     playlist._id = obj._id ? new ObjectId(obj._id) : new ObjectId();
     playlist.name = obj.name;
     playlist.userId = userId;
@@ -45,21 +45,21 @@ class Playlist {
   }
 
   static async addSongs (obj) {
-    var _id = new ObjectId(obj.playlistId);
-    var playlist = await getPlaylistsCollection().findOne({_id:_id});
+    const _id = new ObjectId(obj.playlistId);
+    const playlist = await getPlaylistsCollection().findOne({_id:_id});
     if (!playlist) {
       return null;
     }
-    var songsArray = [];
+    const songsArray = [];
     obj.songIds.forEach(song=>{
-      var mongoid =  new ObjectId(song);
+      const mongoid = new ObjectId(song);
       songsArray.push(mongoid);
     });
-    var songs = await getSongsCollection().find({_id: {$in: songsArray}}).toArray();
+    const songs = await getSongsCollection().find({_id: {$in: songsArray}}).toArray();
     if (!songs) {
       return null;
     }
-    var order = playlist.songs.length > 0 ? playlist.songs.length + 1 : 1;
+    let order = playlist.songs.length > 0 ? playlist.songs.length + 1 : 1;
     songs.forEach(song=>{
       song.order = order;
       playlist.songs.push(song);
@@ -70,14 +70,14 @@ class Playlist {
   }
 
   static async updateOrder (obj, playlistId) {
-    var _id = new ObjectId(playlistId);
-    var oldOrder = parseInt(obj.oldOrder);
-    var newOrder = parseInt(obj.newOrder);
-    var playlist = await getPlaylistsCollection().findOne({_id : _id});
+    const _id = new ObjectId(playlistId);
+    const oldOrder = parseInt(obj.oldOrder);
+    const newOrder = parseInt(obj.newOrder);
+    const playlist = await getPlaylistsCollection().findOne({_id : _id});
     if (!playlist) {
       return null;
     }
-    var direction = newOrder - oldOrder;
+    const direction = newOrder - oldOrder;
     playlist.songs.forEach(song=>{
       if (direction > 0){
         if (song.order > oldOrder && song.order <= newOrder ) {
@@ -107,8 +107,8 @@ class Playlist {
   }
 
   static async rename (obj) {
-    var _id = new ObjectId(obj.playlistId);
-    var playlist = await getPlaylistsCollection().findOne({_id:_id});
+    const _id = new ObjectId(obj.playlistId);
+    const playlist = await getPlaylistsCollection().findOne({_id:_id});
     if (!playlist){
       return null;
     }
@@ -122,14 +122,14 @@ class Playlist {
   }
 
   static async deletePlaylist (id, userId){
-    var _id = new ObjectId(id);
+    const _id = new ObjectId(id);
     await getPlaylistsCollection().findOneAndDelete({_id:_id});
     return getPlaylistsCollection().find({userId : userId}).toArray();
   }
 
   static async show (playlistId) {
-    var _id = new ObjectId(playlistId);
-    var playlist = await getPlaylistsCollection().findOne({_id : _id});
+    const _id = new ObjectId(playlistId);
+    const playlist = await getPlaylistsCollection().findOne({_id : _id});
     if (!playlist) {
       return null;
     }
@@ -143,22 +143,22 @@ class Playlist {
   }
 
   static async deleteFromPlaylist (songIds, playlistId) {
-    var _id = new ObjectId(playlistId);
-    var playlist = await getPlaylistsCollection().findOne({_id : _id });
+    const _id = new ObjectId(playlistId);
+    const playlist = await getPlaylistsCollection().findOne({_id : _id });
     if (!playlist) {
       return null;
     }
 
-    var songIdsArray = [];
+    const songIdsArray = [];
     songIds.forEach(songId=>{
-      var mongoid = new ObjectId(songId);
+      const mongoid = new ObjectId(songId);
       songIdsArray.push(mongoid);
     });
-    var songs = await getSongsCollection().find({_id: {$in: songIdsArray}}).toArray();
+    const songs = await getSongsCollection().find({_id: {$in: songIdsArray}}).toArray();
     songs.forEach(s=>{
       playlist.songs.forEach(song=>{
         if (s.Song === song.Song){
-          var index = playlist.songs.indexOf(song);
+          const index = playlist.songs.indexOf(song);
           playlist.songs.splice(index, 1);
         }
       });
@@ -172,7 +172,7 @@ class Playlist {
         return 0;
       }
     });
-    var order = 1;
+    let order = 1;
     playlist.songs.forEach(song=>{
       song.order = order;
       order++;

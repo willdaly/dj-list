@@ -1,13 +1,13 @@
-var ObjectId = require('mongodb').ObjectId;
-var db = require(__dirname + '/../lib/db.js');
+const ObjectId = require('mongodb').ObjectId;
+const db = require(__dirname + '/../lib/db.js');
 
-var getSongCollection = function() {
+function getSongCollection() {
   return db.getCollection('songs');
-};
+}
 
 class Song {
   static async create(obj){
-    var song = new Song();
+    const song = new Song();
     song.Artist = obj.Artist;
     song.Album = obj.Album || '';
     song.Song = obj.Title;
@@ -19,52 +19,52 @@ class Song {
   }
 
   static async findByKey(obj) {
-    var keyArray = [];
+    const keyArray = [];
     keyArray.push(obj.Key);
-    var ambig = obj.Key.substr(0, obj.Key.length-1);
+    const ambig = obj.Key.substr(0, obj.Key.length-1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
-    var genre = obj.genre;
+    const genre = obj.genre;
     return getSongCollection().find({Key:{$in: keyArray}, genre:{$in: genre}}).toArray();
   }
 
   static async findByBPM(obj) {
-    var lowBPM = +obj.BPM[0];
-    var highBPM = +obj.BPM[1];
-    var genre = obj.genre;
+    const lowBPM = +obj.BPM[0];
+    const highBPM = +obj.BPM[1];
+    const genre = obj.genre;
     return getSongCollection().find({BPM:{'$gte': lowBPM, '$lte': highBPM}, genre:{$in: genre}}).toArray();
   }
 
   static async findByBpmKey (obj){
-    var lowBPM = +obj.BPM[0];
-    var highBPM = +obj.BPM[1];
-    var keyArray = [];
+    const lowBPM = +obj.BPM[0];
+    const highBPM = +obj.BPM[1];
+    const keyArray = [];
     keyArray.push(obj.Key);
-    var ambig = obj.Key.substr(0, obj.Key.length-1);
+    const ambig = obj.Key.substr(0, obj.Key.length-1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
-    var genre = obj.genre;
+    const genre = obj.genre;
     return getSongCollection().find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray();
   }
 
   static async transpose (obj){
-    var trans = obj.trans;
-    var factor = Math.abs(trans) * 0.06;
+    const trans = obj.trans;
+    let factor = Math.abs(trans) * 0.06;
     factor = factor + 1;
-    var bpm;
+    let bpm;
     if (trans < 0){
       bpm = obj.BPM / factor;
     }else{
       bpm = obj.BPM * factor;
     }
-    var lowBPM = Math.floor(bpm);
-    var highBPM = Math.ceil(bpm);
-    var oldkey = obj.Key;
-    var tonality = oldkey.substr(oldkey.length-1, 1);
-    var majorKeyArray = ['AbM', 'AM', 'BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
-    var minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
-    var key;
-    var index;
+    const lowBPM = Math.floor(bpm);
+    const highBPM = Math.ceil(bpm);
+    const oldkey = obj.Key;
+    const tonality = oldkey.substr(oldkey.length-1, 1);
+    const majorKeyArray = ['AbM', 'AM', 'BbM', 'BM', 'CM', 'C#M', 'DM', 'EbM', 'EM', 'FM', 'F#M', 'GM'];
+    const minorKeyArray = ['abm', 'am', 'bbm', 'bm', 'cm', 'c#m', 'dm', 'ebm', 'em', 'fm', 'f#m', 'gm'];
+    let key;
+    let index;
     if (tonality === 'M'){
         index = parseInt(majorKeyArray.indexOf(oldkey));
         index = index + Number(trans);
@@ -75,7 +75,7 @@ class Song {
           index = index + 12;
         }
         key = majorKeyArray[index];
-    }else{
+    } else {
       index = parseInt(minorKeyArray.indexOf(oldkey));
       index = index + Number(trans);
       if(11 < index){
@@ -86,10 +86,10 @@ class Song {
       }
       key = minorKeyArray[index];
     }
-    var genre = obj.genre.split(',');
-    var keyArray = [];
+    const genre = obj.genre.split(',');
+    const keyArray = [];
     keyArray.push(key);
-    var ambig = key.substr(0, key.length-1);
+    const ambig = key.substr(0, key.length-1);
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
     return getSongCollection().find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray();
@@ -120,12 +120,12 @@ class Song {
   }
 
   static async findBySearchTerm(term){
-    var query = (term || '').trim();
+    const query = (term || '').trim();
     if (!query) {
       return [];
     }
 
-    var tokens = query.split(/\s+/).filter(function(token) {
+    const tokens = query.split(/\s+/).filter(function(token) {
       return token.length > 0;
     }).map(function(token) {
       return token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -135,7 +135,7 @@ class Song {
       return [];
     }
 
-    var makeFieldConditions = function(field) {
+    const makeFieldConditions = function(field) {
       return tokens.map(function(token) {
         return {[field]: {$regex: new RegExp(token, 'i')}};
       });
@@ -155,8 +155,8 @@ class Song {
   }
 
   static async editSong (obj){
-    var id = new ObjectId(obj.Id);
-    var song = await getSongCollection().findOne({_id: id});
+    const id = new ObjectId(obj.Id);
+    const song = await getSongCollection().findOne({_id: id});
     if (!song) {
       return null;
     }

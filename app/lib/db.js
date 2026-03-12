@@ -1,6 +1,6 @@
 'use strict';
 
-var activeDb = null;
+let activeDb = null;
 
 exports.setDb = function(db) {
   activeDb = db;

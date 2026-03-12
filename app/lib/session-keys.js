@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = function getSessionKeys() {
-  var rawKeys = process.env.SESSION_KEYS;
+  const rawKeys = process.env.SESSION_KEYS;
 
   if (rawKeys) {
-    var keys = rawKeys.split(',').map(function(key) {
+    const keys = rawKeys.split(',').map(function(key) {
       return key.trim();
     }).filter(function(key) {
       return key.length > 0;

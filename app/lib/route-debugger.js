@@ -1,7 +1,7 @@
 'use strict';
 
-var util = require('util');
-var SENSITIVE_KEY_REGEX = /(pass(word)?|email|token|secret|auth|cookie|session|key)/i;
+const util = require('util');
+const SENSITIVE_KEY_REGEX = /(pass(word)?|email|token|secret|auth|cookie|session|key)/i;
 
 function redactValue(value) {
   if (Array.isArray(value)) {
@@ -9,7 +9,7 @@ function redactValue(value) {
   }
 
   if (value && typeof value === 'object') {
-    var output = {};
+    const output = {};
     Object.keys(value).forEach(function(key) {
       if (SENSITIVE_KEY_REGEX.test(key)) {
         output[key] = '[REDACTED]';

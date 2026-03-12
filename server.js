@@ -2,21 +2,21 @@
 
 require('dotenv').config();
 
-var dbname = process.env.DBNAME || 'default-db';
-var port = process.env.PORT || 4000;
+const dbname = process.env.DBNAME || 'default-db';
+const port = process.env.PORT || 4000;
 
-var http = require('http');
-var app = require('./app/app');
-var connectMongo = require('./app/lib/connect-mongo.js');
-var db = require('./app/lib/db.js');
+const http = require('http');
+const app = require('./app/app');
+const connectMongo = require('./app/lib/connect-mongo.js');
+const db = require('./app/lib/db.js');
 
 async function start() {
   try {
-    var result = await connectMongo(dbname);
+    const result = await connectMongo(dbname);
     db.setDb(result.db);
     console.log('Connected to MongoDB');
 
-    var server = http.createServer(app);
+    const server = http.createServer(app);
     server.listen(port, function() {
       console.log('Node server listening. Port: ' + port + ', Database: ' + dbname);
     });
