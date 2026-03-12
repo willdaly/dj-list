@@ -1,113 +1,99 @@
-DJ List - Music Catalog Management Tool
+# DJ List
 
-A web application for cataloging and searching vinyl records with metadata optimized for DJ harmonic mixing. Built to manage a personal collection of 6,926 records with searchable BPM, musical key, genre, and artist information.
+A web app for cataloging and searching records with DJ-focused metadata (BPM, key, genre, artist), including playlist workflows and transposition helpers.
 
-Background
+## Current Stack
 
-As a hip-hop DJ focused on harmonic mixing (blending tracks in compatible keys), I needed a way to search my vinyl collection by BPM and key. No existing database had this metadata for 90s hip-hop, so I spent years hand-cataloging records - counting quarter notes for BPM and using a piano to identify key signatures. This app was built to make that data searchable and useful during DJ sets.
+- **Backend:** Node.js, Express, MongoDB driver v6, Socket.IO
+- **Views:** Pug templates
+- **Frontend build:** Vite (bundle output in `app/static/assets`)
+- **Frontend libs:** jQuery, Bootstrap 3, noUiSlider, SortableJS, lodash, moment
+- **Styles:** LESS source in `app/less/app.less`, compiled to `app/static/css/app.css`
+- **Tests:** Mocha, Chai, Supertest
 
-Features:
+## Prerequisites
 
-Advanced Search: Filter records by BPM range, musical key, genre, and artist
-Harmonic Mixing Support: Find tracks in compatible keys for seamless DJ transitions
-Catalog Management: Full CRUD operations for managing music metadata
-User Authentication: Secure login with bcrypt password hashing
-Playlist Creation: Build and save custom playlists
-Transpose Calculator: Calculate key/BPM when pitch-shifting records
+- Node.js 18+
+- MongoDB running locally (`mongodb://localhost`)
 
-Technical Stack
+## Installation
 
-Backend:
-
-Node.js with Express framework
-MongoDB for document storage
-Bcrypt for password hashing
-Session-based authentication
-
-Frontend:
-
-Jade/Pug templates
-jQuery and jQuery UI
-Bootstrap 3
-Custom CSS
-
-Build Tools:
-
-Grunt task runner
-Native ES6 (no transpilation step required)
-LESS CSS preprocessing
-
-Data Model
-Each record entry includes:
-
-Artist, Album, Song Title
-BPM (beats per minute)
-Musical Key (using Camelot notation)
-Genre
-Custom metadata fields
-
-Installation & Setup
-Prerequisites
-
-Node.js (v18 or higher recommended)
-MongoDB (v3.7 or higher)
-
-Installation
-bash# Clone the repository
+```bash
 git clone https://github.com/willdaly/dj-list.git
 cd dj-list
-
-# Install dependencies
 npm install
+```
 
-# Start MongoDB (if not running)
-mongod
+## Running Locally
 
-# Initialize the database
-mongo dj-list
-db.createCollection("songs")
-db.createCollection("users")
-exit
+1. Start MongoDB (if not already running).
+2. Start the app:
 
-# Run the application
+```bash
 DBNAME=dj-list SESSION_KEYS=change-me-1,change-me-2 npm start
-The app will be available at http://localhost:4000
-Creating a User
-To create a user with a hashed password, use the MongoDB shell:
-javascript// In mongo shell:
-use dj-list
+```
 
-// Generate a password hash using bcrypt with the app running:
-// Then insert user:
+The app runs at [http://localhost:4000](http://localhost:4000).
+
+### Required environment variables
+
+- `SESSION_KEYS` - comma-separated cookie-signing keys (at least two), e.g. `key1,key2`
+
+### Optional environment variables
+
+- `DBNAME` - MongoDB database name (default: `default-db`)
+- `PORT` - server port (default: `4000`)
+
+## Frontend Workflow
+
+- Build frontend assets:
+
+```bash
+npm run build:frontend
+```
+
+- Run Vite dev server (frontend-only):
+
+```bash
+npm run dev:frontend
+```
+
+`npm start` compiles LESS and starts the Node server. If you change frontend JS modules, run `npm run build:frontend` to refresh bundled assets.
+
+## Tests
+
+Run the full suite:
+
+```bash
+npm test
+```
+
+Watch mode:
+
+```bash
+npm run watch
+```
+
+## Create a Local User (Manual)
+
+If you need a known login user in local dev, generate a bcrypt hash and insert a document:
+
+```bash
+node -e "require('bcrypt').hash('password', 8).then(h => console.log(h))"
+```
+
+Then in `mongosh`:
+
+```javascript
+use dj-list
 db.users.insertOne({
-  email: "your@email.com",
-  password: "$2b$08$YOUR_BCRYPT_HASH_HERE",
+  email: "you@example.com",
+  password: "<paste bcrypt hash>",
   isValid: true,
   joinedOn: new Date()
 })
-Recent Updates (October 2025)
-Updated the codebase to work with modern Node.js and MongoDB:
+```
 
-Fixed MongoDB initialization timing and connection handling
-Updated deprecated util.log to console.log
-Fixed Mongo.ObjectID → Mongo.ObjectId API changes
-Downgraded MongoDB driver to v3.7.4 for callback compatibility
-Fixed route middleware configuration
-Updated user authentication and bcrypt implementation
-Added error handling for database queries
+## Project History
 
-Project History
-Originally built in 2014 at Nashville Software School as a capstone project.
-Use Case: Music Publishing
-While originally built for DJing, this project demonstrates core concepts relevant to music publishing catalog management:
-
-Accurate metadata organization
-Searchable music databases
-User authentication and access control
-Data hygiene and quality control
-Building tools for music industry workflows
-
-The same principles that make this useful for finding compatible DJ mixes apply to managing publishing catalogs - clean data, smart search functionality, and domain-specific metadata structure.
-
-License
-MIT
+Originally created in 2014 at Nashville Software School and modernized for current Node/Mongo/frontend tooling while keeping the core DJ catalog workflow intact.
