@@ -16,7 +16,7 @@ module.exports = function loadRoutes(app) {
   if (process.env.NODE_ENV === 'test') {
     app.get('/test/login', dbg, users.testLogin);
   }
- app.use(users.bounce); //bounce
+  app.use(users.bounce);
   app.post('/logout', dbg, users.logout);
   app.post('/createSong', dbg, songs.create);
   app.post('/key', dbg, songs.key);

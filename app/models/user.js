@@ -51,6 +51,6 @@ class User {
     return Object.assign(Object.create(User.prototype), user);
   }
 
-} //end of user
+}
 
 module.exports = User;
