@@ -5,22 +5,12 @@ html
     meta(charset='utf-8')
     link(rel='shortcut icon', href='/img/favicon.ico')
     title= title
-    link(href="/jquery-ui/jquery-ui.min.css", rel="stylesheet")
-    link(href='/bootstrap/css/bootstrap.css', rel='stylesheet')
-    link(href='/css/jquery.nouislider.css', rel='stylesheet')
+    link(href='/assets/app.css', rel='stylesheet')
     link(href='/less/app.css', rel='stylesheet')
   body
     include navigation
     block content
 
-    script(src='/js/vendor/jquery-2.1.1.js')
-    script(src="/jquery-ui/jquery-ui.min.js")
-    script(src='/js/vendor/lodash-2.4.1.js')
-    script(src='/js/vendor/moment-2.6.0.js')
-    script(src='/js/vendor/wNumb.min.js')
-    script(src='/js/vendor/jquery.nouislider.all.min.js')
-    script(src='/js/vendor/jquery.liblink.js')
-    script(src='/js/es6/main.es6.js')
-    script(src='/bootstrap/js/bootstrap.min.js')
+    script(type='module', src='/assets/app.js')
 
     block scripts
