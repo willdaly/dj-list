@@ -95,6 +95,24 @@ exports.spotifyCallback = async (req, res)=>{
   }
 };
 
+exports.testLogin = async (req, res)=>{
+  if (process.env.NODE_ENV !== 'test') {
+    return res.status(404).send('not found');
+  }
+
+  try {
+    var user = await User.findOrCreateFromSpotify({
+      id: 'smoke-test-user',
+      email: 'smoke-test-user@example.com',
+      display_name: 'Smoke Test User'
+    });
+    req.session.userId = user._id;
+    return res.status(204).send();
+  } catch (err) {
+    return logAndRenderError(res, err);
+  }
+};
+
 exports.logout = (req, res)=>{
   req.session = null;
   res.redirect('/');

@@ -20,7 +20,6 @@ import {
   deleteFromPlaylist,
   deletePlaylist
 } from './playlist-actions';
-import { createSong, editSongShow, editSong } from './song-actions';
 import { initGenreSelection, initResultSelection } from './ui-common';
 
 function controlsToggle() {
@@ -34,7 +33,6 @@ export function initApp() {
   initResultSelection();
   $('#controlsToggle').click(controlsToggle);
 
-  $('#createNewSong').click(createSong);
   $('#keyFilter').click(key);
   $('#bpmFilter').click(bpm);
   $('#bpmKeyFilter').click(bpmKey);
@@ -44,8 +42,6 @@ export function initApp() {
   $('#genreFilter').click(genreFilter);
   $('.transpose').click(transpose);
   $('#songsButton').click(songsControls);
-  $('#editSongBtn').click(editSongShow);
-  $('#editSongSubmit').click(editSong);
 
   $('#createPlaylist').click(createPlaylist);
   $('#playlistsButton').click(getplaylistindex);

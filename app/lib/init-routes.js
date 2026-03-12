@@ -12,6 +12,9 @@ module.exports = function loadRoutes(app){
   app.get('/', dbg, home.index);
   app.get('/auth/spotify', dbg, users.spotifyStart);
   app.get('/auth/spotify/callback', dbg, users.spotifyCallback);
+  if (process.env.NODE_ENV === 'test') {
+    app.get('/test/login', dbg, users.testLogin);
+  }
  app.use(users.bounce); //bounce
   app.post('/logout', dbg, users.logout);
   app.post('/createSong', dbg, songs.create);

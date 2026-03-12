@@ -13,7 +13,8 @@
     "dev:frontend": "vite",
     "setup": "npm install",
     "test": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000",
-    "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch"
+    "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch",
+    "test:smoke": "npm run build:frontend && playwright test"
   },
   "dependencies": {
     "async": "^3.2.6",
@@ -37,6 +38,7 @@
     "wnumb": "^1.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "chai": "^6.2.0",
     "mocha": "^11.7.4",
     "superagent": "^10.2.3",

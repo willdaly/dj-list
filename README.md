@@ -70,6 +70,10 @@ npm run dev:frontend
 
 `npm start` compiles LESS and starts the Node server. If you change frontend JS modules, run `npm run build:frontend` to refresh bundled assets.
 
+### Legacy frontend stabilization note
+
+The current jQuery-based frontend modules in `app/frontend/modules` are in stabilization mode. Treat them as bugfix-only while the React migration is planned/executed.
+
 ## Tests
 
 Run the full suite:
@@ -82,6 +86,12 @@ Watch mode:
 
 ```bash
 npm run watch
+```
+
+Browser smoke test (controls/search baseline):
+
+```bash
+npm run test:smoke
 ```
 
 ## Authentication
