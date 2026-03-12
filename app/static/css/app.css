@@ -122,10 +122,18 @@ select {
 }
 .genres {
   list-style-type: none;
+  margin: 0 0 1em 0;
+  max-height: 14em;
+  overflow-y: auto;
+  padding: 0.5em;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.45);
 }
 .genres li {
-  margin: 0em 0 1.5em 0;
-  font-size: 1.5em;
+  margin: 0;
+  padding: 0.2em 0.15em;
+  font-size: 1.15em;
   cursor: pointer;
 }
 tr.is-selected {

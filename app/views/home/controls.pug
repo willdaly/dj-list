@@ -6,17 +6,19 @@
       a(data-target='#')#playlistsButton Playlists
   .container
     .row.songs
-      .btn-group
-        button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Pick Genres
-        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
-          span.caret
-        ul.dropdown-menu
-            li
-              a(data-target='#')#genreFilter Checked Genres
-            li
-              a(data-target='#')#bpmFilter Genres by BPM
-            li
-              a(data-target='#')#keyFilter Genres by Key
+      .control-label Genres
+      ul.genres
+        li.is-selected Hip-Hop
+        li Hip-Hop Instrumental
+        li Battle
+        li 45 King
+        li Soul
+        li Jazz
+        li Rock
+        li Pop
+        li(value='Electronic') Electronic
+        li(value='Melodiya') Melodiya
+        li(value='OST') OST
 
     .row.songs
       .control-label Key
@@ -78,7 +80,7 @@
       .bpm-range#bpmRangeDisplay Range: 88 - 102
 
     .row.songs
-      button.btn.btn-default.btn-lg#bpmKeyFilter Search by Genre/Key/BPM
+      button.btn.btn-default.btn-lg#bpmKeyFilter Search
     
     .row.songs
       .input-group

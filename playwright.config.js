@@ -8,7 +8,7 @@ module.exports = {
     headless: true
   },
   webServer: {
-    command: 'NODE_ENV=test PORT=4100 DBNAME=dj-list npm start',
+    command: 'NODE_ENV=test PORT=4100 DBNAME=dj-list-smoke npm start',
     url: 'http://127.0.0.1:4100',
     reuseExistingServer: true,
     timeout: 120000
