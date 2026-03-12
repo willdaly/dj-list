@@ -9,6 +9,10 @@ function getSongsCollection() {
   return db.getCollection('songs');
 }
 
+function sortByOrder(a, b) {
+  return a.order - b.order;
+}
+
 class Playlist {
   static async create (obj, userId){
     const songsArray = [];
@@ -95,13 +99,7 @@ class Playlist {
         }
       }
     });
-    playlist.songs.sort((a, b)=>{
-      if (a.order > b.order){
-        return 1;
-      }else{
-        return -1;
-      }
-    });
+    playlist.songs.sort(sortByOrder);
     await getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist);
     return playlist;
   }
@@ -133,13 +131,7 @@ class Playlist {
     if (!playlist) {
       return null;
     }
-    return playlist.songs.sort((a, b)=>{
-      if (a.order > b.order){
-        return 1;
-      }else{
-        return -1;
-      }
-    });
+    return playlist.songs.sort(sortByOrder);
   }
 
   static async deleteFromPlaylist (songIds, playlistId, userId) {
@@ -163,15 +155,7 @@ class Playlist {
         }
       });
     });
-    playlist.songs.sort((a, b)=>{
-      if (a.order > b.order){
-        return 1;
-      } else if (a.order < b.order ) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
+    playlist.songs.sort(sortByOrder);
     let order = 1;
     playlist.songs.forEach(song=>{
       song.order = order;
