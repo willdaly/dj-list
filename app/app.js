@@ -23,4 +23,3 @@ function createApp() {
 }
 
 module.exports = createApp();
-module.exports.createApp = createApp;
