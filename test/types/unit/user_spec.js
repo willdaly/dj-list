@@ -3,10 +3,11 @@
 
 process.env.DBNAME = 'dj-list';
 
+var path = require('path');
 var expect = require('chai').expect;
-var db = require(__dirname + '/../../helpers/db.js');
-var factory = require(__dirname + '/../../helpers/factory.js');
-var dbState = require(__dirname + '/../../../app/lib/db.js');
+var db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
+var factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
+var dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
 var Mongo = require('mongodb');
 
 var User;
@@ -14,7 +15,7 @@ var User;
 describe('User', function(){
   before(async function(){
     await db();
-    User = require(__dirname + '/../../../app/models/user.js');
+    User = require(path.join(__dirname, '..', '..', '..', 'app', 'models', 'user.js'));
   }); //end of before
 
 

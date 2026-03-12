@@ -1,8 +1,9 @@
 'use strict';
 
-const User = require(__dirname + '/../models/user.js');
+const path = require('path');
+const User = require(path.join(__dirname, '..', 'models', 'user.js'));
 const crypto = require('crypto');
-const logAndRenderError = require(__dirname + '/../lib/errors.js').logAndRenderError;
+const logAndRenderError = require(path.join(__dirname, '..', 'lib', 'errors.js')).logAndRenderError;
 
 exports.bounce = (req, res, next)=>{
   if(res.locals.user){

@@ -1,5 +1,6 @@
+const path = require('path');
 const ObjectId = require('mongodb').ObjectId;
-const db = require(__dirname + '/../lib/db.js');
+const db = require(path.join(__dirname, '..', 'lib', 'db.js'));
 
 function getPlaylistsCollection() {
   return db.getCollection('playlists');

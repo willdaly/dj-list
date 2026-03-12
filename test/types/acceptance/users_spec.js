@@ -3,10 +3,11 @@
 
 process.env.DBNAME = 'dj-list';
 
+var path = require('path');
 var expect = require('chai').expect;
-var db = require(__dirname + '/../../helpers/db.js');
-var factory = require(__dirname + '/../../helpers/factory.js');
-var dbState = require(__dirname + '/../../../app/lib/db.js');
+var db = require(path.join(__dirname, '..', '..', 'helpers', 'db.js'));
+var factory = require(path.join(__dirname, '..', '..', 'helpers', 'factory.js'));
+var dbState = require(path.join(__dirname, '..', '..', '..', 'app', 'lib', 'db.js'));
 var app = require('../../../app/app');
 var request = require('supertest');
 

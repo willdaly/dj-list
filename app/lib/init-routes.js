@@ -1,12 +1,13 @@
 'use strict';
 
-const dbg = require(__dirname + '/route-debugger.js');
+const path = require('path');
+const dbg = require(path.join(__dirname, 'route-debugger.js'));
 
 module.exports = function loadRoutes(app) {
-  const home = require(__dirname + '/../routes/home.js');
-  const users = require(__dirname + '/../routes/users.js');
-  const songs = require(__dirname + '/../routes/songs.js');
-  const playlists = require(__dirname + '/../routes/playlists.js');
+  const home = require(path.join(__dirname, '..', 'routes', 'home.js'));
+  const users = require(path.join(__dirname, '..', 'routes', 'users.js'));
+  const songs = require(path.join(__dirname, '..', 'routes', 'songs.js'));
+  const playlists = require(path.join(__dirname, '..', 'routes', 'playlists.js'));
 
   app.use(users.lookup);
   app.get('/', dbg, home.index);

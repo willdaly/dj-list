@@ -1,7 +1,8 @@
 'use strict';
 
-const Playlist = require(__dirname + '/../models/playlist.js');
-const logAndSendError = require(__dirname + '/../lib/errors.js').logAndSendError;
+const path = require('path');
+const Playlist = require(path.join(__dirname, '..', 'models', 'playlist.js'));
+const logAndSendError = require(path.join(__dirname, '..', 'lib', 'errors.js')).logAndSendError;
 
 exports.index = async (req, res)=>{
   try {

@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var ObjectId = require('mongodb').ObjectId;
 var bcrypt = require('bcrypt');
-var db = require(__dirname + '/../../app/lib/db.js');
+var db = require(path.join(__dirname, '..', '..', 'app', 'lib', 'db.js'));
 var Model;
 
 module.exports = async (model, fn)=>{
@@ -16,7 +16,7 @@ module.exports = async (model, fn)=>{
     return seedUsers(records, fn);
   }
 
-  Model = require(__dirname + '/../../app/models/' + model + '.js');
+  Model = require(path.join(__dirname, '..', '..', 'app', 'models', model + '.js'));
   var objs = await Promise.all(records.map(iterator));
   if (fn) {
     fn(objs);

@@ -1,7 +1,8 @@
 'use strict';
 
-const Song = require(__dirname + '/../models/song.js');
-const logAndSendError = require(__dirname + '/../lib/errors.js').logAndSendError;
+const path = require('path');
+const Song = require(path.join(__dirname, '..', 'models', 'song.js'));
+const logAndSendError = require(path.join(__dirname, '..', 'lib', 'errors.js')).logAndSendError;
 
 exports.create = async (req, res)=>{
   try {
