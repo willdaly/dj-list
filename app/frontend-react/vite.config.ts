@@ -3,31 +3,19 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
+const API_BASE = 'http://127.0.0.1:4000';
+const API_PROXY_PATHS = [
+  '/api/session', '/search', '/artistSearch', '/albumSearch', '/songSearch',
+  '/guessSearch', '/genreFilter', '/bpm', '/key', '/bpmKey', '/playlists',
+  '/createPlaylist', '/addToPlaylist', '/renamePlaylist', '/deleteFromPlaylist',
+  '/deletePlaylist', '/updateOrder', '/auth/spotify', '/logout'
+];
+
 export default defineConfig({
   root: __dirname,
   plugins: [react(), tailwindcss()],
   server: {
-    proxy: {
-      '/api/session': 'http://127.0.0.1:4000',
-      '/search': 'http://127.0.0.1:4000',
-      '/artistSearch': 'http://127.0.0.1:4000',
-      '/albumSearch': 'http://127.0.0.1:4000',
-      '/songSearch': 'http://127.0.0.1:4000',
-      '/guessSearch': 'http://127.0.0.1:4000',
-      '/genreFilter': 'http://127.0.0.1:4000',
-      '/bpm': 'http://127.0.0.1:4000',
-      '/key': 'http://127.0.0.1:4000',
-      '/bpmKey': 'http://127.0.0.1:4000',
-      '/playlists': 'http://127.0.0.1:4000',
-      '/createPlaylist': 'http://127.0.0.1:4000',
-      '/addToPlaylist': 'http://127.0.0.1:4000',
-      '/renamePlaylist': 'http://127.0.0.1:4000',
-      '/deleteFromPlaylist': 'http://127.0.0.1:4000',
-      '/deletePlaylist': 'http://127.0.0.1:4000',
-      '/updateOrder': 'http://127.0.0.1:4000',
-      '/auth/spotify': 'http://127.0.0.1:4000',
-      '/logout': 'http://127.0.0.1:4000'
-    }
+    proxy: Object.fromEntries(API_PROXY_PATHS.map((path) => [path, API_BASE]))
   },
   build: {
     outDir: resolve(__dirname, '../static/assets-react'),
