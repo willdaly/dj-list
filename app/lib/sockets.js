@@ -37,7 +37,7 @@ function addUserToSocket(socket){
 }
 
 function decode(string) {
-  var body = new Buffer(string, 'base64').toString('utf8');
+  var body = Buffer.from(string, 'base64').toString('utf8');
   return JSON.parse(body);
 }
 
