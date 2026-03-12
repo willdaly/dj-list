@@ -1,12 +1,28 @@
-var listItemsCollection = global.nss.db.collection('listItems');
-var songCollection = global.nss.db.collection('songs');
 var Mongo = require('mongodb');
+var db = require(__dirname + '/../lib/db.js');
+
+function getListItemsCollection() {
+  return db.getCollection('listItems');
+}
+
+function getSongCollection() {
+  return db.getCollection('songs');
+}
 
 class ListItem {
   static create(order, songId, playlistId, fn){
-    listItemsCollection.findOne({playlistId : playlistId, order : order}, (e, listItem)=>{
+    getListItemsCollection().findOne({playlistId : playlistId, order : order}, (e, listItem)=>{
+      if (e) {
+        return fn(e);
+      }
       if (!listItem){
-        songCollection.findOne({_id : songId}, (err, song)=>{
+        getSongCollection().findOne({_id : songId}, (err, song)=>{
+          if (err) {
+            return fn(err);
+          }
+          if (!song) {
+            return fn(null, null);
+          }
           var li = new ListItem();
           li.order = order;
           li.songId = songId;
@@ -17,12 +33,12 @@ class ListItem {
           li.bpm = song.BPM;
           li.key = song.Key;
           li.genre = song.genre;
-          listItemsCollection.insertOne(li, ()=>{
-            fn(li);
+          getListItemsCollection().insertOne(li, (insertErr)=>{
+            fn(insertErr, li);
           });
         });
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   } //create
@@ -31,8 +47,8 @@ class ListItem {
     songIds = songIds.map((id)=>new Mongo.ObjectId(id));
     console.log('songIds');
     console.log(songIds);
-    listItemsCollection.deleteMany({songId : { $in: songIds }}, (err, result)=>{
-      fn({deletedCount: result ? result.deletedCount : 0});
+    getListItemsCollection().deleteMany({songId : { $in: songIds }}, (err, result)=>{
+      fn(err, {deletedCount: result ? result.deletedCount : 0});
     });
 
     // playlistCollection.findOne({_id:_id}, (err,playlist)=>{

@@ -5,6 +5,7 @@ var path = require('path');
 var async = require('async');
 var Mongo = require('mongodb');
 var bcrypt = require('bcrypt');
+var db = require(__dirname + '/../../app/lib/db.js');
 var Model;
 
 module.exports = (model, fn)=>{
@@ -21,7 +22,9 @@ module.exports = (model, fn)=>{
 };
 
 function iterator(record, fn){
-  Model.create(record, obj=>fn(null, obj));
+  Model.create(record, function(err, obj){
+    fn(err, obj);
+  });
 }
 
 function seedUsers(records, fn) {
@@ -48,7 +51,7 @@ function seedUsers(records, fn) {
     return user;
   });
 
-  global.nss.db.collection('users').insertMany(users, function() {
+  db.getCollection('users').insertMany(users, function() {
     fn(users);
   });
 }

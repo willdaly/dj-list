@@ -6,6 +6,7 @@ process.env.DBNAME = 'dj-list';
 var expect = require('chai').expect;
 var db = require(__dirname + '/../../helpers/db.js');
 var factory = require(__dirname + '/../../helpers/factory.js');
+var dbState = require(__dirname + '/../../../app/lib/db.js');
 var app = require('../../../app/app');
 var request = require('supertest');
 
@@ -21,7 +22,7 @@ describe('users', function(){
   }); //end of before
 
   beforeEach(function(done){
-    global.nss.db.collection('users').drop(function(){
+    dbState.getCollection('users').drop(function(){
       factory('user', function(users){
         done();
       });

@@ -2,18 +2,19 @@ var Mongo = require('mongodb');
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var request = require('request');
+var db = require(__dirname + '/../lib/db.js');
 
 var getUserCollection = function() {
-  if (!global.nss || !global.nss.db) {
-    throw new Error('Database not initialized');
-  }
-  return global.nss.db.collection('users');
+  return db.getCollection('users');
 };
 
 class User {
   static create (obj, fn){
     var message;
     getUserCollection().findOne({email: obj.email}, (e, u)=>{
+      if (e) {
+        return fn(e);
+      }
       if (!u){
         var user = new User();
         user._id = new Mongo.ObjectId(obj._id);
@@ -21,12 +22,15 @@ class User {
         user.password = '';
         user.joinedOn = new Date();
         user.isValid = false;
-        getUserCollection().insertOne(user, ()=>{
+        getUserCollection().insertOne(user, (insertErr)=>{
+          if (insertErr) {
+            return fn(insertErr);
+          }
           sendVerificationEmail(user, fn);
         });
       }else{
         message = 'already registered';
-        fn(null, message);
+        fn(null, null, message);
       }
     });
     //end of create
@@ -36,6 +40,9 @@ static login (obj, fn){
   var message;
   console.log('LOGIN ATTEMPT:', obj.email);
   getUserCollection().findOne({email: obj.email}, (e,u)=>{
+    if (e) {
+      return fn(e);
+    }
     console.log('USER FOUND:', u ? 'yes' : 'no');
     if (u){
       console.log('COMPARING PASSWORDS');
@@ -43,16 +50,16 @@ static login (obj, fn){
       console.log('PASSWORD MATCH:', isMatch);
       console.log('IS VALID:', u.isValid);
       if (isMatch && u.isValid){
-        fn(u);
+        fn(null, u);
       }else{
         message = u.isValid ? 'incorrect password' : 'unverified account, please respond to the verification email sent when you registered';
         console.log('LOGIN FAILED:', message);
-        fn(null, message);
+        fn(null, null, message);
       }
     }else{
       message = 'no user registered with ' + obj.email;
       console.log('NO USER FOUND');
-      fn(null, message);
+      fn(null, null, message);
     }
   });
 }
@@ -60,8 +67,8 @@ static login (obj, fn){
   changePassword(password, fn){
     this.password = bcrypt.hashSync(password, 8);
     this.isValid = true;
-    getUserCollection().updateOne({_id: this._id}, {$set: {password: this.password, isValid: this.isValid}}, ()=>{
-      fn();
+    getUserCollection().updateOne({_id: this._id}, {$set: {password: this.password, isValid: this.isValid}}, (e)=>{
+      fn(e);
     });
   }
 
@@ -69,11 +76,14 @@ static login (obj, fn){
 
     id = new Mongo.ObjectId(id);
     getUserCollection().findOne({_id:id}, (e, u)=>{
+      if (e) {
+        return fn(e);
+      }
       if (u) {
         u = _.create(User.prototype, u);
-        fn(u);
+        fn(null, u);
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   } //end of findById
@@ -84,15 +94,18 @@ function sendVerificationEmail(user, fn){
   'use strict';
   if (process.env.NODE_ENV === 'test') {
     var testMessage = `an account verification email has been sent to ${user.email}`;
-    fn(user, testMessage);
+    fn(null, user, testMessage);
     return;
   }
 
   var key = process.env.MAILGUN;
   var url = 'https://api:' + key + '@api.mailgun.net/v2/sandboxf8003fd796e54c60bc6cc0b82a62f4e8.mailgun.org/messages';
   var post = request.post(url, function(err, response, body){
-  var message = `an account verification email has been sent to ${user.email}`;
-    fn(user, message);
+    if (err) {
+      return fn(err);
+    }
+    var message = `an account verification email has been sent to ${user.email}`;
+    fn(null, user, message);
   });
 
   var form = post.form();

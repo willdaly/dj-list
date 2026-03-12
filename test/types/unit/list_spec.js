@@ -9,6 +9,7 @@ process.env.DBNAME = 'dj-list';
 // var Mongo = require('mongodb');
 var db = require(__dirname + '/../../helpers/db.js');
 var factory = require(__dirname + '/../../helpers/factory.js');
+var dbState = require(__dirname + '/../../../app/lib/db.js');
 
 var List;
 
@@ -21,7 +22,7 @@ describe.skip('List', function(){
   }); //before
 
   beforeEach(function(done){
-    global.nss.db.collection('lists').drop(function(){
+    dbState.getCollection('lists').drop(function(){
       factory('list', function(lists){
         done();
       });

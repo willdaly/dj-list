@@ -2,7 +2,7 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var mongoUrl = `mongodb://localhost/${process.env.DBNAME}`;
-var assert = require('assert');
+var dbState = require(__dirname + '/db.js');
 var initialized = false;
 
 module.exports = (req, res, next)=>{
@@ -17,14 +17,11 @@ module.exports = (req, res, next)=>{
 function load(fn){
   MongoClient.connect(mongoUrl, {useUnifiedTopology: true}, (err, db)=>{
     if(err){throw err;}
-    global.nss = {};
-    global.nss.db = db;
-    global.nss.db.ensureIndex('songs', {
-      Artist: 'text',
-    }, (err, indexname)=>{
-      assert.equal(null, err);
-      });
-    console.log('Connected to MongoDB');
-    fn();
+    dbState.setDb(db);
+    db.collection('songs').createIndex({Artist: 'text'}, function(indexErr){
+      if(indexErr){throw indexErr;}
+      console.log('Connected to MongoDB');
+      fn();
+    });
   });
 }

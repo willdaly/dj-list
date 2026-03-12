@@ -1,11 +1,9 @@
 var Mongo = require('mongodb');
 var _ = require('lodash');
+var db = require(__dirname + '/../lib/db.js');
 
 var getSongCollection = function() {
-  if (!global.nss || !global.nss.db) {
-    throw new Error('Database not initialized');
-  }
-  return global.nss.db.collection('songs');
+  return db.getCollection('songs');
 };
 
 class Song {
@@ -17,7 +15,7 @@ class Song {
     song.BPM = parseInt(obj.BPM);
     song.Key = obj.Key;
     song.genre = obj.genre;
-    getSongCollection().insertOne(song, ()=>fn(song));
+    getSongCollection().insertOne(song, (err)=>fn(err, song));
   }
 
   static findByKey(obj, fn) {
@@ -28,7 +26,7 @@ class Song {
     keyArray.push(ambig.toUpperCase());
     var genre = obj.genre;
     getSongCollection().find({Key:{$in: keyArray}, genre:{$in: genre}}).toArray((err, list)=>{
-      fn(list);
+      fn(err, list);
     });
   }
 
@@ -37,7 +35,7 @@ class Song {
     var highBPM = +obj.BPM[1];
     var genre = obj.genre;
     getSongCollection().find({BPM:{'$gte': lowBPM, '$lte': highBPM}, genre:{$in: genre}}).toArray((err, list)=>{
-      fn(list);
+      fn(err, list);
     });
   }
 
@@ -51,7 +49,7 @@ class Song {
     keyArray.push(ambig.toUpperCase());
     var genre = obj.genre;
     getSongCollection().find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray((err, list)=>{
-      fn(list);
+      fn(err, list);
     });
   }
 
@@ -101,75 +99,78 @@ class Song {
     keyArray.push(ambig.toLowerCase());
     keyArray.push(ambig.toUpperCase());
     getSongCollection().find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray((err, songs)=>{
-      fn(songs);
+      fn(err, songs);
     });
   }
 
-static guessSearch (typed, fn){
-  getSongCollection().find({$text: {$search: typed}}).toArray((err, songs)=>{
-    var artists = [];
-    if (songs) {  // Check if songs exists
-      songs.forEach(song=>{
-        artists.push(song.Artist);
-      });
-      artists = _.uniq(artists);
-    }
-    fn(artists);
-  });
-}
+  static guessSearch (typed, fn){
+    getSongCollection().find({$text: {$search: typed}}).toArray((err, songs)=>{
+      if (err) {
+        return fn(err);
+      }
+      var artists = [];
+      if (songs) {
+        songs.forEach(song=>{
+          artists.push(song.Artist);
+        });
+        artists = _.uniq(artists);
+      }
+      fn(null, artists);
+    });
+  }
 
   static findByArtist (Artist, fn){
     getSongCollection().find({'Artist' : { $regex: new RegExp('^' + Artist.toLowerCase(), 'i')  }}).toArray((err, songs)=>{
-      fn(songs);
+      fn(err, songs);
     });
   }
 
   static findByAlbum (Album, fn){
     getSongCollection().find({'Album' : { $regex: new RegExp('^' + Album.toLowerCase(), 'i')  }}).toArray((err, songs)=>{
-      fn(songs);
+      fn(err, songs);
     });
   }
 
   static findBySong (title, fn){
     getSongCollection().find({'Song' : { $regex: new RegExp('^' + title.toLowerCase(), 'i')  }}).toArray((err, song)=>{
-      fn(song);
+      fn(err, song);
     });
   }
 
   static findByGenre (genre, fn){
     getSongCollection().find({genre: {$in: genre}}).toArray((err, songs)=>{
-      fn(songs);
+      fn(err, songs);
     });
   }
 
   static editSong (obj, fn){
     var id = new Mongo.ObjectId(obj.Id);
     getSongCollection().findOne({_id: id}, (e, song)=>{
+      if (e) {
+        return fn(e);
+      }
+      if (!song) {
+        return fn(null, null);
+      }
       if (obj.Artist) {
         song.Artist = obj.Artist;
-        console.log(song.Artist);
       }
       if (obj.Album) {
         song.Album = obj.Album;
-        console.log(song.Album);
       }
       if (obj.Title) {
         song.Song = obj.Title;
-        console.log(song.Song);
       }
       if (obj.BPM) {
         song.BPM = parseInt(obj.BPM);
-        console.log(song.BPM);
       }
       if (obj.Key) {
         song.Key = obj.Key;
-        console.log(song.Key);
       }
       if (obj.genre) {
         song.genre = obj.genre;
-        console.log(song.genre);
       }
-      getSongCollection().replaceOne({_id: song._id}, song, ()=>fn(song));
+      getSongCollection().replaceOne({_id: song._id}, song, (err)=>fn(err, song));
     });
   }
 }

@@ -8,6 +8,7 @@ process.env.DBNAME = 'dj-list';
 var expect = require('chai').expect;
 var db = require(__dirname + '/../../helpers/db.js');
 var factory = require(__dirname + '/../../helpers/factory.js');
+var dbState = require(__dirname + '/../../../app/lib/db.js');
 var Mongo = require('mongodb');
 
 var User;
@@ -22,7 +23,7 @@ describe('User', function(){
 
 
   beforeEach(function(done){
-    global.nss.db.collection('users').drop(function(){
+    dbState.getCollection('users').drop(function(){
       factory('user', function(users){
         done();
       });
@@ -31,7 +32,8 @@ describe('User', function(){
 
   describe('.create', function(){
     it('should successfully create a user', function(done){
-      User.create({email: 'willyd@nss.com', password: 'password'}, function(u){
+      User.create({email: 'willyd@nss.com', password: 'password'}, function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.ok;
         expect(u).to.be.an.instanceof(User);
         expect(u._id).to.be.an.instanceof(Mongo.ObjectID);
@@ -41,7 +43,8 @@ describe('User', function(){
       });
     }); //end of create success
     it('should NOT successfully create a user', function(done){
-      User.create({email: 'will@nss.com', password: 'already registered'}, function(u){
+      User.create({email: 'will@nss.com', password: 'already registered'}, function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.null;
         done();
       });
@@ -50,19 +53,22 @@ describe('User', function(){
 
   describe('.login', function(){
     it('should successfully login a user', function(done){
-      User.login({email: 'will@nss.com', password: 'password'}, function(u){
+      User.login({email: 'will@nss.com', password: 'password'}, function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.ok;
         done();
       });
     }); //end of login success
     it('should NOT login user - bad password', function(done){
-      User.login({email: 'will@nss.com', password: 'gobbldeygook'}, function(u){
+      User.login({email: 'will@nss.com', password: 'gobbldeygook'}, function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.null;
         done();
       });
     }); //end of login bad pass
     it('should Not login user - bad email', function(done){
-      User.login({email: 'bad@nss.com', password: 'password'}, function(u){
+      User.login({email: 'bad@nss.com', password: 'password'}, function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.null;
         done();
       });
@@ -71,20 +77,23 @@ describe('User', function(){
 
   describe('.findById', function(){
     it('should successfully find a user', function(done){
-      User.findById('1234567890abcdef12345678', function(u){
+      User.findById('1234567890abcdef12345678', function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.instanceof(User);
         expect(u.email).to.equal('will@nss.com');
         done();
       });
     }); //end of successfully find user
     it('should NOT successfully find a user - Bad Id', function(done){
-      User.findById('132435465768abcdef098765', function(u){
+      User.findById('132435465768abcdef098765', function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.null;
         done();
       });
     }); //end of unsuccessfully find user bad id
     it ('should NOT successfully find a user - user doesnt exist', function(done){
-      User.findById('0987654321abcdef09876543', function(u){
+      User.findById('0987654321abcdef09876543', function(err, u){
+        expect(err).to.be.null;
         expect(u).to.be.null;
         done();
       });

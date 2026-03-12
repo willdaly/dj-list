@@ -1,18 +1,8 @@
 'use strict';
 
 var dbg = require(__dirname + '/route-debugger.js');
-var initialized = false;
 
-module.exports = (req, res, next)=>{
-  if(!initialized){
-    initialized = true;
-    load(req.app, next);
-  }else{
-    next();
-  }
-};
-
-function load(app, fn){
+module.exports = function loadRoutes(app){
   var home = require(__dirname + '/../routes/home.js');
   var users = require(__dirname + '/../routes/users.js');
   var songs = require(__dirname + '/../routes/songs.js');
@@ -46,7 +36,5 @@ function load(app, fn){
   app.post('/deleteFromPlaylist', dbg, playlists.deleteFromPlaylist);
   app.delete('/deletePlaylist/:id', dbg, playlists.deletePlaylist);
 
-
   console.log('Routes Loaded');
-  fn();
-}
+};

@@ -1,17 +1,12 @@
 var Mongo = require('mongodb');
+var db = require(__dirname + '/../lib/db.js');
 
 var getPlaylistsCollection = function() {
-  if (!global.nss || !global.nss.db) {
-    throw new Error('Database not initialized');
-  }
-  return global.nss.db.collection('playlists');
+  return db.getCollection('playlists');
 };
 
 var getSongsCollection = function() {
-  if (!global.nss || !global.nss.db) {
-    throw new Error('Database not initialized');
-  }
-  return global.nss.db.collection('songs');
+  return db.getCollection('songs');
 };
 
 class Playlist {
@@ -26,6 +21,9 @@ class Playlist {
     }
 
     getSongsCollection().find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
+      if (err) {
+        return fn(err);
+      }
       if (songs) {
         var order = 1;
         songs.forEach(song=>{
@@ -34,31 +32,37 @@ class Playlist {
           sArray.push(song);
         });
         getPlaylistsCollection().findOne({name: obj.name}, (e, playlist)=>{
+            if (e) {
+              return fn(e);
+            }
             if (!playlist){
               playlist = new Playlist();
               playlist._id = new Mongo.ObjectId(obj._id);
               playlist.name = obj.name;
               playlist.userId = userId;
               playlist.songs = sArray;
-              getPlaylistsCollection().insertOne(playlist, ()=>fn(playlist));
+              getPlaylistsCollection().insertOne(playlist, (insertErr)=>fn(insertErr, playlist));
             }else{
-              fn(null);
+              fn(null, null);
             }
           });
       } else {
         getPlaylistsCollection().findOne({name: obj.name}, (e, playlist)=>{
+            if (e) {
+              return fn(e);
+            }
             if (!playlist){
               playlist = new Playlist();
               playlist._id = new Mongo.ObjectId(obj._id);
               playlist.name = obj.name;
               playlist.userId = userId;
               playlist.songs = sArray;
-              getPlaylistsCollection().insertOne(playlist, ()=>fn(playlist));
+              getPlaylistsCollection().insertOne(playlist, (insertErr)=>fn(insertErr, playlist));
             }else{
-              fn(null);
+              fn(null, null);
             }
           });
-        fn(null);
+        fn(null, null);
       }
     });
   }
@@ -66,12 +70,21 @@ class Playlist {
   static addSongs (obj, fn) {
     var _id = new Mongo.ObjectId(obj.playlistId);
     getPlaylistsCollection().findOne({_id:_id}, (err,playlist)=>{
+      if (err) {
+        return fn(err);
+      }
+      if (!playlist) {
+        return fn(null, null);
+      }
       var songsArray = [];
       obj.songIds.forEach(song=>{
         var mongoid =  new Mongo.ObjectId(song);
         songsArray.push(mongoid);
       });
       getSongsCollection().find( {_id: {$in: songsArray}}).toArray((err, songs)=>{
+        if (err) {
+          return fn(err);
+        }
         if (songs) {
           var order = playlist.songs.length > 0 ? playlist.songs.length + 1 : 1;
           songs.forEach(song=>{
@@ -79,9 +92,9 @@ class Playlist {
             playlist.songs.push(song);
             order++;
           });
-          getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
+          getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, (replaceErr)=>fn(replaceErr, playlist));
         } else {
-          fn(null);
+          fn(null, null);
         }
       });
     });
@@ -92,6 +105,9 @@ class Playlist {
     var oldOrder = parseInt(obj.oldOrder);
     var newOrder = parseInt(obj.newOrder);
     getPlaylistsCollection().findOne({_id : _id}, (err, playlist)=>{
+      if (err) {
+        return fn(err);
+      }
       if (playlist) {
         var direction = newOrder - oldOrder;
         playlist.songs.forEach(song=>{
@@ -118,9 +134,9 @@ class Playlist {
             return -1;
           }
         });
-        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, (replaceErr)=>fn(replaceErr, playlist));
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   }
@@ -129,34 +145,46 @@ class Playlist {
     console.log('hit model');
     var _id = new Mongo.ObjectId(obj.playlistId);
     getPlaylistsCollection().findOne({_id:_id}, (err,playlist)=>{
+      if (err) {
+        return fn(err);
+      }
       if (playlist){
         console.log(playlist.name);
         playlist.name = obj.newName;
-        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, (replaceErr)=>fn(replaceErr, playlist));
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   }
 
   static index (userId, fn){
     getPlaylistsCollection().find({userId : userId}).toArray((e, playlists)=>{
+      if (e) {
+        return fn(e);
+      }
       if (playlists) {
-        fn(playlists);
+        fn(null, playlists);
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   }
 
   static deletePlaylist (id, userId, fn){
     var _id = new Mongo.ObjectId(id);
-    getPlaylistsCollection().findOneAndDelete({_id:_id}, ()=>{
+    getPlaylistsCollection().findOneAndDelete({_id:_id}, (deleteErr)=>{
+      if (deleteErr) {
+        return fn(deleteErr);
+      }
       getPlaylistsCollection().find({userId : userId}).toArray((e, playlists)=>{
+        if (e) {
+          return fn(e);
+        }
         if (playlists) {
-          fn(playlists);
+          fn(null, playlists);
         } else {
-          fn(null);
+          fn(null, null);
         }
       });
     });
@@ -165,6 +193,9 @@ class Playlist {
   static show (playlistId, fn) {
     var _id = new Mongo.ObjectId(playlistId);
     getPlaylistsCollection().findOne({_id : _id}, (err, playlist)=>{
+      if (err) {
+        return fn(err);
+      }
       if (playlist) {
         var songs = playlist.songs.sort((a, b)=>{
           if (a.order > b.order){
@@ -173,9 +204,9 @@ class Playlist {
             return -1;
           }
         });
-        fn(songs);
+        fn(null, songs);
       } else {
-        fn(null);
+        fn(null, null);
       }
     });
   }
@@ -183,12 +214,21 @@ class Playlist {
   static deleteFromPlaylist (songIds, playlistId, fn) {
     var _id = new Mongo.ObjectId(playlistId);
     getPlaylistsCollection().findOne({_id : _id }, (err, playlist)=>{
+      if (err) {
+        return fn(err);
+      }
+      if (!playlist) {
+        return fn(null, null);
+      }
       var songIdsArray = [];
       songIds.forEach(songId=>{
         var mongoid = new Mongo.ObjectId(songId);
         songIdsArray.push(mongoid);
       });
       getSongsCollection().find({_id: {$in: songIdsArray}}).toArray((err, songs)=>{
+        if (err) {
+          return fn(err);
+        }
         songs.forEach(s=>{
           playlist.songs.forEach(song=>{
             if (s.Song === song.Song){
@@ -211,7 +251,7 @@ class Playlist {
           song.order = order;
           order++;
         });
-        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, ()=>fn(playlist));
+        getPlaylistsCollection().replaceOne({_id: playlist._id}, playlist, (replaceErr)=>fn(replaceErr, playlist));
       });
     });
   }
