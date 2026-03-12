@@ -1,10 +1,7 @@
 'use strict';
 
 var Playlist = require(__dirname + '/../models/playlist.js');
-var logAndSendError = function(res, err) {
-  console.error(err);
-  return res.status(500).send({error: 'internal server error'});
-};
+var logAndSendError = require(__dirname + '/../lib/errors.js').logAndSendError;
 
 exports.index = async (req, res)=>{
   try {

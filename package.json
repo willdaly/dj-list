@@ -24,7 +24,6 @@
     "async": "^3.2.6",
     "bcrypt": "^6.0.0",
     "cookie-session": "^2.1.1",
-    "cookies": "^0.9.1",
     "dotenv": "^17.3.1",
     "express": "^5.1.0",
     "mongodb": "^6.20.0",
@@ -32,7 +31,6 @@
     "pug": "^3.0.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "socket.io": "^4.8.1",
     "sortablejs": "^1.15.7",
     "zod": "^4.3.6"
   },

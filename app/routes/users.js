@@ -2,10 +2,7 @@
 
 var User = require(__dirname + '/../models/user.js');
 var crypto = require('crypto');
-var logAndRenderError = function(res, err) {
-  console.error(err);
-  return res.status(500).render('home/index', {message: 'internal server error'});
-};
+var logAndRenderError = require(__dirname + '/../lib/errors.js').logAndRenderError;
 
 exports.bounce = (req, res, next)=>{
   if(res.locals.user){

@@ -1,10 +1,7 @@
 'use strict';
 
 var ListItem = require(__dirname + '/../models/listItem.js');
-var logAndSendError = function(res, err) {
-  console.error(err);
-  return res.status(500).send({error: 'internal server error'});
-};
+var logAndSendError = require(__dirname + '/../lib/errors.js').logAndSendError;
 
 exports.create = async (req, res)=>{
   try {

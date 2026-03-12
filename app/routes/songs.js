@@ -1,10 +1,7 @@
 'use strict';
 
 var Song = require(__dirname + '/../models/song.js');
-var logAndSendError = function(res, err) {
-  console.error(err);
-  return res.status(500).send({error: 'internal server error'});
-};
+var logAndSendError = require(__dirname + '/../lib/errors.js').logAndSendError;
 
 exports.create = async (req, res)=>{
   try {
