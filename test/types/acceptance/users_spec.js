@@ -29,7 +29,7 @@ describe('users', function(){
   beforeEach(async function(){
     try {
       await dbState.getCollection('users').drop();
-    } catch (err) {
+    } catch {
       // ignore namespace not found when collection doesn't exist yet
     }
     await factory('user');

@@ -20,12 +20,12 @@ describe('songs routes', function () {
   beforeEach(async function () {
     try {
       await dbState.getCollection('songs').drop();
-    } catch (err) {
+    } catch {
       // ignore
     }
     try {
       await dbState.getCollection('users').drop();
-    } catch (err) {
+    } catch {
       // ignore
     }
     await factory('user');

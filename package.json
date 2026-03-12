@@ -12,6 +12,7 @@
     "dev:frontend": "vite --config app/frontend-react/vite.config.ts",
     "typecheck:frontend": "tsc --project app/frontend-react/tsconfig.json --noEmit",
     "lint:frontend": "eslint --config eslint.frontend.config.js \"app/frontend-react/src/**/*.{ts,tsx}\"",
+    "lint:backend": "eslint --config eslint.backend.config.js \"app/**/*.js\" \"server.js\" \"test/**/*.js\"",
     "test:frontend": "vitest run --config app/frontend-react/vitest.config.ts",
     "check:frontend": "npm run typecheck:frontend && npm run lint:frontend",
     "setup": "npm install",

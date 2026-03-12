@@ -20,7 +20,7 @@ describe('Song', function () {
   beforeEach(async function () {
     try {
       await dbState.getCollection('songs').drop();
-    } catch (err) {
+    } catch {
       // ignore namespace not found
     }
     await factory('song');
