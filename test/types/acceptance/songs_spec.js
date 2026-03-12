@@ -76,4 +76,24 @@ describe('songs routes', function () {
     expect(res.status).to.equal(200);
     expect(res.body.songs).to.be.an('array');
   });
+
+  it('POST /song/:id/fetchPreview returns 404 for non-existent song', async function () {
+    const agent = request.agent(app);
+    await agent.get('/test/login');
+    const fakeId = '000000000000000000000000';
+    const res = await agent.post(`/song/${fakeId}/fetchPreview`);
+    expect(res.status).to.equal(404);
+    expect(res.body.error).to.equal('song not found');
+  });
+
+  it('POST /song/:id/fetchPreview returns song for existing song', async function () {
+    const agent = request.agent(app);
+    await agent.get('/test/login');
+    const songs = await dbState.getCollection('songs').find().toArray();
+    const songId = songs[0]._id.toString();
+    const res = await agent.post(`/song/${songId}/fetchPreview`);
+    expect(res.status).to.equal(200);
+    expect(res.body.song).to.be.ok;
+    expect(res.body.song._id).to.equal(songId);
+  });
 });

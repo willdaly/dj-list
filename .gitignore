@@ -6,6 +6,7 @@ test-results/
 playwright-report/
 app/static/assets-react/
 db/list.json
+list.json
 db/user.json
 old
 workToDo.md

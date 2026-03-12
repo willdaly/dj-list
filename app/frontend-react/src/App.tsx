@@ -400,6 +400,15 @@ export function App() {
                 mode="search"
                 selectedIds={selectedIds}
                 onSelectionChange={setSelectedIds}
+                onFetchPreview={async (songId) => {
+                  try {
+                    const song = await apiClient.fetchPreview(songId);
+                    setSongs((prev) => prev.map((s) => (s._id === songId ? song : s)));
+                    return song;
+                  } catch {
+                    return null;
+                  }
+                }}
               />
             </>
           ) : null}
@@ -427,6 +436,9 @@ export function App() {
               onRenamePlaylist={(name) => void runRenamePlaylist(name)}
               onDeletePlaylist={() => void runDeletePlaylist()}
               onOrderChange={(title, oldO, newO) => void runOrderChange(title, oldO, newO)}
+              onPreviewFetched={(song) =>
+                setPlaylistSongs((prev) => prev.map((s) => (s._id === song._id ? song : s)))
+              }
               status={status}
               onStatusChange={setStatus}
             />

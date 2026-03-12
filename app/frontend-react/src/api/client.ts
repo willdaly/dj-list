@@ -4,6 +4,7 @@ import {
   playlistResponseSchema,
   playlistsResponseSchema,
   sessionStateSchema,
+  songResponseSchema,
   songsResponseSchema
 } from '../types/schemas';
 import { request } from './http';
@@ -171,5 +172,13 @@ export const apiClient = {
 
   logout(): Promise<void> {
     return request({ method: 'POST', path: '/logout' });
+  },
+
+  fetchPreview(songId: string): Promise<Song> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/fetchPreview`,
+      schema: songResponseSchema
+    }).then((response) => response.song);
   }
 };

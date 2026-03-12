@@ -8,7 +8,8 @@ export const songSchema = z.object({
   BPM: z.number(),
   Key: z.string(),
   genre: z.string(),
-  order: z.number().optional()
+  order: z.number().optional(),
+  previewUrl: z.string().nullable().optional()
 });
 
 export const playlistSchema = z.object({

@@ -16,7 +16,12 @@ function createApp() {
   app.use(morgan('dev'));
   app.use(express.static(path.join(__dirname, 'static')));
   app.use(express.urlencoded({extended:true}));
-  app.use(cookieSession({keys: sessionKeys}));
+  app.use(
+    cookieSession({
+      keys: sessionKeys,
+      sameSite: 'lax'
+    })
+  );
 
   loadRoutes(app);
   return app;

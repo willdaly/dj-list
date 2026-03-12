@@ -31,7 +31,11 @@ exports.spotifyStart = asyncHandler((req, res) => {
     state: state
   });
 
-  return res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
+  const spotifyAuthUrl = 'https://accounts.spotify.com/authorize?' + params.toString();
+  const escapedUrl = spotifyAuthUrl.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  return res.status(200).send(
+    `<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${escapedUrl}"><title>Redirecting...</title></head><body>Redirecting to Spotify… <a href="${spotifyAuthUrl}">Continue</a></body></html>`
+  );
 }, logAndRenderError);
 
 exports.spotifyCallback = asyncHandler(async (req, res) => {

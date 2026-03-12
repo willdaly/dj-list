@@ -17,6 +17,7 @@
     "check:frontend": "npm run typecheck:frontend && npm run lint:frontend",
     "check:backend": "npm run lint:backend && npm test",
     "check": "npm run check:frontend && npm run check:backend && npm run test:frontend",
+    "seed": "node scripts/seed.js",
     "setup": "npm install",
     "test": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000",
     "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch",

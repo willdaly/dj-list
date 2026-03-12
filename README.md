@@ -41,6 +41,14 @@ npm start
 
 The app runs at [http://localhost:4000](http://localhost:4000).
 
+5. Seed songs (optional; the database starts empty):
+
+```bash
+npm run seed
+```
+
+If `../list.json` exists (sibling to the project), it will be used. Override with `LIST_DATA=/path/to/list.json`. Use `--force` to replace existing data.
+
 ### Required environment variables
 
 - `SESSION_KEYS` - comma-separated cookie-signing keys (at least two), e.g. `key1,key2`

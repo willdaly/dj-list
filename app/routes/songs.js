@@ -66,3 +66,11 @@ exports.editSong = asyncHandler(async (req, res) => {
   }
   res.send({ song });
 }, logAndSendError);
+
+exports.fetchPreview = asyncHandler(async (req, res) => {
+  const song = await Song.updatePreview(req.params.id);
+  if (!song) {
+    return res.status(404).send({ error: 'song not found' });
+  }
+  res.send({ song });
+}, logAndSendError);

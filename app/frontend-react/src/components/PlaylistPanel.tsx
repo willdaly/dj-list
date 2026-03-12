@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { apiClient } from '../api/client';
 import type { Playlist, Song } from '../types/models';
 import { ResultsTable } from './ResultsTable';
 
@@ -16,6 +17,7 @@ interface PlaylistPanelProps {
   onRenamePlaylist: (newName: string) => void;
   onDeletePlaylist: () => void;
   onOrderChange: (songTitle: string, oldOrder: number, newOrder: number) => void;
+  onPreviewFetched?: (song: Song) => void;
   status: string;
   onStatusChange: (msg: string) => void;
 }
@@ -50,6 +52,7 @@ export function PlaylistPanel(props: PlaylistPanelProps) {
     onRenamePlaylist,
     onDeletePlaylist,
     onOrderChange,
+    onPreviewFetched,
     status,
     onStatusChange
   } = props;
@@ -150,6 +153,19 @@ export function PlaylistPanel(props: PlaylistPanelProps) {
             selectedIds={selectedIds}
             onSelectionChange={onSelectionChange}
             onOrderChange={onOrderChange}
+            onFetchPreview={
+              onPreviewFetched
+                ? async (songId) => {
+                    try {
+                      const song = await apiClient.fetchPreview(songId);
+                      onPreviewFetched(song);
+                      return song;
+                    } catch {
+                      return null;
+                    }
+                  }
+                : undefined
+            }
           />
         </div>
       ) : (

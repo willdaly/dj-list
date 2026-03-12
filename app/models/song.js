@@ -1,6 +1,7 @@
 const path = require('path');
 const ObjectId = require('mongodb').ObjectId;
 const db = require(path.join(__dirname, '..', 'lib', 'db.js'));
+const { searchPreviewUrl } = require(path.join(__dirname, '..', 'lib', 'spotify-preview.js'));
 
 function getSongCollection() {
   return db.getCollection('songs');
@@ -12,15 +13,23 @@ function buildKeyVariants(key) {
 }
 
 class Song {
-  static async create(obj){
-    const song = new Song();
+  static async create(obj) {
+    const song = {};
     song.Artist = obj.Artist;
     song.Album = obj.Album || '';
     song.Song = obj.Title;
     song.BPM = parseInt(obj.BPM);
     song.Key = obj.Key;
     song.genre = obj.genre;
-    await getSongCollection().insertOne(song);
+    const result = await getSongCollection().insertOne(song);
+    song._id = result.insertedId;
+
+    const previewUrl = await searchPreviewUrl(obj.Artist, obj.Title);
+    if (previewUrl) {
+      await getSongCollection().updateOne({ _id: song._id }, { $set: { previewUrl } });
+      song.previewUrl = previewUrl;
+    }
+
     return song;
   }
 
@@ -144,9 +153,9 @@ class Song {
     return getSongCollection().find({genre: {$in: genre}}).toArray();
   }
 
-  static async editSong (obj){
+  static async editSong(obj) {
     const id = new ObjectId(obj.Id);
-    const song = await getSongCollection().findOne({_id: id});
+    const song = await getSongCollection().findOne({ _id: id });
     if (!song) {
       return null;
     }
@@ -168,8 +177,20 @@ class Song {
     if (obj.genre) {
       song.genre = obj.genre;
     }
-    await getSongCollection().replaceOne({_id: song._id}, song);
+    await getSongCollection().replaceOne({ _id: song._id }, song);
     return song;
+  }
+
+  static async updatePreview(songId) {
+    const id = new ObjectId(songId);
+    const song = await getSongCollection().findOne({ _id: id });
+    if (!song) {
+      return null;
+    }
+    const previewUrl = await searchPreviewUrl(song.Artist, song.Song);
+    await getSongCollection().updateOne({ _id: id }, { $set: { previewUrl: previewUrl || null } });
+    const updated = await getSongCollection().findOne({ _id: id });
+    return updated;
   }
 }
 

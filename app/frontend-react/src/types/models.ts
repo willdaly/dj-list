@@ -7,6 +7,7 @@ export interface Song {
   Key: string;
   genre: string;
   order?: number;
+  previewUrl?: string | null;
 }
 
 export interface Playlist {
