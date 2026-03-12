@@ -39,4 +39,5 @@ function noopMiddleware(req, res, next) {
   next();
 }
 
-module.exports = process.env.NODE_ENV === 'production' ? noopMiddleware : debugMiddleware;
+const useDebug = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test';
+module.exports = useDebug ? debugMiddleware : noopMiddleware;
