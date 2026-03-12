@@ -4,7 +4,7 @@ A web app for cataloging and searching records with DJ-focused metadata (BPM, ke
 
 ## Current Stack
 
-- **Backend:** Node.js, Express, MongoDB driver v6, Socket.IO
+- **Backend:** Node.js, Express, MongoDB driver v6
 - **Views:** Pug templates
 - **Frontend:** React, TypeScript, Vite (bundle output in `app/static/assets-react`)
 - **UI:** Tailwind CSS v4, SortableJS
@@ -46,12 +46,16 @@ The app runs at [http://localhost:4000](http://localhost:4000).
 - `SESSION_KEYS` - comma-separated cookie-signing keys (at least two), e.g. `key1,key2`
 - `SPOTIFY_CLIENT_ID` - Spotify app client ID
 - `SPOTIFY_CLIENT_SECRET` - Spotify app client secret
-- `SPOTIFY_REDIRECT_URI` - OAuth callback URL (for local dev: `http://localhost:4000/auth/spotify/callback`)
+- `SPOTIFY_REDIRECT_URI` - OAuth callback URL (for local dev: `http://127.0.0.1:4000/auth/spotify/callback`)
 
 ### Optional environment variables
 
 - `DBNAME` - MongoDB database name (default: `default-db`)
 - `PORT` - server port (default: `4000`)
+
+### Production deployment
+
+**Never commit `.env`.** It is in `.gitignore` and contains secrets. In production, set environment variables via your platform (Heroku Config Vars, Railway, Vercel, Render, etc.)—do not upload or deploy a `.env` file.
 
 ## Frontend Workflow
 
