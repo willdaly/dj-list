@@ -43,7 +43,8 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.3",
     "sortablejs": "^1.15.7",
-    "wnumb": "^1.2.0"
+    "wnumb": "^1.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
