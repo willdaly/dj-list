@@ -1,4 +1,4 @@
-var Mongo = require('mongodb');
+var ObjectId = require('mongodb').ObjectId;
 var bcrypt = require('bcrypt');
 var _ = require('lodash');
 var request = require('request');
@@ -9,111 +9,78 @@ var getUserCollection = function() {
 };
 
 class User {
-  static create (obj, fn){
-    var message;
-    getUserCollection().findOne({email: obj.email}, (e, u)=>{
-      if (e) {
-        return fn(e);
-      }
-      if (!u){
-        var user = new User();
-        user._id = new Mongo.ObjectId(obj._id);
-        user.email = obj.email;
-        user.password = '';
-        user.joinedOn = new Date();
-        user.isValid = false;
-        getUserCollection().insertOne(user, (insertErr)=>{
-          if (insertErr) {
-            return fn(insertErr);
-          }
-          sendVerificationEmail(user, fn);
-        });
-      }else{
-        message = 'already registered';
-        fn(null, null, message);
-      }
-    });
-    //end of create
+  static async create (obj){
+    var existing = await getUserCollection().findOne({email: obj.email});
+    if (existing) {
+      return {user: null, message: 'already registered'};
+    }
+
+    var user = new User();
+    user._id = new ObjectId(obj._id);
+    user.email = obj.email;
+    user.password = '';
+    user.joinedOn = new Date();
+    user.isValid = false;
+
+    await getUserCollection().insertOne(user);
+    var message = await sendVerificationEmail(user);
+    return {user: user, message: message};
   }
 
-static login (obj, fn){
-  var message;
-  console.log('LOGIN ATTEMPT:', obj.email);
-  getUserCollection().findOne({email: obj.email}, (e,u)=>{
-    if (e) {
-      return fn(e);
-    }
-    console.log('USER FOUND:', u ? 'yes' : 'no');
-    if (u){
-      console.log('COMPARING PASSWORDS');
-      var isMatch = bcrypt.compareSync(obj.password, u.password);
-      console.log('PASSWORD MATCH:', isMatch);
-      console.log('IS VALID:', u.isValid);
-      if (isMatch && u.isValid){
-        fn(null, u);
-      }else{
-        message = u.isValid ? 'incorrect password' : 'unverified account, please respond to the verification email sent when you registered';
-        console.log('LOGIN FAILED:', message);
-        fn(null, null, message);
+  static async login (obj){
+    var message;
+    var user = await getUserCollection().findOne({email: obj.email});
+    if (user){
+      var isMatch = bcrypt.compareSync(obj.password, user.password);
+      if (isMatch && user.isValid){
+        return {user: user, message: null};
       }
-    }else{
-      message = 'no user registered with ' + obj.email;
-      console.log('NO USER FOUND');
-      fn(null, null, message);
+      message = user.isValid ? 'incorrect password' : 'unverified account, please respond to the verification email sent when you registered';
+      return {user: null, message: message};
     }
-  });
-}
 
-  changePassword(password, fn){
+    message = 'no user registered with ' + obj.email;
+    return {user: null, message: message};
+  }
+
+  async changePassword(password){
     this.password = bcrypt.hashSync(password, 8);
     this.isValid = true;
-    getUserCollection().updateOne({_id: this._id}, {$set: {password: this.password, isValid: this.isValid}}, (e)=>{
-      fn(e);
-    });
+    await getUserCollection().updateOne({_id: this._id}, {$set: {password: this.password, isValid: this.isValid}});
   }
 
-  static findById (id, fn) {
-
-    id = new Mongo.ObjectId(id);
-    getUserCollection().findOne({_id:id}, (e, u)=>{
-      if (e) {
-        return fn(e);
-      }
-      if (u) {
-        u = _.create(User.prototype, u);
-        fn(null, u);
-      } else {
-        fn(null, null);
-      }
-    });
-  } //end of findById
+  static async findById (id) {
+    var user = await getUserCollection().findOne({_id: new ObjectId(id)});
+    if (!user) {
+      return null;
+    }
+    return _.create(User.prototype, user);
+  }
 
 } //end of user
 
-function sendVerificationEmail(user, fn){
+function sendVerificationEmail(user){
   'use strict';
   if (process.env.NODE_ENV === 'test') {
-    var testMessage = `an account verification email has been sent to ${user.email}`;
-    fn(null, user, testMessage);
-    return;
+    return Promise.resolve(`an account verification email has been sent to ${user.email}`);
   }
+  return new Promise(function(resolve, reject) {
+    var key = process.env.MAILGUN;
+    var url = 'https://api:' + key + '@api.mailgun.net/v2/sandboxf8003fd796e54c60bc6cc0b82a62f4e8.mailgun.org/messages';
+    var post = request.post(url, function(err){
+      if (err) {
+        return reject(err);
+      }
+      return resolve(`an account verification email has been sent to ${user.email}`);
+    });
 
-  var key = process.env.MAILGUN;
-  var url = 'https://api:' + key + '@api.mailgun.net/v2/sandboxf8003fd796e54c60bc6cc0b82a62f4e8.mailgun.org/messages';
-  var post = request.post(url, function(err, response, body){
-    if (err) {
-      return fn(err);
-    }
-    var message = `an account verification email has been sent to ${user.email}`;
-    fn(null, user, message);
+    var form = post.form();
+    form.append('from', 'postmaster@dj-list.willdaly.co');
+    form.append('to', user.email);
+    form.append('subject', 'verify your DJ-List account');
+    // form.append('html', `<a href="http://localhost:3000/verify/${user._id}">Click to verify your DJ-List account</a>`);
+    form.append('html', `<a href="http://dj-list.willdaly.co/verify/${user._id}">Click to verify your DJ-List account</a>`);
   });
-
-  var form = post.form();
-  form.append('from', 'postmaster@dj-list.willdaly.co');
-  form.append('to', user.email);
-  form.append('subject', 'verify your DJ-List account');
-  // form.append('html', `<a href="http://localhost:3000/verify/${user._id}">Click to verify your DJ-List account</a>`);
-  form.append('html', `<a href="http://dj-list.willdaly.co/verify/${user._id}">Click to verify your DJ-List account</a>`);
 }
 
 module.exports = User;

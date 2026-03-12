@@ -6,20 +6,20 @@ var logAndSendError = function(res, err) {
   return res.status(500).send({error: 'internal server error'});
 };
 
-exports.create = (req, res)=>{
-  ListItem.create(req.body.order, req.body.songId, req.body.playlistId, (err, li)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.create = async (req, res)=>{
+  try {
+    var li = await ListItem.create(req.body.order, req.body.songId, req.body.playlistId);
     res.send({listItem : li});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.destroyListItem = (req, res)=>{
-  ListItem.destroyListItem(req.body.playlistId, req.body.songIds, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.destroyListItem = async (req, res)=>{
+  try {
+    var songs = await ListItem.destroyListItem(req.body.playlistId, req.body.songIds);
     res.send({songs : songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };

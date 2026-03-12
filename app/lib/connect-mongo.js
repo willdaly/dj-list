@@ -2,13 +2,11 @@
 
 var MongoClient = require('mongodb').MongoClient;
 
-module.exports = function connectMongo(dbname) {
+module.exports = async function connectMongo(dbname) {
   var mongoUrl = 'mongodb://localhost/' + dbname;
-
-  return MongoClient.connect(mongoUrl, {useUnifiedTopology: true}).then(function(client) {
-    var db = client.db(dbname);
-    return db.collection('songs').createIndex({Artist: 'text'}).then(function() {
-      return {client: client, db: db};
-    });
-  });
+  var client = new MongoClient(mongoUrl);
+  await client.connect();
+  var db = client.db(dbname);
+  await db.collection('songs').createIndex({Artist: 'text'});
+  return {client: client, db: db};
 };

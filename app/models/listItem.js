@@ -1,4 +1,4 @@
-var Mongo = require('mongodb');
+var ObjectId = require('mongodb').ObjectId;
 var db = require(__dirname + '/../lib/db.js');
 
 function getListItemsCollection() {
@@ -10,58 +10,37 @@ function getSongCollection() {
 }
 
 class ListItem {
-  static create(order, songId, playlistId, fn){
-    getListItemsCollection().findOne({playlistId : playlistId, order : order}, (e, listItem)=>{
-      if (e) {
-        return fn(e);
-      }
-      if (!listItem){
-        getSongCollection().findOne({_id : songId}, (err, song)=>{
-          if (err) {
-            return fn(err);
-          }
-          if (!song) {
-            return fn(null, null);
-          }
-          var li = new ListItem();
-          li.order = order;
-          li.songId = songId;
-          li.playlistId = playlistId;
-          li.artist = song.Artist;
-          li.album = song.Album;
-          li.title = song.Song;
-          li.bpm = song.BPM;
-          li.key = song.Key;
-          li.genre = song.genre;
-          getListItemsCollection().insertOne(li, (insertErr)=>{
-            fn(insertErr, li);
-          });
-        });
-      } else {
-        fn(null, null);
-      }
-    });
+  static async create(order, songId, playlistId){
+    var listItem = await getListItemsCollection().findOne({playlistId : playlistId, order : order});
+    if (listItem) {
+      return null;
+    }
+
+    var songObjectId = new ObjectId(songId);
+    var song = await getSongCollection().findOne({_id : songObjectId});
+    if (!song) {
+      return null;
+    }
+
+    var li = new ListItem();
+    li.order = order;
+    li.songId = songObjectId;
+    li.playlistId = playlistId;
+    li.artist = song.Artist;
+    li.album = song.Album;
+    li.title = song.Song;
+    li.bpm = song.BPM;
+    li.key = song.Key;
+    li.genre = song.genre;
+
+    await getListItemsCollection().insertOne(li);
+    return li;
   } //create
 
-  static destroyListItem (playlistId, songIds, fn) {
-    songIds = songIds.map((id)=>new Mongo.ObjectId(id));
-    console.log('songIds');
-    console.log(songIds);
-    getListItemsCollection().deleteMany({songId : { $in: songIds }}, (err, result)=>{
-      fn(err, {deletedCount: result ? result.deletedCount : 0});
-    });
-
-    // playlistCollection.findOne({_id:_id}, (err,playlist)=>{
-    //   songs.forEach(song=>{
-    //     var index = playlist.songs.indexOf(song);
-    //     playlist.songs.splice(index, 1);
-    //     });
-    //   playlistCollection.save(playlist, ()=>{
-    //     listItemsCollection.find({_id : {$in: playlist.songs}}).toArray((err, songz)=>{
-    //       fn(songz);
-    //     });
-    //   });
-    // });
+  static async destroyListItem (playlistId, songIds) {
+    var ids = songIds.map((id)=>new ObjectId(id));
+    var result = await getListItemsCollection().deleteMany({songId : { $in: ids }});
+    return {deletedCount: result ? result.deletedCount : 0};
   }//removeSong
 
 } //list

@@ -9,8 +9,8 @@
       .btn-group
         button.btn.btn-default(type='button', data-toggle='modal', data-target='#genres')#genrebutton Pick Genres
         button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Filter
-            span.caret
-          ul.dropdown-menu
+          span.caret
+        ul.dropdown-menu
             li
               a(data-target='#')#genreFilter Checked Genres
             li
@@ -49,7 +49,7 @@
           option g#m
         span.input-group-btn
           button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')#transpose Transpose
-              span.caret
+            span.caret
           ul#tp.dropdown-menu
             li(value='-1')
               a(data-target='#').transpose -1
@@ -83,8 +83,8 @@
         input.form-control(type='text', name='search', placeholder='Artist, Album, Song')#searchInput
         .input-group-btn
           button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') search by
-              span.caret
-            ul#searchbar.dropdown-menu(role='menu')
+            span.caret
+          ul#searchbar.dropdown-menu(role='menu')
               li
                 a(data-target='#')#artistSearch Artist
               li

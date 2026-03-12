@@ -14,19 +14,18 @@ var User;
 
 describe('users', function(){
 
-  before(function(done){
-    db(function(){
-      User = require(__dirname + '/../../../app/models/user.js');
-      done();
-    });
+  before(async function(){
+    await db();
+    User = require(__dirname + '/../../../app/models/user.js');
   }); //end of before
 
-  beforeEach(function(done){
-    dbState.getCollection('users').drop(function(){
-      factory('user', function(users){
-        done();
-      });
-    });
+  beforeEach(async function(){
+    try {
+      await dbState.getCollection('users').drop();
+    } catch (err) {
+      // ignore namespace not found when collection doesn't exist yet
+    }
+    await factory('user');
   }); //end of beforeEach
 
   describe('GET /login', function(){

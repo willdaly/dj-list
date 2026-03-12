@@ -14,19 +14,18 @@ var dbState = require(__dirname + '/../../../app/lib/db.js');
 var List;
 
 describe.skip('List', function(){
-  before(function(done){
-    db(function(){
-      List = require(__dirname + '/../../../app/models/list.js');
-      done();
-    });
+  before(async function(){
+    await db();
+    List = require(__dirname + '/../../../app/models/list.js');
   }); //before
 
-  beforeEach(function(done){
-    dbState.getCollection('lists').drop(function(){
-      factory('list', function(lists){
-        done();
-      });
-    });
+  beforeEach(async function(){
+    try {
+      await dbState.getCollection('lists').drop();
+    } catch (err) {
+      // ignore namespace not found when collection doesn't exist yet
+    }
+    await factory('list');
   }); //beforeEach
 
 

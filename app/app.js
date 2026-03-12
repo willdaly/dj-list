@@ -11,7 +11,7 @@ var loadRoutes      = require(__dirname + '/lib/init-routes.js');
 function createApp() {
   var app = express();
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'pug');
 
   app.use(morgan('dev'));
   app.use(express.static(__dirname + '/static'));

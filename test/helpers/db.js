@@ -5,9 +5,13 @@ var connectMongo = require('../../app/lib/connect-mongo.js');
 var dbname = process.env.DBNAME || 'dj-list';
 var initPromise;
 
-module.exports = fn=>{
+module.exports = function(fn){
   if (db.hasDb()) {
-    return fn();
+    if (fn) {
+      fn();
+      return;
+    }
+    return Promise.resolve();
   }
 
   if (!initPromise) {
@@ -16,9 +20,14 @@ module.exports = fn=>{
     });
   }
 
-  initPromise.then(function() {
-    fn();
-  }).catch(function(err) {
-    throw err;
-  });
+  if (fn) {
+    initPromise.then(function() {
+      fn();
+    }).catch(function(err) {
+      fn(err);
+    });
+    return;
+  }
+
+  return initPromise;
 };

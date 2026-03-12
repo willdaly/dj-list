@@ -6,104 +6,104 @@ var logAndSendError = function(res, err) {
   return res.status(500).send({error: 'internal server error'});
 };
 
-exports.create = (req, res)=>{
-  Song.create(req.body, (err, song)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.create = async (req, res)=>{
+  try {
+    var song = await Song.create(req.body);
     res.send({songs : song});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.key = (req, res)=>{
-  Song.findByKey(req.body, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.key = async (req, res)=>{
+  try {
+    var songs = await Song.findByKey(req.body);
     res.send({songs : songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.bpm = (req, res)=>{
-  Song.findByBPM(req.body, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.bpm = async (req, res)=>{
+  try {
+    var songs = await Song.findByBPM(req.body);
     res.send({songs : songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.bpmKey = (req, res)=>{
-  Song.findByBpmKey(req.body, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.bpmKey = async (req, res)=>{
+  try {
+    var songs = await Song.findByBpmKey(req.body);
     res.send({songs : songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.guessSearch = (req, res)=>{
-  Song.guessSearch(req.body.typed, (err, artists)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.guessSearch = async (req, res)=>{
+  try {
+    var artists = await Song.guessSearch(req.body.typed);
     res.send({artists : artists});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.artistSearch = (req, res)=>{
-  Song.findByArtist(req.body.Artist, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.artistSearch = async (req, res)=>{
+  try {
+    var songs = await Song.findByArtist(req.body.Artist);
     res.send({songs: songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.albumSearch = (req, res)=>{
-  Song.findByAlbum(req.body.Album, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.albumSearch = async (req, res)=>{
+  try {
+    var songs = await Song.findByAlbum(req.body.Album);
     res.send({songs: songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.songSearch = (req, res)=>{
-  Song.findBySong(req.body.Song, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.songSearch = async (req, res)=>{
+  try {
+    var songs = await Song.findBySong(req.body.Song);
     res.send({songs: songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.genreFilter = (req, res)=>{
-  Song.findByGenre(req.body.genre, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.genreFilter = async (req, res)=>{
+  try {
+    var songs = await Song.findByGenre(req.body.genre);
     res.send({songs: songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.transpose = (req, res)=>{
-  Song.transpose(req.body, (err, songs)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.transpose = async (req, res)=>{
+  try {
+    var songs = await Song.transpose(req.body);
     res.send({songs: songs});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };
 
-exports.editSong = (req, res)=>{
-  Song.editSong(req.body, (err, song)=>{
-    if (err) {
-      return logAndSendError(res, err);
-    }
+exports.editSong = async (req, res)=>{
+  try {
+    var song = await Song.editSong(req.body);
     if (!song) {
       return res.status(404).send({error: 'song not found'});
     }
     res.send({song: song});
-  });
+  } catch (err) {
+    return logAndSendError(res, err);
+  }
 };

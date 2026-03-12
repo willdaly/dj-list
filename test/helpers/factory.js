@@ -2,13 +2,12 @@
 
 var fs = require('fs');
 var path = require('path');
-var async = require('async');
-var Mongo = require('mongodb');
+var ObjectId = require('mongodb').ObjectId;
 var bcrypt = require('bcrypt');
 var db = require(__dirname + '/../../app/lib/db.js');
 var Model;
 
-module.exports = (model, fn)=>{
+module.exports = async (model, fn)=>{
   var fixturePath = path.join(__dirname, '..', 'fixtures', model + '.json');
   var records = fs.readFileSync(fixturePath, 'utf8');
   records = JSON.parse(records);
@@ -18,16 +17,18 @@ module.exports = (model, fn)=>{
   }
 
   Model = require(__dirname + '/../../app/models/' + model + '.js');
-  async.map(records, iterator, (e, objs)=>fn(objs));
+  var objs = await Promise.all(records.map(iterator));
+  if (fn) {
+    fn(objs);
+  }
+  return objs;
 };
 
-function iterator(record, fn){
-  Model.create(record, function(err, obj){
-    fn(err, obj);
-  });
+async function iterator(record){
+  return Model.create(record);
 }
 
-function seedUsers(records, fn) {
+async function seedUsers(records, fn) {
   var users = records.map(function(record) {
     var user = {
       email: record.email,
@@ -36,9 +37,9 @@ function seedUsers(records, fn) {
     };
 
     if (record._id) {
-      user._id = new Mongo.ObjectId(record._id);
+      user._id = new ObjectId(record._id);
     } else {
-      user._id = new Mongo.ObjectId();
+      user._id = new ObjectId();
     }
 
     // Allow plaintext in fixtures while storing secure hashes in DB.
@@ -51,7 +52,9 @@ function seedUsers(records, fn) {
     return user;
   });
 
-  db.getCollection('users').insertMany(users, function() {
+  await db.getCollection('users').insertMany(users);
+  if (fn) {
     fn(users);
-  });
+  }
+  return users;
 }
