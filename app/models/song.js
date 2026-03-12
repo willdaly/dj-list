@@ -6,6 +6,11 @@ function getSongCollection() {
   return db.getCollection('songs');
 }
 
+function buildKeyVariants(key) {
+  const ambig = key.slice(0, -1);
+  return [key, ambig.toLowerCase(), ambig.toUpperCase()];
+}
+
 class Song {
   static async create(obj){
     const song = new Song();
@@ -20,11 +25,7 @@ class Song {
   }
 
   static async findByKey(obj) {
-    const keyArray = [];
-    keyArray.push(obj.Key);
-    const ambig = obj.Key.slice(0, -1);
-    keyArray.push(ambig.toLowerCase());
-    keyArray.push(ambig.toUpperCase());
+    const keyArray = buildKeyVariants(obj.Key);
     const genre = obj.genre;
     return getSongCollection().find({Key:{$in: keyArray}, genre:{$in: genre}}).toArray();
   }
@@ -39,11 +40,7 @@ class Song {
   static async findByBpmKey (obj){
     const lowBPM = +obj.BPM[0];
     const highBPM = +obj.BPM[1];
-    const keyArray = [];
-    keyArray.push(obj.Key);
-    const ambig = obj.Key.slice(0, -1);
-    keyArray.push(ambig.toLowerCase());
-    keyArray.push(ambig.toUpperCase());
+    const keyArray = buildKeyVariants(obj.Key);
     const genre = obj.genre;
     return getSongCollection().find({BPM:{'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray();
   }
@@ -88,11 +85,7 @@ class Song {
       key = minorKeyArray[index];
     }
     const genre = obj.genre.split(',');
-    const keyArray = [];
-    keyArray.push(key);
-    const ambig = key.slice(0, -1);
-    keyArray.push(ambig.toLowerCase());
-    keyArray.push(ambig.toUpperCase());
+    const keyArray = buildKeyVariants(key);
     return getSongCollection().find({BPM: {'$gte': lowBPM, '$lte': highBPM}, Key: {$in: keyArray}, genre: {$in: genre}}).toArray();
   }
 
