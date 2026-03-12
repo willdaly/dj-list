@@ -18,7 +18,8 @@
     "setup": "npm install",
     "test": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000",
     "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch",
-    "test:smoke": "npm run build:frontend && playwright test"
+    "test:smoke": "npm run build:frontend && playwright test",
+    "test:integration": "npm run build:frontend && playwright test"
   },
   "dependencies": {
     "async": "^3.2.6",

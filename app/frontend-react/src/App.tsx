@@ -7,8 +7,10 @@ import { Nav } from './components/Nav';
 import { PlaylistPanel } from './components/PlaylistPanel';
 import { ResultsTable } from './components/ResultsTable';
 import { TextSearchControls, type TextSearchMode } from './components/TextSearchControls';
+import { useToast } from './context/ToastContext';
 
 export function App() {
+  const toast = useToast();
   const [query, setQuery] = useState('');
   const [textSearchMode, setTextSearchMode] = useState<TextSearchMode>('smart');
   const [viewMode, setViewMode] = useState<'songs' | 'playlists'>('songs');
@@ -184,8 +186,10 @@ export function App() {
       if (playlist) {
         setPlaylists((prev) => [playlist, ...prev]);
         setStatus(`Created "${playlist.name}".`);
+        toast.notify(`Created "${playlist.name}".`, 'success');
       } else {
         setStatus('Playlist name already exists.');
+        toast.notify('Playlist name already exists.', 'error');
       }
     } catch (error) {
       handleApiError(error);
@@ -197,6 +201,7 @@ export function App() {
     try {
       await apiClient.addSongsToPlaylist(playlistId, selectedIds);
       setStatus('Playlist updated.');
+      toast.notify('Playlist updated.', 'success');
       if (activePlaylistId === playlistId) {
         const updated = await apiClient.showPlaylist(playlistId);
         setPlaylistSongs(updated);
@@ -215,6 +220,7 @@ export function App() {
         setPlaylistSongs(updated.songs);
         setSelectedIds([]);
         setStatus('Songs removed.');
+        toast.notify('Songs removed.', 'success');
       }
     } catch (error) {
       handleApiError(error);
@@ -229,6 +235,7 @@ export function App() {
       if (updated) {
         setPlaylists((prev) => prev.map((p) => (p._id === activePlaylistId ? updated : p)));
         setStatus('Playlist renamed.');
+        toast.notify('Playlist renamed.', 'success');
       }
     } catch (error) {
       handleApiError(error);
@@ -245,6 +252,7 @@ export function App() {
       setPlaylistSongs([]);
       setSelectedIds([]);
       setStatus('Playlist deleted.');
+      toast.notify('Playlist deleted.', 'success');
     } catch (error) {
       handleApiError(error);
     }
@@ -347,7 +355,6 @@ export function App() {
                 setViewMode('playlists');
                 setActivePlaylistId(null);
                 setPlaylistSongs([]);
-                setSelectedIds([]);
               }}
             >
               Playlists

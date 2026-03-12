@@ -1,4 +1,5 @@
 import { ZodError, type ZodSchema } from 'zod';
+import { reportError } from '../lib/telemetry';
 
 export class ApiClientError extends Error {
   status: number;
@@ -70,12 +71,14 @@ export async function request<T>(options: {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new ApiClientError(
+    const err = new ApiClientError(
       `HTTP ${response.status} ${options.method} ${options.path}`,
       response.status,
       toUserMessage(response.status),
       text
     );
+    reportError(err, `HTTP ${options.method} ${options.path}`);
+    throw err;
   }
 
   if (expectsJson && !contentType.includes('application/json')) {
