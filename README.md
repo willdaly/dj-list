@@ -8,7 +8,7 @@ A web app for cataloging and searching records with DJ-focused metadata (BPM, ke
 - **Views:** Pug templates
 - **Frontend:** React, TypeScript, Vite (bundle output in `app/static/assets-react`)
 - **UI:** Tailwind CSS v4, SortableJS
-- **Tests:** Mocha, Chai, Supertest (backend); Playwright (smoke + integration)
+- **Tests:** Mocha, Chai, Supertest (backend); Vitest (frontend); Playwright (smoke + integration)
 
 ## Prerequisites
 
@@ -87,10 +87,22 @@ Watch mode:
 npm run watch
 ```
 
+- Frontend (Vitest):
+
+```bash
+npm run test:frontend
+```
+
 - Browser tests (Playwright – smoke + integration):
 
 ```bash
 npm run test:smoke
+```
+
+- Full check (typecheck, lint, and tests for frontend and backend):
+
+```bash
+npm run check
 ```
 
 ## Authentication
