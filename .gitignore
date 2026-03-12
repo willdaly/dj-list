@@ -4,6 +4,7 @@ node_modules/
 .env.local
 test-results/
 playwright-report/
+app/static/assets-react/
 db/list.json
 db/user.json
 old

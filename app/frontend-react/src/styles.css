@@ -44,6 +44,11 @@ body {
   padding: 8px 14px;
 }
 
+.search-row button.secondary {
+  background: #f3f4f6;
+  color: #111827;
+}
+
 .status {
   margin: 12px 0 8px;
 }
@@ -51,4 +56,15 @@ body {
 .results {
   margin: 0;
   padding-left: 18px;
+}
+
+.spotify-link {
+  display: inline-block;
+  margin-top: 8px;
+  text-decoration: none;
+  border: 1px solid #1db954;
+  color: #0f5132;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #e8f8ee;
 }

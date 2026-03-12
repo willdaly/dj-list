@@ -18,8 +18,13 @@ export interface Playlist {
 
 export interface User {
   _id: string;
-  spotifyId: string;
+  spotifyId: string | null;
   email: string | null;
   displayName: string | null;
   isValid: boolean;
+}
+
+export interface SessionState {
+  authenticated: boolean;
+  user: User | null;
 }

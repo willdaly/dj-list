@@ -1,16 +1,23 @@
 doctype html
 html
+  - var isReactPage = (typeof reactPage !== 'undefined') ? reactPage : false
   head
     meta(name='viewport', content='width=device-width, initial-scale=1.0') 
     meta(charset='utf-8')
     link(rel='shortcut icon', href='/img/favicon.ico')
     title= title
-    link(href='/assets/app.css', rel='stylesheet')
-    link(href='/css/app.css', rel='stylesheet')
+    if isReactPage
+      link(href='/assets-react/app.css', rel='stylesheet')
+    else
+      link(href='/assets/app.css', rel='stylesheet')
+      link(href='/css/app.css', rel='stylesheet')
   body
     include navigation
     block content
 
-    script(type='module', src='/assets/app.js')
+    if isReactPage
+      script(type='module', src='/assets-react/app.js')
+    else
+      script(type='module', src='/assets/app.js')
 
     block scripts

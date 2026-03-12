@@ -1,8 +1,9 @@
-import type { Playlist, Song } from '../types/models';
+import type { Playlist, SessionState, Song } from '../types/models';
 import {
   artistSuggestionsResponseSchema,
   playlistResponseSchema,
   playlistsResponseSchema,
+  sessionStateSchema,
   songsResponseSchema
 } from '../types/schemas';
 import { request } from './http';
@@ -14,6 +15,10 @@ export interface SearchFilters {
 }
 
 export const apiClient = {
+  session(): Promise<SessionState> {
+    return request({ method: 'GET', path: '/api/session', schema: sessionStateSchema });
+  },
+
   searchSongs(query: string): Promise<Song[]> {
     return request({ method: 'POST', path: '/search', data: { query }, schema: songsResponseSchema }).then(
       (response) => response.songs

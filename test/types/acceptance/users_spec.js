@@ -13,16 +13,19 @@ var request = require('supertest');
 describe('users', function(){
   var originalSpotifyClientId;
   var originalSpotifyRedirectUri;
+  var originalReactUiEnabled;
 
   before(async function(){
     await db();
     originalSpotifyClientId = process.env.SPOTIFY_CLIENT_ID;
     originalSpotifyRedirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    originalReactUiEnabled = process.env.REACT_UI_ENABLED;
   }); //end of before
 
   afterEach(function(){
     process.env.SPOTIFY_CLIENT_ID = originalSpotifyClientId;
     process.env.SPOTIFY_REDIRECT_URI = originalSpotifyRedirectUri;
+    process.env.REACT_UI_ENABLED = originalReactUiEnabled;
   });
 
   beforeEach(async function(){
@@ -76,6 +79,59 @@ describe('users', function(){
       .get('/auth/spotify/callback?code=abc&state=wrong')
       .end(function(err, res){
         expect(res.status).to.equal(400);
+        done();
+      });
+    });
+  });
+
+  describe('GET /api/session', function(){
+    it('should return unauthenticated state for anonymous requests', function(done){
+      request(app)
+      .get('/api/session')
+      .end(function(err, res){
+        expect(res.status).to.equal(200);
+        expect(res.body.authenticated).to.equal(false);
+        expect(res.body.user).to.equal(null);
+        done();
+      });
+    });
+
+    it('should return authenticated state for logged in users', function(done){
+      var agent = request.agent(app);
+      agent.get('/test/login').end(function(loginErr, loginRes){
+        expect(loginRes.status).to.equal(204);
+        agent
+        .get('/api/session')
+        .end(function(err, res){
+          expect(res.status).to.equal(200);
+          expect(res.body.authenticated).to.equal(true);
+          expect(res.body.user).to.be.an('object');
+          expect(res.body.user.spotifyId).to.equal('smoke-test-user');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET /react', function(){
+    it('should redirect to legacy page when feature flag is disabled', function(done){
+      delete process.env.REACT_UI_ENABLED;
+      request(app)
+      .get('/react')
+      .end(function(err, res){
+        expect(res.status).to.equal(302);
+        expect(res.headers.location).to.equal('/');
+        done();
+      });
+    });
+
+    it('should render react shell when feature flag is enabled', function(done){
+      process.env.REACT_UI_ENABLED = 'true';
+      request(app)
+      .get('/react')
+      .end(function(err, res){
+        expect(res.status).to.equal(200);
+        expect(res.text).to.contain('/assets-react/app.js');
         done();
       });
     });

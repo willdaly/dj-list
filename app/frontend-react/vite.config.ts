@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/api/session': 'http://127.0.0.1:4000',
       '/search': 'http://127.0.0.1:4000',
       '/guessSearch': 'http://127.0.0.1:4000',
       '/genreFilter': 'http://127.0.0.1:4000',
@@ -19,11 +20,24 @@ export default defineConfig({
       '/renamePlaylist': 'http://127.0.0.1:4000',
       '/deleteFromPlaylist': 'http://127.0.0.1:4000',
       '/deletePlaylist': 'http://127.0.0.1:4000',
+      '/auth/spotify': 'http://127.0.0.1:4000',
       '/logout': 'http://127.0.0.1:4000'
     }
   },
   build: {
     outDir: resolve(__dirname, '../static/assets-react'),
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'app.js',
+        chunkFileNames: 'chunks/[name].js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'app.css';
+          }
+          return '[name][extname]';
+        }
+      }
+    }
   }
 });

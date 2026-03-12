@@ -18,6 +18,19 @@ export const playlistSchema = z.object({
   songs: z.array(songSchema)
 });
 
+export const userSchema = z.object({
+  _id: z.string(),
+  spotifyId: z.string().nullable(),
+  email: z.string().nullable(),
+  displayName: z.string().nullable(),
+  isValid: z.boolean()
+});
+
+export const sessionStateSchema = z.object({
+  authenticated: z.boolean(),
+  user: userSchema.nullable()
+});
+
 export const songsResponseSchema = z.object({
   songs: z.array(songSchema)
 });
