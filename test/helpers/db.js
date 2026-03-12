@@ -4,8 +4,9 @@ var db = require('../../app/lib/db.js');
 var connectMongo = require('../../app/lib/connect-mongo.js');
 var dbname = process.env.DBNAME || 'dj-list';
 var initPromise;
+var activeClient;
 
-module.exports = function(fn){
+function initDb(fn){
   if (db.hasDb()) {
     if (fn) {
       fn();
@@ -16,6 +17,7 @@ module.exports = function(fn){
 
   if (!initPromise) {
     initPromise = connectMongo(dbname).then(function(result) {
+      activeClient = result.client;
       db.setDb(result.db);
     });
   }
@@ -30,4 +32,15 @@ module.exports = function(fn){
   }
 
   return initPromise;
+}
+
+initDb.close = async function() {
+  if (activeClient) {
+    await activeClient.close();
+    activeClient = null;
+  }
+  db.setDb(null);
+  initPromise = null;
 };
+
+module.exports = initDb;

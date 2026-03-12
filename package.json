@@ -14,9 +14,9 @@
     "build:frontend": "vite build",
     "dev:frontend": "vite",
     "setup": "npm install",
-    "test": "NODE_ENV=test mocha test/types --recursive -R spec -t 5000",
-    "watch": "NODE_ENV=test mocha test/types --recursive -R spec -t 5000 --watch",
-    "coveralls": "NODE_ENV=test ./node_modules/mocha/bin/mocha test/types --recursive -r blanket -R mocha-lcov-reporter | coveralls"
+    "test": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000",
+    "watch": "NODE_ENV=test mocha --require test/helpers/mocha-hooks.js test/types --recursive -R spec -t 5000 --watch",
+    "coveralls": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require test/helpers/mocha-hooks.js test/types --recursive -r blanket -R mocha-lcov-reporter | coveralls"
   },
   "dependencies": {
     "async": "^3.2.6",
