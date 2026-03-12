@@ -19,7 +19,7 @@ describe('users', function(){
     await db();
     originalSpotifyClientId = process.env.SPOTIFY_CLIENT_ID;
     originalSpotifyRedirectUri = process.env.SPOTIFY_REDIRECT_URI;
-  }); //end of before
+  });
 
   afterEach(function(){
     process.env.SPOTIFY_CLIENT_ID = originalSpotifyClientId;
@@ -33,94 +33,65 @@ describe('users', function(){
       // ignore namespace not found when collection doesn't exist yet
     }
     await factory('user');
-  }); //end of beforeEach
+  });
 
   describe('GET /', function(){
-    it('should render react shell', function(done){
-      request(app)
-      .get('/')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        expect(res.text).to.contain('/assets-react/app.js');
-        done();
-      });
+    it('should render react shell', async function(){
+      const res = await request(app).get('/');
+      expect(res.status).to.equal(200);
+      expect(res.text).to.contain('/assets-react/app.js');
     });
   });
 
   describe('GET /auth/spotify', function(){
-    it('should redirect to spotify when configured', function(done){
+    it('should redirect to spotify when configured', async function(){
       process.env.SPOTIFY_CLIENT_ID = 'test-client-id';
       process.env.SPOTIFY_REDIRECT_URI = 'http://localhost:4000/auth/spotify/callback';
-      request(app)
-      .get('/auth/spotify')
-      .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.contain('https://accounts.spotify.com/authorize?');
-        done();
-      });
+      const res = await request(app).get('/auth/spotify');
+      expect(res.status).to.equal(302);
+      expect(res.headers.location).to.contain('https://accounts.spotify.com/authorize?');
     });
 
-    it('should fail when spotify env is missing', function(done){
+    it('should fail when spotify env is missing', async function(){
       delete process.env.SPOTIFY_CLIENT_ID;
       delete process.env.SPOTIFY_REDIRECT_URI;
-      request(app)
-      .get('/auth/spotify')
-      .end(function(err, res){
-        expect(res.status).to.equal(500);
-        done();
-      });
+      const res = await request(app).get('/auth/spotify');
+      expect(res.status).to.equal(500);
     });
   });
 
   describe('GET /auth/spotify/callback', function(){
-    it('should reject callback without valid state', function(done){
-      request(app)
-      .get('/auth/spotify/callback?code=abc&state=wrong')
-      .end(function(err, res){
-        expect(res.status).to.equal(400);
-        done();
-      });
+    it('should reject callback without valid state', async function(){
+      const res = await request(app).get('/auth/spotify/callback?code=abc&state=wrong');
+      expect(res.status).to.equal(400);
     });
   });
 
   describe('GET /api/session', function(){
-    it('should return unauthenticated state for anonymous requests', function(done){
-      request(app)
-      .get('/api/session')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        expect(res.body.authenticated).to.equal(false);
-        expect(res.body.user).to.equal(null);
-        done();
-      });
+    it('should return unauthenticated state for anonymous requests', async function(){
+      const res = await request(app).get('/api/session');
+      expect(res.status).to.equal(200);
+      expect(res.body.authenticated).to.equal(false);
+      expect(res.body.user).to.equal(null);
     });
 
-    it('should return authenticated state for logged in users', function(done){
+    it('should return authenticated state for logged in users', async function(){
       const agent = request.agent(app);
-      agent.get('/test/login').end(function(loginErr, loginRes){
-        expect(loginRes.status).to.equal(204);
-        agent
-        .get('/api/session')
-        .end(function(err, res){
-          expect(res.status).to.equal(200);
-          expect(res.body.authenticated).to.equal(true);
-          expect(res.body.user).to.be.an('object');
-          expect(res.body.user.spotifyId).to.equal('smoke-test-user');
-          done();
-        });
-      });
+      const loginRes = await agent.get('/test/login');
+      expect(loginRes.status).to.equal(204);
+      const res = await agent.get('/api/session');
+      expect(res.status).to.equal(200);
+      expect(res.body.authenticated).to.equal(true);
+      expect(res.body.user).to.be.an('object');
+      expect(res.body.user.spotifyId).to.equal('smoke-test-user');
     });
   });
 
   describe('POST /logout', function(){
-    it('should logout an existing user', function(done){
-      request(app)
-      .post('/logout')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        done();
-      });
-    }); //logout success
-  }); //logout
+    it('should logout an existing user', async function(){
+      const res = await request(app).post('/logout');
+      expect(res.status).to.equal(200);
+    });
+  });
 
-}); //end of users
+});
