@@ -140,6 +140,93 @@ body {
   font-weight: 600;
 }
 
+.results-table tr {
+  cursor: pointer;
+}
+
+.results-table tr.selected {
+  background-color: rgba(254, 226, 226, 0.6);
+}
+
+.results-table .order-cell {
+  cursor: grab;
+  user-select: none;
+}
+
+.results-table .order-cell:active {
+  cursor: grabbing;
+}
+
+.results-table .order-col {
+  width: 2.5em;
+}
+
+.playlist-panel .create-playlist-form,
+.playlist-panel .playlist-actions {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.playlist-panel .playlist-view h3 {
+  margin: 8px 0;
+}
+
+.playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.playlist-item button.link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  flex: 1;
+}
+
+.playlist-item button.link:hover {
+  text-decoration: underline;
+}
+
+button.danger {
+  background: #dc2626;
+  color: #fff;
+  border-color: #dc2626;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.tab-bar button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.tab-bar button.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
+
 .spotify-link {
   display: inline-block;
   margin-top: 8px;

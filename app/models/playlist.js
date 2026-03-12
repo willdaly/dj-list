@@ -36,7 +36,7 @@ class Playlist {
     }
 
     var playlist = new Playlist();
-    playlist._id = new ObjectId(obj._id);
+    playlist._id = obj._id ? new ObjectId(obj._id) : new ObjectId();
     playlist.name = obj.name;
     playlist.userId = userId;
     playlist.songs = sArray;

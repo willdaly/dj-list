@@ -23,6 +23,7 @@ export default defineConfig({
       '/renamePlaylist': 'http://127.0.0.1:4000',
       '/deleteFromPlaylist': 'http://127.0.0.1:4000',
       '/deletePlaylist': 'http://127.0.0.1:4000',
+      '/updateOrder': 'http://127.0.0.1:4000',
       '/auth/spotify': 'http://127.0.0.1:4000',
       '/logout': 'http://127.0.0.1:4000'
     }

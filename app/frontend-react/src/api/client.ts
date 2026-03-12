@@ -155,6 +155,20 @@ export const apiClient = {
     }).then((response) => response.playlists);
   },
 
+  updatePlaylistOrder(
+    playlistId: string,
+    songTitle: string,
+    oldOrder: number,
+    newOrder: number
+  ): Promise<Playlist | null> {
+    return request({
+      method: 'PUT',
+      path: `/updateOrder/${playlistId}`,
+      data: { songTitle, oldOrder, newOrder },
+      schema: playlistResponseSchema
+    }).then((response) => response.playlist);
+  },
+
   logout(): Promise<void> {
     return request({ method: 'POST', path: '/logout' });
   }
