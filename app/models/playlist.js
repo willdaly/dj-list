@@ -44,9 +44,9 @@ class Playlist {
     return playlist;
   }
 
-  static async addSongs (obj) {
+  static async addSongs (obj, userId) {
     const _id = new ObjectId(obj.playlistId);
-    const playlist = await getPlaylistsCollection().findOne({_id:_id});
+    const playlist = await getPlaylistsCollection().findOne({_id: _id, userId: userId});
     if (!playlist) {
       return null;
     }
@@ -69,11 +69,11 @@ class Playlist {
     return playlist;
   }
 
-  static async updateOrder (obj, playlistId) {
+  static async updateOrder (obj, playlistId, userId) {
     const _id = new ObjectId(playlistId);
     const oldOrder = parseInt(obj.oldOrder);
     const newOrder = parseInt(obj.newOrder);
-    const playlist = await getPlaylistsCollection().findOne({_id : _id});
+    const playlist = await getPlaylistsCollection().findOne({_id: _id, userId: userId});
     if (!playlist) {
       return null;
     }
@@ -106,10 +106,10 @@ class Playlist {
     return playlist;
   }
 
-  static async rename (obj) {
+  static async rename (obj, userId) {
     const _id = new ObjectId(obj.playlistId);
-    const playlist = await getPlaylistsCollection().findOne({_id:_id});
-    if (!playlist){
+    const playlist = await getPlaylistsCollection().findOne({_id: _id, userId: userId});
+    if (!playlist) {
       return null;
     }
     playlist.name = obj.newName;
@@ -121,15 +121,15 @@ class Playlist {
     return getPlaylistsCollection().find({userId : userId}).toArray();
   }
 
-  static async deletePlaylist (id, userId){
+  static async deletePlaylist (id, userId) {
     const _id = new ObjectId(id);
-    await getPlaylistsCollection().findOneAndDelete({_id:_id});
-    return getPlaylistsCollection().find({userId : userId}).toArray();
+    await getPlaylistsCollection().findOneAndDelete({_id: _id, userId: userId});
+    return getPlaylistsCollection().find({userId: userId}).toArray();
   }
 
-  static async show (playlistId) {
+  static async show (playlistId, userId) {
     const _id = new ObjectId(playlistId);
-    const playlist = await getPlaylistsCollection().findOne({_id : _id});
+    const playlist = await getPlaylistsCollection().findOne({_id: _id, userId: userId});
     if (!playlist) {
       return null;
     }
@@ -142,9 +142,9 @@ class Playlist {
     });
   }
 
-  static async deleteFromPlaylist (songIds, playlistId) {
+  static async deleteFromPlaylist (songIds, playlistId, userId) {
     const _id = new ObjectId(playlistId);
-    const playlist = await getPlaylistsCollection().findOne({_id : _id });
+    const playlist = await getPlaylistsCollection().findOne({_id: _id, userId: userId});
     if (!playlist) {
       return null;
     }
