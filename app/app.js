@@ -1,7 +1,6 @@
 'use strict';
 
 var express        = require('express');
-var less           = require('express-less');
 var morgan         = require('morgan');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
@@ -17,7 +16,6 @@ function createApp() {
 
   app.use(morgan('dev'));
   app.use(express.static(__dirname + '/static'));
-  app.use('/less', less(__dirname + '/less'));
   app.use(bodyParser.urlencoded({extended:true}));
   app.use(methodOverride());
   app.use(cookieSession({keys: sessionKeys}));

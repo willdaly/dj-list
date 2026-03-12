@@ -10,7 +10,8 @@
     "coveralls": "./node_modules/coveralls/bin/coveralls.js"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "npm run build:styles && node server.js",
+    "build:styles": "lessc app/less/app.less app/static/css/app.css",
     "build:frontend": "vite build",
     "dev:frontend": "vite",
     "setup": "npm install",
@@ -26,9 +27,9 @@
     "cookie-session": "^2.1.1",
     "cookies": "^0.9.1",
     "express": "^5.1.0",
-    "express-less": "^0.1.0",
     "jquery": "^3.7.1",
     "jquery-ui-dist": "^1.13.3",
+    "less": "^4.6.3",
     "lodash": "^4.17.21",
     "mailgun-js": "^0.22.0",
     "method-override": "^3.0.0",
