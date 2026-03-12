@@ -13,19 +13,16 @@ var request = require('supertest');
 describe('users', function(){
   var originalSpotifyClientId;
   var originalSpotifyRedirectUri;
-  var originalReactUiEnabled;
 
   before(async function(){
     await db();
     originalSpotifyClientId = process.env.SPOTIFY_CLIENT_ID;
     originalSpotifyRedirectUri = process.env.SPOTIFY_REDIRECT_URI;
-    originalReactUiEnabled = process.env.REACT_UI_ENABLED;
   }); //end of before
 
   afterEach(function(){
     process.env.SPOTIFY_CLIENT_ID = originalSpotifyClientId;
     process.env.SPOTIFY_REDIRECT_URI = originalSpotifyRedirectUri;
-    process.env.REACT_UI_ENABLED = originalReactUiEnabled;
   });
 
   beforeEach(async function(){
@@ -38,15 +35,16 @@ describe('users', function(){
   }); //end of beforeEach
 
   describe('GET /', function(){
-    it('should show the landing page', function(done){
+    it('should render react shell', function(done){
       request(app)
       .get('/')
       .end(function(err, res){
         expect(res.status).to.equal(200);
+        expect(res.text).to.contain('/assets-react/app.js');
         done();
       });
     });
-  }); //end of landing page
+  });
 
   describe('GET /auth/spotify', function(){
     it('should redirect to spotify when configured', function(done){
@@ -109,30 +107,6 @@ describe('users', function(){
           expect(res.body.user.spotifyId).to.equal('smoke-test-user');
           done();
         });
-      });
-    });
-  });
-
-  describe('GET /react', function(){
-    it('should redirect to legacy page when feature flag is disabled', function(done){
-      delete process.env.REACT_UI_ENABLED;
-      request(app)
-      .get('/react')
-      .end(function(err, res){
-        expect(res.status).to.equal(302);
-        expect(res.headers.location).to.equal('/');
-        done();
-      });
-    });
-
-    it('should render react shell when feature flag is enabled', function(done){
-      process.env.REACT_UI_ENABLED = 'true';
-      request(app)
-      .get('/react')
-      .end(function(err, res){
-        expect(res.status).to.equal(200);
-        expect(res.text).to.contain('/assets-react/app.js');
-        done();
       });
     });
   });

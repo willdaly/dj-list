@@ -3,6 +3,7 @@ import { apiClient } from './api/client';
 import { ApiClientError } from './api/http';
 import type { Playlist, SessionState, Song } from './types/models';
 import { GenreKeyBpmControls } from './components/GenreKeyBpmControls';
+import { Nav } from './components/Nav';
 import { PlaylistPanel } from './components/PlaylistPanel';
 import { ResultsTable } from './components/ResultsTable';
 import { TextSearchControls, type TextSearchMode } from './components/TextSearchControls';
@@ -283,32 +284,65 @@ export function App() {
   }
 
   return (
-    <main className="app-shell">
-      <h1>DJ List</h1>
-      <p className="hint">Search, filter, and manage playlists from your curated library.</p>
+    <>
+      <Nav session={session} />
+      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <h1 className="text-2xl font-bold text-gray-900">DJ List</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Search, filter, and manage playlists from your curated library.
+          </p>
 
-      <p className="status">{status}</p>
+          <p className="mt-4 text-sm text-gray-600" role="status" aria-live="polite">
+            {status}
+          </p>
 
       {session?.authenticated ? (
         <>
-          <p className="user-row">
-            Signed in as <strong>{session.user?.displayName || session.user?.email || 'Spotify user'}</strong>
-            <button type="button" className="secondary" onClick={() => void runLogout()}>
-              Logout
-            </button>
-          </p>
-
-          <div className="tab-bar">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-gray-600">
+              Signed in as <strong>{session.user?.displayName || session.user?.email || 'Spotify user'}</strong>
+            </p>
             <button
               type="button"
-              className={viewMode === 'songs' ? 'active' : ''}
+              onClick={() => void runLogout()}
+              className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Logout
+            </button>
+          </div>
+
+          <div
+            className="mt-6 flex gap-1 rounded-lg border border-gray-200 bg-gray-50 p-1"
+            role="tablist"
+            aria-label="Main views"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === 'songs'}
+              aria-controls="songs-panel"
+              id="tab-songs"
+              className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                viewMode === 'songs'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
               onClick={() => setViewMode('songs')}
             >
               Songs
             </button>
             <button
               type="button"
-              className={viewMode === 'playlists' ? 'active' : ''}
+              role="tab"
+              aria-selected={viewMode === 'playlists'}
+              aria-controls="playlists-panel"
+              id="tab-playlists"
+              className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                viewMode === 'playlists'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
               onClick={() => {
                 setViewMode('playlists');
                 setActivePlaylistId(null);
@@ -320,6 +354,7 @@ export function App() {
             </button>
           </div>
 
+          <div role="tabpanel" id="songs-panel" aria-labelledby="tab-songs" hidden={viewMode !== 'songs'}>
           {viewMode === 'songs' ? (
             <>
               <GenreKeyBpmControls
@@ -352,7 +387,10 @@ export function App() {
                 onSelectionChange={setSelectedIds}
               />
             </>
-          ) : (
+          ) : null}
+          </div>
+          <div role="tabpanel" id="playlists-panel" aria-labelledby="tab-playlists" hidden={viewMode !== 'playlists'}>
+          {viewMode === 'playlists' ? (
             <PlaylistPanel
               playlists={playlists}
               activePlaylistId={activePlaylistId}
@@ -377,13 +415,19 @@ export function App() {
               status={status}
               onStatusChange={setStatus}
             />
-          )}
+          ) : null}
+          </div>
         </>
       ) : (
-        <a className="spotify-link" href="/auth/spotify">
+        <a
+          href="/auth/spotify"
+          className="mt-4 inline-flex items-center rounded-lg border border-green-600 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
           Sign In with Spotify
         </a>
       )}
-    </main>
+        </div>
+      </main>
+    </>
   );
 }

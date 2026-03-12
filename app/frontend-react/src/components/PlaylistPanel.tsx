@@ -20,6 +20,21 @@ interface PlaylistPanelProps {
   onStatusChange: (msg: string) => void;
 }
 
+const inputBase =
+  'min-w-0 flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500';
+
+const btnPrimary =
+  'rounded-md border border-gray-800 bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
+
+const btnSecondary =
+  'rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
+
+const btnDanger =
+  'rounded-md border border-red-600 bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2';
+
+const btnLink =
+  'flex-1 rounded-md bg-transparent px-0 py-1 text-left text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
+
 export function PlaylistPanel(props: PlaylistPanelProps) {
   const {
     playlists,
@@ -92,29 +107,40 @@ export function PlaylistPanel(props: PlaylistPanelProps) {
   }
 
   return (
-    <section className="panel playlist-panel">
-      <h2>Playlists</h2>
-      <p className="status">{status}</p>
+    <section className="mt-6 rounded-lg border border-gray-200 bg-gray-50/50 p-5 first:mt-0">
+      <h2 className="text-base font-semibold text-gray-900">Playlists</h2>
+      <p className="mt-2 text-sm text-gray-600" role="status" aria-live="polite">
+        {status}
+      </p>
 
       {activePlaylistId ? (
-        <div className="playlist-view">
-          <button type="button" className="secondary" onClick={onBackToList}>
+        <div className="mt-4">
+          <button
+            type="button"
+            className={btnSecondary}
+            onClick={onBackToList}
+          >
             ← Back to list
           </button>
-          <h3>{activePlaylist?.name ?? 'Playlist'}</h3>
-          <div className="playlist-actions">
+          <h3 className="mt-4 text-lg font-medium text-gray-900">
+            {activePlaylist?.name ?? 'Playlist'}
+          </h3>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
+              type="text"
               placeholder="New name"
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
+              className={inputBase}
+              aria-label="New playlist name"
             />
-            <button type="button" onClick={handleRename}>
+            <button type="button" className={btnPrimary} onClick={handleRename}>
               Rename
             </button>
-            <button type="button" onClick={handleRemove}>
+            <button type="button" className={btnSecondary} onClick={handleRemove}>
               Remove selected
             </button>
-            <button type="button" className="danger" onClick={handleDelete}>
+            <button type="button" className={btnDanger} onClick={handleDelete}>
               Delete playlist
             </button>
           </div>
@@ -128,24 +154,38 @@ export function PlaylistPanel(props: PlaylistPanelProps) {
         </div>
       ) : (
         <>
-          <div className="create-playlist-form">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
+              type="text"
               placeholder="Check songs above, enter name"
               value={createName}
               onChange={(e) => setCreateName(e.target.value)}
+              className={inputBase}
+              aria-label="New playlist name"
             />
-            <button type="button" onClick={handleCreate}>
+            <button type="button" className={btnPrimary} onClick={handleCreate}>
               Create Playlist
             </button>
           </div>
 
-          <ul className="playlist-list">
+          <ul className="mt-4 list-none divide-y divide-gray-200 p-0">
             {playlists.map((p) => (
-              <li key={p._id} className="playlist-item">
-                <button type="button" className="link" onClick={() => onShowPlaylist(p._id)}>
+              <li
+                key={p._id}
+                className="flex items-center gap-3 py-3 first:pt-0"
+              >
+                <button
+                  type="button"
+                  className={btnLink}
+                  onClick={() => onShowPlaylist(p._id)}
+                >
                   {p.name}
                 </button>
-                <button type="button" onClick={() => handleAddTo(p._id)}>
+                <button
+                  type="button"
+                  className={btnSecondary}
+                  onClick={() => handleAddTo(p._id)}
+                >
                   Add songs
                 </button>
               </li>

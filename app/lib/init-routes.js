@@ -10,7 +10,6 @@ module.exports = function loadRoutes(app){
 
   app.use(users.lookup);
   app.get('/', dbg, home.index);
-  app.get('/react', dbg, home.reactApp);
   app.get('/api/session', dbg, users.session);
   app.get('/auth/spotify', dbg, users.spotifyStart);
   app.get('/auth/spotify/callback', dbg, users.spotifyCallback);
