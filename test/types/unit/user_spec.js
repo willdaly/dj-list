@@ -29,36 +29,53 @@ describe('User', function(){
     await factory('user');
   }); //end of beforeEach
 
-  describe('.create', function(){
-    it('should successfully create a user', async function(){
-      var result = await User.create({email: 'willyd@nss.com', password: 'password'});
-      var u = result.user;
+  describe('.findOrCreateFromSpotify', function(){
+    it('should create a new user for a new spotify profile', async function(){
+      var u = await User.findOrCreateFromSpotify({
+        id: 'spotify-user-1',
+        email: 'willyd@nss.com',
+        display_name: 'Will Daly'
+      });
+
       expect(u).to.be.ok;
       expect(u).to.be.an.instanceof(User);
       expect(u._id).to.be.an.instanceof(Mongo.ObjectId);
-      expect(u.password).to.equal('');
-      expect(u.isValid).to.equal(false);
-    }); //end of create success
-    it('should NOT successfully create a user', async function(){
-      var result = await User.create({email: 'will@nss.com', password: 'already registered'});
-      expect(result.user).to.be.null;
-    }); //end of create unsucces
-  }); //end of create
+      expect(u.spotifyId).to.equal('spotify-user-1');
+      expect(u.email).to.equal('willyd@nss.com');
+      expect(u.isValid).to.equal(true);
+    });
 
-  describe('.login', function(){
-    it('should successfully login a user', async function(){
-      var result = await User.login({email: 'will@nss.com', password: 'password'});
-      expect(result.user).to.be.ok;
-    }); //end of login success
-    it('should NOT login user - bad password', async function(){
-      var result = await User.login({email: 'will@nss.com', password: 'gobbldeygook'});
-      expect(result.user).to.be.null;
-    }); //end of login bad pass
-    it('should Not login user - bad email', async function(){
-      var result = await User.login({email: 'bad@nss.com', password: 'password'});
-      expect(result.user).to.be.null;
-    }); //end of login bad email
-  }); //end of login
+    it('should return existing spotify user', async function(){
+      await User.findOrCreateFromSpotify({
+        id: 'spotify-user-existing',
+        email: 'will@nss.com',
+        display_name: 'Will'
+      });
+
+      var u = await User.findOrCreateFromSpotify({
+        id: 'spotify-user-existing',
+        email: 'ignored@nss.com',
+        display_name: 'Ignored'
+      });
+
+      expect(u).to.be.ok;
+      expect(u.spotifyId).to.equal('spotify-user-existing');
+      expect(u.email).to.equal('will@nss.com');
+    });
+
+    it('should link an existing email user to spotify', async function(){
+      var u = await User.findOrCreateFromSpotify({
+        id: 'spotify-linked',
+        email: 'will@nss.com',
+        display_name: 'Linked User'
+      });
+
+      expect(u).to.be.ok;
+      expect(u.spotifyId).to.equal('spotify-linked');
+      expect(u.email).to.equal('will@nss.com');
+      expect(u.isValid).to.equal(true);
+    });
+  });
 
   describe('.findById', function(){
     it('should successfully find a user', async function(){

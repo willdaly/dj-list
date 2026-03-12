@@ -27,10 +27,17 @@ npm install
 ## Running Locally
 
 1. Start MongoDB (if not already running).
-2. Start the app:
+2. Create a local env file from the example:
 
 ```bash
-DBNAME=dj-list SESSION_KEYS=change-me-1,change-me-2 npm start
+cp .env.example .env
+```
+
+3. Fill in your Spotify credentials in `.env`.
+4. Start the app:
+
+```bash
+npm start
 ```
 
 The app runs at [http://localhost:4000](http://localhost:4000).
@@ -38,6 +45,9 @@ The app runs at [http://localhost:4000](http://localhost:4000).
 ### Required environment variables
 
 - `SESSION_KEYS` - comma-separated cookie-signing keys (at least two), e.g. `key1,key2`
+- `SPOTIFY_CLIENT_ID` - Spotify app client ID
+- `SPOTIFY_CLIENT_SECRET` - Spotify app client secret
+- `SPOTIFY_REDIRECT_URI` - OAuth callback URL (for local dev: `http://localhost:4000/auth/spotify/callback`)
 
 ### Optional environment variables
 
@@ -74,25 +84,9 @@ Watch mode:
 npm run watch
 ```
 
-## Create a Local User (Manual)
+## Authentication
 
-If you need a known login user in local dev, generate a bcrypt hash and insert a document:
-
-```bash
-node -e "require('bcrypt').hash('password', 8).then(h => console.log(h))"
-```
-
-Then in `mongosh`:
-
-```javascript
-use dj-list
-db.users.insertOne({
-  email: "you@example.com",
-  password: "<paste bcrypt hash>",
-  isValid: true,
-  joinedOn: new Date()
-})
-```
+The app now uses Spotify OAuth for sign-in. Click **Sign In with Spotify** on the home page.
 
 ## Project History
 

@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require(__dirname + '/../models/user.js');
+var crypto = require('crypto');
 var logAndRenderError = function(res, err) {
   console.error(err);
   return res.status(500).render('home/index', {message: 'internal server error'});
@@ -14,39 +15,81 @@ exports.bounce = (req, res, next)=>{
   }
 };
 
-exports.verify = async (req, res)=>{
+exports.spotifyStart = (req, res)=>{
   try {
-    var user = await User.findById(req.params.id);
-    res.render('users/verify', {user: user});
+    var clientId = process.env.SPOTIFY_CLIENT_ID;
+    var redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    if (!clientId || !redirectUri) {
+      return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
+    }
+
+    var state = crypto.randomBytes(16).toString('hex');
+    req.session.spotifyState = state;
+
+    var params = new URLSearchParams({
+      response_type: 'code',
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      scope: 'user-read-email',
+      state: state
+    });
+
+    return res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
   } catch (err) {
     return logAndRenderError(res, err);
   }
 };
 
-exports.password = async (req, res)=>{
+exports.spotifyCallback = async (req, res)=>{
   try {
-    var user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).render('home/index', {message: 'user not found'});
+    if (req.query.error) {
+      return res.status(400).render('home/index', {message: 'spotify login cancelled'});
     }
-    await user.changePassword(req.body.password);
-    return res.render('home/index', {message: 'account verified. now you can sign in'});
-  } catch (err) {
-    return logAndRenderError(res, err);
-  }
-};
 
-exports.login = async (req, res)=>{
-  try {
-    var result = await User.login(req.body);
-    var user = result.user;
-    var message = result.message;
-    if (user){
-      req.session.userId = user._id;
-      res.redirect('/');
-    }else{
-      res.render('home/index', {message: message});
+    if (!req.query.code || !req.query.state || req.query.state !== req.session.spotifyState) {
+      return res.status(400).render('home/index', {message: 'invalid oauth state'});
     }
+
+    var clientId = process.env.SPOTIFY_CLIENT_ID;
+    var clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+    var redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    if (!clientId || !clientSecret || !redirectUri) {
+      return res.status(500).render('home/index', {message: 'spotify oauth not configured'});
+    }
+
+    var tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: req.query.code,
+        redirect_uri: redirectUri
+      }).toString()
+    });
+
+    if (!tokenResponse.ok) {
+      return res.status(400).render('home/index', {message: 'spotify token exchange failed'});
+    }
+
+    var tokenData = await tokenResponse.json();
+    var profileResponse = await fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        Authorization: 'Bearer ' + tokenData.access_token
+      }
+    });
+
+    if (!profileResponse.ok) {
+      return res.status(400).render('home/index', {message: 'spotify profile fetch failed'});
+    }
+
+    var profile = await profileResponse.json();
+    var user = await User.findOrCreateFromSpotify(profile);
+    req.session.userId = user._id;
+    req.session.spotifyState = null;
+    return res.redirect('/');
   } catch (err) {
     return logAndRenderError(res, err);
   }
@@ -55,15 +98,6 @@ exports.login = async (req, res)=>{
 exports.logout = (req, res)=>{
   req.session = null;
   res.redirect('/');
-};
-
-exports.create = async (req, res)=>{
-  try {
-    var result = await User.create(req.body);
-    return res.render('home/index', {message: result.message});
-  } catch (err) {
-    return logAndRenderError(res, err);
-  }
 };
 
 exports.lookup = async (req, res, next)=>{
