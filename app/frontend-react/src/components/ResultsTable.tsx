@@ -126,6 +126,9 @@ export function ResultsTable(props: ResultsTableProps) {
     ? [...songs].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     : songs;
 
+  const showCamelot = songs.some((s) => s.camelotCode);
+  const showEnergy = songs.some((s) => s.energyTier);
+
   return (
     <section className="mt-6 rounded-lg border border-gray-200 bg-gray-50/50 p-5 first:mt-0">
       <h2 className="text-base font-semibold text-gray-900">Results</h2>
@@ -144,6 +147,16 @@ export function ResultsTable(props: ResultsTableProps) {
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Key
               </th>
+              {showCamelot && (
+                <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Camelot
+                </th>
+              )}
+              {showEnergy && (
+                <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Energy
+                </th>
+              )}
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Song
               </th>
@@ -183,6 +196,14 @@ export function ResultsTable(props: ResultsTableProps) {
                   )}
                   <td className="px-3 py-2 text-sm text-gray-600">{song.BPM}</td>
                   <td className="px-3 py-2 text-sm text-gray-600">{song.Key}</td>
+                  {showCamelot && (
+                    <td className="px-3 py-2 text-sm font-mono text-gray-600">{song.camelotCode || '—'}</td>
+                  )}
+                  {showEnergy && (
+                    <td className="px-3 py-2 text-sm text-gray-600">
+                      {song.energyTier ? song.energyTier.replace('_', ' ') : '—'}
+                    </td>
+                  )}
                   <td className="px-3 py-2 text-sm" data-song-title={song.Song}>
                     {song.Song}
                   </td>
