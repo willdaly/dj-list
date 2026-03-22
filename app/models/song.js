@@ -192,6 +192,71 @@ class Song {
     const updated = await getSongCollection().findOne({ _id: id });
     return updated;
   }
+
+  static async findHarmonicMatches(songId) {
+    const id = new ObjectId(songId);
+    const song = await getSongCollection().findOne({ _id: id });
+    if (!song) {
+      return null;
+    }
+    const codes = song.harmonicCodes;
+    if (!codes || codes.length === 0) {
+      return [];
+    }
+    const bpm = song.BPM || 0;
+    const lowBPM = Math.floor(bpm * 0.94);
+    const highBPM = Math.ceil(bpm * 1.06);
+    return getSongCollection()
+      .find({
+        _id: { $ne: id },
+        camelotCode: { $in: codes },
+        BPM: { $gte: lowBPM, $lte: highBPM },
+      })
+      .toArray();
+  }
+
+  static async findSimilar(songId) {
+    const id = new ObjectId(songId);
+    const song = await getSongCollection().findOne({ _id: id });
+    if (!song) {
+      return null;
+    }
+    const ids = song.similarSongIds;
+    if (!ids || ids.length === 0) {
+      return [];
+    }
+    const objectIds = ids.map((sid) => new ObjectId(sid));
+    return getSongCollection().find({ _id: { $in: objectIds } }).toArray();
+  }
+
+  static async findNextTracks(songId) {
+    const id = new ObjectId(songId);
+    const song = await getSongCollection().findOne({ _id: id });
+    if (!song) {
+      return null;
+    }
+    const codes = song.harmonicCodes;
+    if (!codes || codes.length === 0) {
+      return [];
+    }
+    const bpm = song.BPM || 0;
+    const lowBPM = Math.floor(bpm * 0.92);
+    const highBPM = Math.ceil(bpm * 1.08);
+    const energy = song.energyTier || '';
+    const energyOptions = [energy];
+    if (energy === 'high_energy') energyOptions.push('mid_energy');
+    if (energy === 'mid_energy') energyOptions.push('high_energy', 'low_energy');
+    if (energy === 'low_energy') energyOptions.push('mid_energy');
+    const query = {
+      _id: { $ne: id },
+      camelotCode: { $in: codes },
+      BPM: { $gte: lowBPM, $lte: highBPM },
+    };
+    if (energy) {
+      query.energyTier = { $in: energyOptions };
+    }
+    return getSongCollection().find(query).limit(10).toArray();
+  }
 }
 
 module.exports = Song;

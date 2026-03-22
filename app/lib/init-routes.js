@@ -32,6 +32,9 @@ module.exports = function loadRoutes(app) {
   app.post('/transpose', dbg, songs.transpose);
   app.put('/editSong', dbg, songs.editSong);
   app.post('/song/:id/fetchPreview', dbg, songs.fetchPreview);
+  app.post('/song/:id/harmonic', dbg, songs.harmonicMatches);
+  app.post('/song/:id/similar', dbg, songs.similar);
+  app.post('/song/:id/next', dbg, songs.nextTracks);
   app.post('/playlists', dbg, playlists.index);
   app.post('/playlists/:id', dbg, playlists.show);
   app.post('/createPlaylist', dbg, playlists.create);
