@@ -122,3 +122,24 @@ The app uses Spotify OAuth for sign-in. Click **Sign In with Spotify** on the ho
 ## Project History
 
 Originally created in 2014 at Nashville Software School and modernized for current Node/Mongo/frontend tooling while keeping the core DJ catalog workflow intact.
+
+## Knowledge Graph Features
+
+The `knowledge-graph/` directory contains a Python-based knowledge representation system that enriches the song database with DJ-relevant intelligence:
+
+- **Camelot codes** — each song gets a Camelot wheel code (e.g. `5A`, `8B`) derived from its musical key, enabling harmonic mixing
+- **Harmonic compatibility** — compatible Camelot codes are precomputed so the app can instantly find tracks that mix well together
+- **Energy tiers** — songs are classified as `high_energy`, `mid_energy`, or `low_energy` based on genre + BPM rules
+- **Set categories** — tracks are assigned a DJ set segment (`warm_up`, `build`, `peak_hour`, `cool_down`)
+- **Embedding similarity** — TransE knowledge graph embeddings find semantically similar tracks beyond simple metadata matching
+
+### Running the enrichment
+
+```bash
+cd knowledge-graph
+source venv/bin/activate
+pip install -r requirements.txt
+python -m scripts.enrich_mongodb
+```
+
+This writes Camelot codes, energy tiers, set categories, and similar-song links directly to the MongoDB `songs` collection. The UI surfaces these via three action buttons that appear when a song is selected: **Harmonic Matches**, **Similar Tracks**, and **Next Track Ideas**.
