@@ -180,5 +180,29 @@ export const apiClient = {
       path: `/song/${songId}/fetchPreview`,
       schema: songResponseSchema
     }).then((response) => response.song);
+  },
+
+  findHarmonicMatches(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/harmonic`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  findSimilar(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/similar`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  findNextTracks(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/next`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
   }
 };
