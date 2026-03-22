@@ -1,0 +1,12 @@
+# Core dependencies
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# pykg2vec and its dependencies (Option B implementation)
+# Uncomment below if using --use-pykg2vec flag:
+# pykg2vec>=0.0.35
+# torch>=2.0.0
+
+# Optional: for enhanced visualizations in report
+# networkx>=3.0
+# seaborn>=0.12

@@ -1,0 +1,982 @@
+{
+  "graph_stats": {
+    "total_triples": 51674,
+    "entities": {
+      "song": 6681,
+      "artist": 956,
+      "album": 736,
+      "genre": 11,
+      "tempo": 6,
+      "set_category": 4,
+      "key": 14,
+      "mode": 2
+    },
+    "relations": [
+      "album_artist",
+      "appears_on",
+      "artist_genre",
+      "has_genre",
+      "has_mode",
+      "has_tempo",
+      "in_key_root",
+      "performed_by",
+      "related_genre",
+      "subgenre_of",
+      "suitable_for"
+    ]
+  },
+  "embedding_metrics": {
+    "mean_rank": 158.182,
+    "mrr": 0.2854579234331198,
+    "hits@1": 0.128,
+    "hits@3": 0.376,
+    "hits@10": 0.622
+  },
+  "forward_chaining": {
+    "new_facts_inferred": 3663,
+    "log_sample": [
+      "  [R1_peak_hour_soul] song:b_t_express_still_good_still_like_it \u2192 energy_tier = high_energy",
+      "  [R1_peak_hour_soul] song:kool_and_the_gang_all_night_long \u2192 energy_tier = high_energy",
+      "  [R1_peak_hour_soul] song:willie_hutch_lucky_to_be_loved_by_you \u2192 energy_tier = high_energy",
+      "  [R1_peak_hour_soul] ... and 1043 more",
+      "  [R3_breakbeat_peak] song:masta_killa_digi_warfare \u2192 energy_tier = high_energy",
+      "  [R3_breakbeat_peak] song:a_town_playas_freak_that_hoe \u2192 energy_tier = high_energy",
+      "  [R3_breakbeat_peak] song:afrika_bambaata_planet_rock \u2192 energy_tier = high_energy",
+      "  [R3_breakbeat_peak] ... and 143 more",
+      "  [R2_warmup_jazz] song:lionel_hampton_easy \u2192 energy_tier = low_energy",
+      "  [R2_warmup_jazz] song:quincy_jones_just_a_man \u2192 energy_tier = low_energy",
+      "  [R2_warmup_jazz] song:david_t_walker_windows_of_the_world \u2192 energy_tier = low_energy",
+      "  [R2_warmup_jazz] ... and 430 more",
+      "  [R4_midtempo_builder] song:kool_the_gang_higher_plane \u2192 energy_tier = mid_energy",
+      "  [R4_midtempo_builder] song:earth_wind_fire_zanzibar \u2192 energy_tier = mid_energy",
+      "  [R4_midtempo_builder] song:kool_the_gang_light_of_worlds \u2192 energy_tier = mid_energy",
+      "  [R4_midtempo_builder] ... and 914 more",
+      "  [R6_electronic_energy] song:yellow_magic_orchestra_computer_game \u2192 energy_tier = high_energy",
+      "  [R6_electronic_energy] song:absolute_elsewhere_legend_of_santa_cruz \u2192 energy_tier = high_energy",
+      "  [R6_electronic_energy] song:dick_hyman_improvisation_in_fourths \u2192 energy_tier = high_energy",
+      "  [R6_electronic_energy] ... and 19 more"
+    ]
+  },
+  "consistency_issues": [
+    "CONFLICT: song:isis_servant_saviour classified as both high energy and cool-down",
+    "CONFLICT: song:isis_servant_saviour classified as both high energy and cool-down",
+    "WARNING: song:igor_brill has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:arsenal_the_tree has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:zbigniew_namyslowski_jasmine_flavoured has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:murad_kahlayev_the_old_saxophonist has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:igor_brill_the_morning_of_the_earth has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:igor_brill_c_jam_blues has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:igor_brill_street_with_no_end has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:igor_brill_a_green_tram has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:walter_ojakaaru_new_boat has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:gunars_rozenbergs_once_upon_a_summertime has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:melodiya_ensemble has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:allegro_jazz_band_fantasy_in_g_major has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:gunars_rozenbergs_gone_with_the_wind has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:murad_kahlayev_kaleidoscope has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:gunars_rozenbergs_couloured_drops has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:igor_brill_in_high_spirits has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:allegro_jazz_band_composition_on_a_theme_of_cole_porter has multiple genres: {'genre:melodiya', 'genre:jazz'}",
+    "WARNING: song:melodiya_ensemble_in_a_sentimental_mood has multiple genres: {'genre:melodiya', 'genre:jazz'}"
+  ],
+  "competency_questions": [
+    {
+      "query": "What set segment is song:love_child_s_afro_cuban_blues_band_bang_bang suited for?",
+      "song": "song:love_child_s_afro_cuban_blues_band_bang_bang",
+      "set_category": [
+        "set:peak_hour"
+      ],
+      "energy_tier": [
+        "high_energy"
+      ],
+      "mood": [
+        "crowd_pleaser"
+      ],
+      "genre": [
+        "genre:soul"
+      ],
+      "tempo": [
+        "tempo:uptempo"
+      ],
+      "reasoning": "Track has genre(s) {'genre:soul'} at tempo {'tempo:uptempo'}. Rules infer energy tier {'high_energy'}, so it is suited for {'set:peak_hour'}."
+    },
+    {
+      "query": "Top 15 artists by track count",
+      "results": [
+        {
+          "artist": "artist:james_brown",
+          "tracks": 88
+        },
+        {
+          "artist": "artist:45_king",
+          "tracks": 74
+        },
+        {
+          "artist": "artist:j_dilla",
+          "tracks": 62
+        },
+        {
+          "artist": "artist:kool_the_gang",
+          "tracks": 61
+        },
+        {
+          "artist": "artist:beat_konducta",
+          "tracks": 60
+        },
+        {
+          "artist": "artist:isaac_hayes",
+          "tracks": 59
+        },
+        {
+          "artist": "artist:kool_and_the_gang",
+          "tracks": 55
+        },
+        {
+          "artist": "artist:earth_wind_fire",
+          "tracks": 44
+        },
+        {
+          "artist": "artist:steely_dan",
+          "tracks": 44
+        },
+        {
+          "artist": "artist:mandrill",
+          "tracks": 43
+        },
+        {
+          "artist": "artist:cannonball_adderley",
+          "tracks": 40
+        },
+        {
+          "artist": "artist:willie_hutch",
+          "tracks": 39
+        },
+        {
+          "artist": "artist:herbie_hancock",
+          "tracks": 39
+        },
+        {
+          "artist": "artist:george_benson",
+          "tracks": 38
+        },
+        {
+          "artist": "artist:roy_ayers_ubiquity",
+          "tracks": 38
+        }
+      ],
+      "total_artists": 956
+    },
+    {
+      "query": "What are the peak-hour soul tracks?",
+      "count": 1055,
+      "total_soul": 2797,
+      "sample": [
+        {
+          "song": "song:5th_dimension_save_the_country",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": [
+            "key:C"
+          ]
+        },
+        {
+          "song": "song:7th_wonder_climbin_higher",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": [
+            "key:D"
+          ]
+        },
+        {
+          "song": "song:7th_wonder_do_it_with_your_body",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:E"
+          ]
+        },
+        {
+          "song": "song:ace_spectrum_beautiful_love",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:G"
+          ]
+        },
+        {
+          "song": "song:ace_spectrum_do_you_remember_yesterday",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:Eb"
+          ]
+        },
+        {
+          "song": "song:ace_spectrum_keep_holding_on",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:F"
+          ]
+        },
+        {
+          "song": "song:ace_spectrum_without_you",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:Bb"
+          ]
+        },
+        {
+          "song": "song:act_i_i_don_t_want_to_know_what_you_do_to_me",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:C#"
+          ]
+        },
+        {
+          "song": "song:act_i_it_s_the_same_old_story",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:Eb"
+          ]
+        },
+        {
+          "song": "song:act_i_love_s_got_your_mind",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:F"
+          ]
+        },
+        {
+          "song": "song:act_i_tom_the_peeper",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:Eb"
+          ]
+        },
+        {
+          "song": "song:afrique_get_it",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": []
+        },
+        {
+          "song": "song:afrique_hot_doggin",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": [
+            "key:F"
+          ]
+        },
+        {
+          "song": "song:afrique_let_me_do_my_thing",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:Bb"
+          ]
+        },
+        {
+          "song": "song:afrique_slow_motion",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:D"
+          ]
+        },
+        {
+          "song": "song:afrique_soul_makossa",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:G"
+          ]
+        },
+        {
+          "song": "song:al_kooper_let_me_love_you",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": [
+            "key:F"
+          ]
+        },
+        {
+          "song": "song:al_kooper_soul_hoedown",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:G"
+          ]
+        },
+        {
+          "song": "song:al_kooper_walter_g_s_boogie",
+          "tempo": [
+            "tempo:uptempo"
+          ],
+          "key": [
+            "key:A"
+          ]
+        },
+        {
+          "song": "song:al_wilson_passport",
+          "tempo": [
+            "tempo:fast"
+          ],
+          "key": [
+            "key:G"
+          ]
+        }
+      ],
+      "reasoning": "Of 2797 soul tracks, 1055 are classified as peak-hour based on tempo (uptempo/fast) and energy rules."
+    },
+    {
+      "query": "Which albums contain tracks in multiple genres?",
+      "count": 14,
+      "results": [
+        {
+          "album": "album:igor_brill_an_orchestra_came",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 7
+        },
+        {
+          "album": "album:melodiya_ensemble_concert_in_bombay",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 1
+        },
+        {
+          "album": "album:donovan_hurdy_gurdy_man",
+          "genres": [
+            "genre:pop",
+            "genre:rock"
+          ],
+          "track_count": 1
+        },
+        {
+          "album": "album:kool_the_gang_live_at_p_j_s",
+          "genres": [
+            "genre:jazz",
+            "genre:soul"
+          ],
+          "track_count": 7
+        },
+        {
+          "album": "album:igor_brill_the_morning_of_the_earth",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 3
+        },
+        {
+          "album": "album:lord_finesse_the_awakening",
+          "genres": [
+            "genre:hip_hop",
+            "genre:hip_hop_instrumental"
+          ],
+          "track_count": 7
+        },
+        {
+          "album": "album:melodiya_ensemble_labrinyth",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 4
+        },
+        {
+          "album": "album:kool_the_gang_jazz",
+          "genres": [
+            "genre:jazz",
+            "genre:soul"
+          ],
+          "track_count": 8
+        },
+        {
+          "album": "album:donovan_the_hurdy_gurdy_man",
+          "genres": [
+            "genre:pop",
+            "genre:rock"
+          ],
+          "track_count": 1
+        },
+        {
+          "album": "album:gunars_rozenbergs_laura",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 11
+        },
+        {
+          "album": "album:melodiya_ensemble_plays_duke_ellington",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 3
+        },
+        {
+          "album": "album:allegro_jazz_band_the_golden_mean",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 3
+        },
+        {
+          "album": "album:melodiya_ensemble_popular_hits",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 3
+        },
+        {
+          "album": "album:allegro_jazz_band_sphinx",
+          "genres": [
+            "genre:jazz",
+            "genre:melodiya"
+          ],
+          "track_count": 1
+        }
+      ]
+    },
+    {
+      "query": "Predict genre for unclassified tracks",
+      "unclassified_count": 0,
+      "predictions": []
+    },
+    {
+      "query": "Which keys are underrepresented?",
+      "missing_keys": [
+        "key:Db",
+        "key:Gb"
+      ],
+      "underrepresented": [
+        [
+          "key:G#",
+          71
+        ],
+        [
+          "key:Cb",
+          1
+        ]
+      ],
+      "distribution": {
+        "key:C": 813,
+        "key:E": 727,
+        "key:F": 713,
+        "key:G": 708,
+        "key:D": 690,
+        "key:A": 625,
+        "key:Bb": 527,
+        "key:Eb": 492,
+        "key:C#": 298,
+        "key:B": 295,
+        "key:F#": 265,
+        "key:Ab": 250,
+        "key:G#": 71,
+        "key:Cb": 1
+      },
+      "reasoning": "Keys completely absent: ['key:Db', 'key:Gb']. Keys with fewer than half the median (246): ['key:G#', 'key:Cb']"
+    },
+    {
+      "query": "Harmonic matches for song:love_child_s_afro_cuban_blues_band_bang_bang",
+      "source_key": "D major",
+      "source_camelot": "10B",
+      "compatible_count": 960,
+      "sample": [
+        {
+          "song": "song:101_strings_san_francisco",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:45_king_chase",
+          "key": "B minor",
+          "camelot": "10A",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:ace_spectrum_beautiful_love",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:afrique_slow_motion",
+          "key": "D major",
+          "camelot": "10B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:afrique_soul_makossa",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:airmen_of_note_traces",
+          "key": "D major",
+          "camelot": "10B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:al_hirt_honey_pot",
+          "key": "D major",
+          "camelot": "10B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:al_kooper_soul_hoedown",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:archie_bell_the_drells_girl_you_re_too_young",
+          "key": "A major",
+          "camelot": "11B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:area_code_615_scotland",
+          "key": "A major",
+          "camelot": "11B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:argo_a1_part_3",
+          "key": "A major",
+          "camelot": "11B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:astro_disc_expansion",
+          "key": "D major",
+          "camelot": "10B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:average_white_band_i_just_can_t_give_you_up",
+          "key": "B minor",
+          "camelot": "10A",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:average_white_band_you_got_it",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:b_t_express_everything_good_to_you",
+          "key": "B minor",
+          "camelot": "10A",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:ballin_jack_ballin_the_jack",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:ballin_jack_telephone",
+          "key": "A major",
+          "camelot": "11B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:bar_kays_montego_bay",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:barbara_jean_english_comin_or_goin",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        },
+        {
+          "song": "song:beaver_krause_walkin_by_the_river",
+          "key": "G major",
+          "camelot": "9B",
+          "same_tempo_range": true
+        }
+      ]
+    },
+    {
+      "query": "Genre \u00d7 Tempo cross-tabulation",
+      "tempo_columns": [
+        "tempo:fast",
+        "tempo:mid_tempo",
+        "tempo:slow",
+        "tempo:uptempo",
+        "tempo:very_fast",
+        "tempo:very_slow"
+      ],
+      "table": [
+        {
+          "genre": "genre:45_king",
+          "tempo:fast": 0,
+          "tempo:mid_tempo": 51,
+          "tempo:slow": 16,
+          "tempo:uptempo": 6,
+          "tempo:very_fast": 0,
+          "tempo:very_slow": 0,
+          "total": 73
+        },
+        {
+          "genre": "genre:battle",
+          "tempo:fast": 1,
+          "tempo:mid_tempo": 18,
+          "tempo:slow": 3,
+          "tempo:uptempo": 5,
+          "tempo:very_fast": 0,
+          "tempo:very_slow": 0,
+          "total": 27
+        },
+        {
+          "genre": "genre:electronic",
+          "tempo:fast": 6,
+          "tempo:mid_tempo": 13,
+          "tempo:slow": 20,
+          "tempo:uptempo": 16,
+          "tempo:very_fast": 0,
+          "tempo:very_slow": 2,
+          "total": 57
+        },
+        {
+          "genre": "genre:hip_hop",
+          "tempo:fast": 14,
+          "tempo:mid_tempo": 929,
+          "tempo:slow": 196,
+          "tempo:uptempo": 117,
+          "tempo:very_fast": 2,
+          "tempo:very_slow": 10,
+          "total": 1268
+        },
+        {
+          "genre": "genre:hip_hop_instrumental",
+          "tempo:fast": 2,
+          "tempo:mid_tempo": 208,
+          "tempo:slow": 78,
+          "tempo:uptempo": 8,
+          "tempo:very_fast": 0,
+          "tempo:very_slow": 1,
+          "total": 297
+        },
+        {
+          "genre": "genre:jazz",
+          "tempo:fast": 163,
+          "tempo:mid_tempo": 399,
+          "tempo:slow": 307,
+          "tempo:uptempo": 318,
+          "tempo:very_fast": 17,
+          "tempo:very_slow": 120,
+          "total": 1324
+        },
+        {
+          "genre": "genre:melodiya",
+          "tempo:fast": 27,
+          "tempo:mid_tempo": 41,
+          "tempo:slow": 31,
+          "tempo:uptempo": 40,
+          "tempo:very_fast": 2,
+          "tempo:very_slow": 11,
+          "total": 152
+        },
+        {
+          "genre": "genre:ost",
+          "tempo:fast": 9,
+          "tempo:mid_tempo": 34,
+          "tempo:slow": 15,
+          "tempo:uptempo": 15,
+          "tempo:very_fast": 2,
+          "tempo:very_slow": 3,
+          "total": 78
+        },
+        {
+          "genre": "genre:pop",
+          "tempo:fast": 37,
+          "tempo:mid_tempo": 83,
+          "tempo:slow": 71,
+          "tempo:uptempo": 71,
+          "tempo:very_fast": 1,
+          "tempo:very_slow": 17,
+          "total": 280
+        },
+        {
+          "genre": "genre:rock",
+          "tempo:fast": 32,
+          "tempo:mid_tempo": 98,
+          "tempo:slow": 87,
+          "tempo:uptempo": 83,
+          "tempo:very_fast": 1,
+          "tempo:very_slow": 30,
+          "total": 331
+        },
+        {
+          "genre": "genre:soul",
+          "tempo:fast": 199,
+          "tempo:mid_tempo": 909,
+          "tempo:slow": 569,
+          "tempo:uptempo": 845,
+          "tempo:very_fast": 9,
+          "tempo:very_slow": 263,
+          "total": 2794
+        }
+      ],
+      "reasoning": "This matrix reveals which genre-tempo combinations are well covered (deep crates) vs. sparse (potential gaps to fill)."
+    }
+  ],
+  "link_predictions": [
+    {
+      "song": "song:james_brown_nothing_beats_a_try_but_a_fail",
+      "predicted_genres": [
+        {
+          "entity": "genre:ost",
+          "score": -0.0286
+        },
+        {
+          "entity": "genre:rock",
+          "score": -0.0294
+        },
+        {
+          "entity": "genre:soul",
+          "score": -0.0302
+        },
+        {
+          "entity": "genre:electronic",
+          "score": -0.0303
+        },
+        {
+          "entity": "genre:melodiya",
+          "score": -0.0304
+        }
+      ],
+      "predicted_set_categories": [
+        {
+          "entity": "set:warm_up",
+          "score": -0.0269
+        },
+        {
+          "entity": "set:build",
+          "score": -0.0274
+        },
+        {
+          "entity": "set:cool_down",
+          "score": -0.0284
+        },
+        {
+          "entity": "set:peak_hour",
+          "score": -0.0294
+        }
+      ]
+    },
+    {
+      "song": "song:marvin_gaye_distant_lover",
+      "predicted_genres": [
+        {
+          "entity": "genre:electronic",
+          "score": -0.0276
+        },
+        {
+          "entity": "genre:ost",
+          "score": -0.0281
+        },
+        {
+          "entity": "genre:jazz",
+          "score": -0.0284
+        },
+        {
+          "entity": "genre:melodiya",
+          "score": -0.0285
+        },
+        {
+          "entity": "genre:soul",
+          "score": -0.0286
+        }
+      ],
+      "predicted_set_categories": [
+        {
+          "entity": "set:build",
+          "score": -0.0277
+        },
+        {
+          "entity": "set:warm_up",
+          "score": -0.0279
+        },
+        {
+          "entity": "set:peak_hour",
+          "score": -0.029
+        },
+        {
+          "entity": "set:cool_down",
+          "score": -0.0303
+        }
+      ]
+    },
+    {
+      "song": "song:bobby_hutcherson_procession",
+      "predicted_genres": [
+        {
+          "entity": "genre:battle",
+          "score": -0.0291
+        },
+        {
+          "entity": "genre:soul",
+          "score": -0.031
+        },
+        {
+          "entity": "genre:electronic",
+          "score": -0.0311
+        },
+        {
+          "entity": "genre:45_king",
+          "score": -0.0314
+        },
+        {
+          "entity": "genre:melodiya",
+          "score": -0.0316
+        }
+      ],
+      "predicted_set_categories": [
+        {
+          "entity": "set:build",
+          "score": -0.0292
+        },
+        {
+          "entity": "set:peak_hour",
+          "score": -0.0295
+        },
+        {
+          "entity": "set:warm_up",
+          "score": -0.0295
+        },
+        {
+          "entity": "set:cool_down",
+          "score": -0.0302
+        }
+      ]
+    },
+    {
+      "song": "song:ohio_players_the_reds",
+      "predicted_genres": [
+        {
+          "entity": "genre:electronic",
+          "score": -0.0285
+        },
+        {
+          "entity": "genre:soul",
+          "score": -0.0286
+        },
+        {
+          "entity": "genre:rock",
+          "score": -0.03
+        },
+        {
+          "entity": "genre:melodiya",
+          "score": -0.0301
+        },
+        {
+          "entity": "genre:ost",
+          "score": -0.0302
+        }
+      ],
+      "predicted_set_categories": [
+        {
+          "entity": "set:build",
+          "score": -0.0261
+        },
+        {
+          "entity": "set:peak_hour",
+          "score": -0.0277
+        },
+        {
+          "entity": "set:warm_up",
+          "score": -0.0283
+        },
+        {
+          "entity": "set:cool_down",
+          "score": -0.0302
+        }
+      ]
+    },
+    {
+      "song": "song:gil_scott_heron_h20gate_blues",
+      "predicted_genres": [
+        {
+          "entity": "genre:electronic",
+          "score": -0.0294
+        },
+        {
+          "entity": "genre:soul",
+          "score": -0.0304
+        },
+        {
+          "entity": "genre:rock",
+          "score": -0.0306
+        },
+        {
+          "entity": "genre:battle",
+          "score": -0.031
+        },
+        {
+          "entity": "genre:melodiya",
+          "score": -0.0315
+        }
+      ],
+      "predicted_set_categories": [
+        {
+          "entity": "set:warm_up",
+          "score": -0.0268
+        },
+        {
+          "entity": "set:build",
+          "score": -0.027
+        },
+        {
+          "entity": "set:peak_hour",
+          "score": -0.028
+        },
+        {
+          "entity": "set:cool_down",
+          "score": -0.0286
+        }
+      ]
+    }
+  ]
+}
