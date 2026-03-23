@@ -11,6 +11,7 @@ interface ResultsTableProps {
   onSelectionChange?: (ids: string[]) => void;
   onOrderChange?: (songTitle: string, oldOrder: number, newOrder: number) => void;
   onFetchPreview?: (songId: string) => Promise<Song | null>;
+  onFindSimilar?: (songId: string) => void;
 }
 
 function useSortable(
@@ -53,7 +54,8 @@ export function ResultsTable(props: ResultsTableProps) {
     selectedIds = [],
     onSelectionChange,
     onOrderChange,
-    onFetchPreview
+    onFetchPreview,
+    onFindSimilar
   } = props;
 
   const tbodyRef = useRef<HTMLTableSectionElement>(null);
@@ -73,6 +75,7 @@ export function ResultsTable(props: ResultsTableProps) {
     if (!onSelectionChange) return;
     if ((e.target as HTMLElement).closest('.order-cell')) return;
     if ((e.target as HTMLElement).closest('.preview-cell')) return;
+    if ((e.target as HTMLElement).closest('.similar-cell')) return;
 
     const multi = e.metaKey || e.ctrlKey;
     if (multi) {
@@ -89,6 +92,7 @@ export function ResultsTable(props: ResultsTableProps) {
     if (!onSelectionChange || e.target !== e.currentTarget) return;
     if ((e.target as HTMLElement).closest('.order-cell')) return;
     if ((e.target as HTMLElement).closest('.preview-cell')) return;
+    if ((e.target as HTMLElement).closest('.similar-cell')) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       const multi = e.metaKey || e.ctrlKey;
@@ -178,6 +182,11 @@ export function ResultsTable(props: ResultsTableProps) {
               <th className="w-20 bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Preview
               </th>
+              {onFindSimilar && (
+                <th className="w-20 bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Similar
+                </th>
+              )}
             </tr>
           </thead>
           <tbody ref={tbodyRef} className="divide-y divide-gray-100">
@@ -247,6 +256,21 @@ export function ResultsTable(props: ResultsTableProps) {
                       <span className="text-gray-400">—</span>
                     )}
                   </td>
+                  {onFindSimilar && (
+                    <td
+                      className="similar-cell px-3 py-2"
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => onFindSimilar(song._id)}
+                        className="rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-200"
+                      >
+                        Similar
+                      </button>
+                    </td>
+                  )}
                 </tr>
               );
             })}

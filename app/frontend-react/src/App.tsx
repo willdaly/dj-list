@@ -261,6 +261,22 @@ export function App() {
     }
   }
 
+  async function runFindSimilar(songId: string) {
+    const song = songs.find((s) => s._id === songId);
+    if (!song) return;
+    setStatus('Finding similar tracks...');
+    try {
+      setPreviousSongs(songs);
+      const results = await apiClient.findSimilar(songId);
+      setSongs(results);
+      setSelectedIds([]);
+      setKgViewLabel(`Similar tracks to "${song.Artist} — ${song.Song}"`);
+      setStatus(results.length > 0 ? `${results.length} similar track(s).` : 'No similar tracks found.');
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
   async function runNextTracks() {
     const song = getSelectedSong();
     if (!song) return;
@@ -547,6 +563,7 @@ export function App() {
                 mode="search"
                 selectedIds={selectedIds}
                 onSelectionChange={setSelectedIds}
+                onFindSimilar={(songId) => void runFindSimilar(songId)}
                 onFetchPreview={async (songId) => {
                   try {
                     const song = await apiClient.fetchPreview(songId);
