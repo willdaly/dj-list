@@ -27,6 +27,8 @@ export function App() {
   const [bpmMax, setBpmMax] = useState(102);
   const [kgViewLabel, setKgViewLabel] = useState<string | null>(null);
   const [previousSongs, setPreviousSongs] = useState<Song[]>([]);
+  const [camelotValue, setCamelotValue] = useState('1A');
+  const [energyValue, setEnergyValue] = useState('high_energy');
 
   function handleApiError(error: unknown) {
     if (error instanceof ApiClientError) {
@@ -164,6 +166,26 @@ export function App() {
     setStatus('Loading...');
     try {
       applyResults(await apiClient.filterByBpmKey({ genres: selectedGenres, bpmRange, key: keyValue }));
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runCamelotSearch() {
+    setStatus('Loading...');
+    try {
+      const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
+      applyResults(await apiClient.filterByCamelot(camelotValue, genres, energyValue));
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runEnergySearch() {
+    setStatus('Loading...');
+    try {
+      const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
+      applyResults(await apiClient.filterByEnergy(energyValue, genres, camelotValue));
     } catch (error) {
       handleApiError(error);
     }
@@ -367,7 +389,7 @@ export function App() {
   return (
     <>
       <Nav session={session} />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <h1 className="text-2xl font-bold text-gray-900">DJ List</h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -442,14 +464,20 @@ export function App() {
                 keyValue={keyValue}
                 bpmMin={bpmMin}
                 bpmMax={bpmMax}
+                camelotValue={camelotValue}
+                energyValue={energyValue}
                 onToggleGenre={toggleGenre}
                 onKeyChange={setKeyValue}
                 onBpmMinChange={setBpmMin}
                 onBpmMaxChange={setBpmMax}
+                onCamelotChange={setCamelotValue}
+                onEnergyChange={setEnergyValue}
                 onSearchByGenre={() => void runGenreSearch()}
                 onSearchByBpm={() => void runBpmSearch()}
                 onSearchByKey={() => void runKeySearch()}
                 onSearchByBpmKey={() => void runBpmKeySearch()}
+                onSearchByCamelot={() => void runCamelotSearch()}
+                onSearchByEnergy={() => void runEnergySearch()}
               />
 
               <TextSearchControls

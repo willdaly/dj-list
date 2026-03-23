@@ -75,6 +75,16 @@ exports.fetchPreview = asyncHandler(async (req, res) => {
   res.send({ song });
 }, logAndSendError);
 
+exports.camelotSearch = asyncHandler(async (req, res) => {
+  const songs = await Song.findByCamelot(req.body);
+  res.send({ songs });
+}, logAndSendError);
+
+exports.energySearch = asyncHandler(async (req, res) => {
+  const songs = await Song.findByEnergyTier(req.body);
+  res.send({ songs });
+}, logAndSendError);
+
 exports.harmonicMatches = asyncHandler(async (req, res) => {
   const songs = await Song.findHarmonicMatches(req.params.id);
   if (songs === null) {

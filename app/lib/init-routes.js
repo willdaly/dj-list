@@ -32,6 +32,8 @@ module.exports = function loadRoutes(app) {
   app.post('/transpose', dbg, songs.transpose);
   app.put('/editSong', dbg, songs.editSong);
   app.post('/song/:id/fetchPreview', dbg, songs.fetchPreview);
+  app.post('/camelotSearch', dbg, songs.camelotSearch);
+  app.post('/energySearch', dbg, songs.energySearch);
   app.post('/song/:id/harmonic', dbg, songs.harmonicMatches);
   app.post('/song/:id/similar', dbg, songs.similar);
   app.post('/song/:id/next', dbg, songs.nextTracks);

@@ -257,6 +257,28 @@ class Song {
     }
     return getSongCollection().find(query).limit(10).toArray();
   }
+
+  static async findByCamelot(obj) {
+    const query = { camelotCode: obj.camelotCode };
+    if (obj.genre && obj.genre.length > 0) {
+      query.genre = { $in: obj.genre };
+    }
+    if (obj.energyTier) {
+      query.energyTier = obj.energyTier;
+    }
+    return getSongCollection().find(query).toArray();
+  }
+
+  static async findByEnergyTier(obj) {
+    const query = { energyTier: obj.energyTier };
+    if (obj.genre && obj.genre.length > 0) {
+      query.genre = { $in: obj.genre };
+    }
+    if (obj.camelotCode) {
+      query.camelotCode = obj.camelotCode;
+    }
+    return getSongCollection().find(query).toArray();
+  }
 }
 
 module.exports = Song;

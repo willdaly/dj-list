@@ -98,6 +98,24 @@ export const apiClient = {
     }).then((response) => response.songs);
   },
 
+  filterByCamelot(camelotCode: string, genres?: string[], energyTier?: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/camelotSearch',
+      data: { camelotCode, genre: genres, energyTier },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  filterByEnergy(energyTier: string, genres?: string[], camelotCode?: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/energySearch',
+      data: { energyTier, genre: genres, camelotCode },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
   listPlaylists(): Promise<Playlist[]> {
     return request({ method: 'POST', path: '/playlists', schema: playlistsResponseSchema }).then(
       (response) => response.playlists
