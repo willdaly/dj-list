@@ -279,6 +279,17 @@ class Song {
     }
     return getSongCollection().find(query).toArray();
   }
+
+  static async findBySetCategory(obj) {
+    const query = { setCategory: obj.setCategory };
+    if (obj.genre && obj.genre.length > 0) {
+      query.genre = { $in: obj.genre };
+    }
+    if (obj.energyTier) {
+      query.energyTier = obj.energyTier;
+    }
+    return getSongCollection().find(query).toArray();
+  }
 }
 
 module.exports = Song;

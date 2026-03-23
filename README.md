@@ -146,8 +146,8 @@ This writes Camelot codes, energy tiers, set categories, and similar-song links 
 
 ### UI features
 
-- **Camelot Code / Energy Tier filters** — dropdown selectors in the search controls let you filter songs by Camelot code (1A–12B) or energy tier (high/mid/low), with optional genre cross-filtering
-- **Camelot and Energy columns** — the results table displays Camelot code and energy tier when the data is present
+- **Camelot Code / Energy Tier / Set Category filters** — dropdown selectors in the search controls let you filter songs by Camelot code (1A–12B), energy tier (high/mid/low), or set category (warm up, build, peak hour, cool down), with optional genre cross-filtering
+- **Camelot, Energy, and Set columns** — the results table displays Camelot code, energy tier, and set category when the data is present
 - **Harmonic Matches** — select a song and find tracks with compatible Camelot codes for smooth harmonic mixing
 - **Similar Tracks** — find semantically similar songs via TransE embedding cosine similarity
 - **Next Track Ideas** — get DJ-friendly suggestions that balance harmonic compatibility and energy flow

@@ -29,6 +29,7 @@ export function App() {
   const [previousSongs, setPreviousSongs] = useState<Song[]>([]);
   const [camelotValue, setCamelotValue] = useState('1A');
   const [energyValue, setEnergyValue] = useState('high_energy');
+  const [setCategoryValue, setSetCategoryValue] = useState('warm_up');
 
   function handleApiError(error: unknown) {
     if (error instanceof ApiClientError) {
@@ -186,6 +187,16 @@ export function App() {
     try {
       const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
       applyResults(await apiClient.filterByEnergy(energyValue, genres, camelotValue));
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runSetCategorySearch() {
+    setStatus('Loading...');
+    try {
+      const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
+      applyResults(await apiClient.filterBySetCategory(setCategoryValue, genres, energyValue));
     } catch (error) {
       handleApiError(error);
     }
@@ -466,18 +477,21 @@ export function App() {
                 bpmMax={bpmMax}
                 camelotValue={camelotValue}
                 energyValue={energyValue}
+                setCategoryValue={setCategoryValue}
                 onToggleGenre={toggleGenre}
                 onKeyChange={setKeyValue}
                 onBpmMinChange={setBpmMin}
                 onBpmMaxChange={setBpmMax}
                 onCamelotChange={setCamelotValue}
                 onEnergyChange={setEnergyValue}
+                onSetCategoryChange={setSetCategoryValue}
                 onSearchByGenre={() => void runGenreSearch()}
                 onSearchByBpm={() => void runBpmSearch()}
                 onSearchByKey={() => void runKeySearch()}
                 onSearchByBpmKey={() => void runBpmKeySearch()}
                 onSearchByCamelot={() => void runCamelotSearch()}
                 onSearchByEnergy={() => void runEnergySearch()}
+                onSearchBySetCategory={() => void runSetCategorySearch()}
               />
 
               <TextSearchControls

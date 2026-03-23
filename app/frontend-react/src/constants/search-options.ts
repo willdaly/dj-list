@@ -61,3 +61,10 @@ export const ENERGY_OPTIONS = [
   'mid_energy',
   'low_energy'
 ] as const;
+
+export const SET_CATEGORY_OPTIONS = [
+  'warm_up',
+  'build',
+  'peak_hour',
+  'cool_down'
+] as const;

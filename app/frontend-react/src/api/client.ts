@@ -116,6 +116,15 @@ export const apiClient = {
     }).then((response) => response.songs);
   },
 
+  filterBySetCategory(setCategory: string, genres?: string[], energyTier?: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/setCategorySearch',
+      data: { setCategory, genre: genres, energyTier },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
   listPlaylists(): Promise<Playlist[]> {
     return request({ method: 'POST', path: '/playlists', schema: playlistsResponseSchema }).then(
       (response) => response.playlists

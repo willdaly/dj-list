@@ -85,6 +85,11 @@ exports.energySearch = asyncHandler(async (req, res) => {
   res.send({ songs });
 }, logAndSendError);
 
+exports.setCategorySearch = asyncHandler(async (req, res) => {
+  const songs = await Song.findBySetCategory(req.body);
+  res.send({ songs });
+}, logAndSendError);
+
 exports.harmonicMatches = asyncHandler(async (req, res) => {
   const songs = await Song.findHarmonicMatches(req.params.id);
   if (songs === null) {

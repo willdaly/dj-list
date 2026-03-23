@@ -128,6 +128,7 @@ export function ResultsTable(props: ResultsTableProps) {
 
   const showCamelot = songs.some((s) => s.camelotCode);
   const showEnergy = songs.some((s) => s.energyTier);
+  const showSetCategory = songs.some((s) => s.setCategory);
 
   return (
     <section className="mt-6 rounded-lg border border-gray-200 bg-gray-50/50 p-5 first:mt-0">
@@ -155,6 +156,11 @@ export function ResultsTable(props: ResultsTableProps) {
               {showEnergy && (
                 <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                   Energy
+                </th>
+              )}
+              {showSetCategory && (
+                <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Set
                 </th>
               )}
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
@@ -202,6 +208,11 @@ export function ResultsTable(props: ResultsTableProps) {
                   {showEnergy && (
                     <td className="px-3 py-2 text-sm text-gray-600">
                       {song.energyTier ? song.energyTier.replace('_', ' ') : '—'}
+                    </td>
+                  )}
+                  {showSetCategory && (
+                    <td className="px-3 py-2 text-sm text-gray-600">
+                      {song.setCategory ? song.setCategory.replace('_', ' ') : '—'}
                     </td>
                   )}
                   <td className="px-3 py-2 text-sm" data-song-title={song.Song}>
