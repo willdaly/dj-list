@@ -142,4 +142,12 @@ pip install -r requirements.txt
 python -m scripts.enrich_mongodb
 ```
 
-This writes Camelot codes, energy tiers, set categories, and similar-song links directly to the MongoDB `songs` collection. The UI surfaces these via three action buttons that appear when a song is selected: **Harmonic Matches**, **Similar Tracks**, and **Next Track Ideas**.
+This writes Camelot codes, energy tiers, set categories, and similar-song links directly to the MongoDB `songs` collection.
+
+### UI features
+
+- **Camelot Code / Energy Tier filters** — dropdown selectors in the search controls let you filter songs by Camelot code (1A–12B) or energy tier (high/mid/low), with optional genre cross-filtering
+- **Camelot and Energy columns** — the results table displays Camelot code and energy tier when the data is present
+- **Harmonic Matches** — select a song and find tracks with compatible Camelot codes for smooth harmonic mixing
+- **Similar Tracks** — find semantically similar songs via TransE embedding cosine similarity
+- **Next Track Ideas** — get DJ-friendly suggestions that balance harmonic compatibility and energy flow
