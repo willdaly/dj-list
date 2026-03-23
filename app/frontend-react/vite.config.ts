@@ -8,7 +8,7 @@ const API_PROXY_PATHS = [
   '/api/session', '/search', '/artistSearch', '/albumSearch', '/songSearch',
   '/guessSearch', '/genreFilter', '/bpm', '/key', '/bpmKey', '/playlists',
   '/createPlaylist', '/addToPlaylist', '/renamePlaylist', '/deleteFromPlaylist',
-  '/deletePlaylist', '/updateOrder', '/auth/spotify', '/logout'
+  '/deletePlaylist', '/updateOrder', '/auth/spotify', '/logout', '/song'
 ];
 
 export default defineConfig({

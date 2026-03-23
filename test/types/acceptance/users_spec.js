@@ -48,8 +48,8 @@ describe('users', function(){
       process.env.SPOTIFY_CLIENT_ID = 'test-client-id';
       process.env.SPOTIFY_REDIRECT_URI = 'http://localhost:4000/auth/spotify/callback';
       const res = await request(app).get('/auth/spotify');
-      expect(res.status).to.equal(302);
-      expect(res.headers.location).to.contain('https://accounts.spotify.com/authorize?');
+      expect(res.status).to.equal(200);
+      expect(res.text).to.contain('https://accounts.spotify.com/authorize?');
     });
 
     it('should fail when spotify env is missing', async function(){

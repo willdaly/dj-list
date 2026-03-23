@@ -1,18 +1,24 @@
-import { GENRE_OPTIONS, KEY_OPTIONS } from '../constants/search-options';
+import { GENRE_OPTIONS, KEY_OPTIONS, CAMELOT_OPTIONS, ENERGY_OPTIONS } from '../constants/search-options';
 
 interface GenreKeyBpmControlsProps {
   selectedGenres: string[];
   keyValue: string;
   bpmMin: number;
   bpmMax: number;
+  camelotValue: string;
+  energyValue: string;
   onToggleGenre: (genre: string) => void;
   onKeyChange: (key: string) => void;
   onBpmMinChange: (value: number) => void;
   onBpmMaxChange: (value: number) => void;
+  onCamelotChange: (value: string) => void;
+  onEnergyChange: (value: string) => void;
   onSearchByGenre: () => void;
   onSearchByBpm: () => void;
   onSearchByKey: () => void;
   onSearchByBpmKey: () => void;
+  onSearchByCamelot: () => void;
+  onSearchByEnergy: () => void;
 }
 
 const inputBase =
@@ -90,6 +96,38 @@ export function GenreKeyBpmControls(props: GenreKeyBpmControlsProps) {
         </label>
       </div>
 
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
+          Camelot Code
+          <select
+            value={props.camelotValue}
+            onChange={(event) => props.onCamelotChange(event.target.value)}
+            className={inputBase}
+          >
+            {CAMELOT_OPTIONS.map((code) => (
+              <option key={code} value={code}>
+                {code}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
+          Energy Tier
+          <select
+            value={props.energyValue}
+            onChange={(event) => props.onEnergyChange(event.target.value)}
+            className={inputBase}
+          >
+            {ENERGY_OPTIONS.map((tier) => (
+              <option key={tier} value={tier}>
+                {tier.replace('_', ' ')}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
       <div className="mt-4 flex flex-wrap gap-2">
         <button type="button" className={btnPrimary} onClick={() => props.onSearchByGenre()}>
           Genres
@@ -102,6 +140,12 @@ export function GenreKeyBpmControls(props: GenreKeyBpmControlsProps) {
         </button>
         <button type="button" className={btnPrimary} onClick={() => props.onSearchByBpmKey()}>
           Genres + BPM + Key
+        </button>
+        <button type="button" className={btnPrimary} onClick={() => props.onSearchByCamelot()}>
+          Camelot
+        </button>
+        <button type="button" className={btnPrimary} onClick={() => props.onSearchByEnergy()}>
+          Energy
         </button>
       </div>
     </section>

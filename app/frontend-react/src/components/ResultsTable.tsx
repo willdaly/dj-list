@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Sortable, { type SortableEvent } from 'sortablejs';
 import type { Song } from '../types/models';
 
@@ -10,6 +10,7 @@ interface ResultsTableProps {
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
   onOrderChange?: (songTitle: string, oldOrder: number, newOrder: number) => void;
+  onFetchPreview?: (songId: string) => Promise<Song | null>;
 }
 
 function useSortable(
@@ -51,11 +52,13 @@ export function ResultsTable(props: ResultsTableProps) {
     mode = 'search',
     selectedIds = [],
     onSelectionChange,
-    onOrderChange
+    onOrderChange,
+    onFetchPreview
   } = props;
 
   const tbodyRef = useRef<HTMLTableSectionElement>(null);
   const isPlaylist = mode === 'playlist';
+  const [fetchingIds, setFetchingIds] = useState<Set<string>>(new Set());
 
   const handleOrderChange = useCallback(
     (songTitle: string, oldOrder: number, newOrder: number) => {
@@ -69,6 +72,7 @@ export function ResultsTable(props: ResultsTableProps) {
   function handleRowClick(e: React.MouseEvent<HTMLTableRowElement>, songId: string) {
     if (!onSelectionChange) return;
     if ((e.target as HTMLElement).closest('.order-cell')) return;
+    if ((e.target as HTMLElement).closest('.preview-cell')) return;
 
     const multi = e.metaKey || e.ctrlKey;
     if (multi) {
@@ -84,6 +88,7 @@ export function ResultsTable(props: ResultsTableProps) {
   function handleRowKeyDown(e: React.KeyboardEvent<HTMLTableRowElement>, songId: string) {
     if (!onSelectionChange || e.target !== e.currentTarget) return;
     if ((e.target as HTMLElement).closest('.order-cell')) return;
+    if ((e.target as HTMLElement).closest('.preview-cell')) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       const multi = e.metaKey || e.ctrlKey;
@@ -98,6 +103,21 @@ export function ResultsTable(props: ResultsTableProps) {
     }
   }
 
+  async function handleFetchPreview(e: React.MouseEvent, songId: string) {
+    e.stopPropagation();
+    if (!onFetchPreview) return;
+    setFetchingIds((prev) => new Set(prev).add(songId));
+    try {
+      await onFetchPreview(songId);
+    } finally {
+      setFetchingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(songId);
+        return next;
+      });
+    }
+  }
+
   if (songs.length === 0) {
     return null;
   }
@@ -105,6 +125,9 @@ export function ResultsTable(props: ResultsTableProps) {
   const sortedSongs = isPlaylist
     ? [...songs].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     : songs;
+
+  const showCamelot = songs.some((s) => s.camelotCode);
+  const showEnergy = songs.some((s) => s.energyTier);
 
   return (
     <section className="mt-6 rounded-lg border border-gray-200 bg-gray-50/50 p-5 first:mt-0">
@@ -124,6 +147,16 @@ export function ResultsTable(props: ResultsTableProps) {
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Key
               </th>
+              {showCamelot && (
+                <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Camelot
+                </th>
+              )}
+              {showEnergy && (
+                <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                  Energy
+                </th>
+              )}
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Song
               </th>
@@ -135,6 +168,9 @@ export function ResultsTable(props: ResultsTableProps) {
               </th>
               <th className="bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
                 Genre
+              </th>
+              <th className="w-20 bg-gray-100 px-3 py-2 text-left text-xs font-medium text-gray-500">
+                Preview
               </th>
             </tr>
           </thead>
@@ -160,12 +196,46 @@ export function ResultsTable(props: ResultsTableProps) {
                   )}
                   <td className="px-3 py-2 text-sm text-gray-600">{song.BPM}</td>
                   <td className="px-3 py-2 text-sm text-gray-600">{song.Key}</td>
+                  {showCamelot && (
+                    <td className="px-3 py-2 text-sm font-mono text-gray-600">{song.camelotCode || '—'}</td>
+                  )}
+                  {showEnergy && (
+                    <td className="px-3 py-2 text-sm text-gray-600">
+                      {song.energyTier ? song.energyTier.replace('_', ' ') : '—'}
+                    </td>
+                  )}
                   <td className="px-3 py-2 text-sm" data-song-title={song.Song}>
                     {song.Song}
                   </td>
                   <td className="px-3 py-2 text-sm text-gray-600">{song.Artist}</td>
                   <td className="px-3 py-2 text-sm text-gray-600">{song.Album}</td>
                   <td className="px-3 py-2 text-sm text-gray-600">{song.genre}</td>
+                  <td
+                    className="preview-cell px-3 py-2"
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  >
+                    {song.previewUrl ? (
+                      <audio
+                        src={song.previewUrl}
+                        controls
+                        preload="none"
+                        className="h-8 max-w-[120px]"
+                        aria-label={`Preview ${song.Song}`}
+                      />
+                    ) : onFetchPreview ? (
+                      <button
+                        type="button"
+                        onClick={(e) => handleFetchPreview(e, song._id)}
+                        disabled={fetchingIds.has(song._id)}
+                        className="rounded bg-gray-200 px-2 py-1 text-xs hover:bg-gray-300 disabled:opacity-50"
+                      >
+                        {fetchingIds.has(song._id) ? '…' : 'Load'}
+                      </button>
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
+                  </td>
                 </tr>
               );
             })}

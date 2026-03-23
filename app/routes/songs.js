@@ -66,3 +66,45 @@ exports.editSong = asyncHandler(async (req, res) => {
   }
   res.send({ song });
 }, logAndSendError);
+
+exports.fetchPreview = asyncHandler(async (req, res) => {
+  const song = await Song.updatePreview(req.params.id);
+  if (!song) {
+    return res.status(404).send({ error: 'song not found' });
+  }
+  res.send({ song });
+}, logAndSendError);
+
+exports.camelotSearch = asyncHandler(async (req, res) => {
+  const songs = await Song.findByCamelot(req.body);
+  res.send({ songs });
+}, logAndSendError);
+
+exports.energySearch = asyncHandler(async (req, res) => {
+  const songs = await Song.findByEnergyTier(req.body);
+  res.send({ songs });
+}, logAndSendError);
+
+exports.harmonicMatches = asyncHandler(async (req, res) => {
+  const songs = await Song.findHarmonicMatches(req.params.id);
+  if (songs === null) {
+    return res.status(404).send({ error: 'song not found' });
+  }
+  res.send({ songs });
+}, logAndSendError);
+
+exports.similar = asyncHandler(async (req, res) => {
+  const songs = await Song.findSimilar(req.params.id);
+  if (songs === null) {
+    return res.status(404).send({ error: 'song not found' });
+  }
+  res.send({ songs });
+}, logAndSendError);
+
+exports.nextTracks = asyncHandler(async (req, res) => {
+  const songs = await Song.findNextTracks(req.params.id);
+  if (songs === null) {
+    return res.status(404).send({ error: 'song not found' });
+  }
+  res.send({ songs });
+}, logAndSendError);

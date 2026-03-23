@@ -7,6 +7,12 @@ export interface Song {
   Key: string;
   genre: string;
   order?: number;
+  previewUrl?: string | null;
+  camelotCode?: string;
+  harmonicCodes?: string[];
+  energyTier?: string;
+  setCategory?: string;
+  similarSongIds?: string[];
 }
 
 export interface Playlist {

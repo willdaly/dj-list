@@ -4,6 +4,7 @@ import {
   playlistResponseSchema,
   playlistsResponseSchema,
   sessionStateSchema,
+  songResponseSchema,
   songsResponseSchema
 } from '../types/schemas';
 import { request } from './http';
@@ -97,6 +98,24 @@ export const apiClient = {
     }).then((response) => response.songs);
   },
 
+  filterByCamelot(camelotCode: string, genres?: string[], energyTier?: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/camelotSearch',
+      data: { camelotCode, genre: genres, energyTier },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  filterByEnergy(energyTier: string, genres?: string[], camelotCode?: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: '/energySearch',
+      data: { energyTier, genre: genres, camelotCode },
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
   listPlaylists(): Promise<Playlist[]> {
     return request({ method: 'POST', path: '/playlists', schema: playlistsResponseSchema }).then(
       (response) => response.playlists
@@ -171,5 +190,37 @@ export const apiClient = {
 
   logout(): Promise<void> {
     return request({ method: 'POST', path: '/logout' });
+  },
+
+  fetchPreview(songId: string): Promise<Song> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/fetchPreview`,
+      schema: songResponseSchema
+    }).then((response) => response.song);
+  },
+
+  findHarmonicMatches(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/harmonic`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  findSimilar(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/similar`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
+  },
+
+  findNextTracks(songId: string): Promise<Song[]> {
+    return request({
+      method: 'POST',
+      path: `/song/${songId}/next`,
+      schema: songsResponseSchema
+    }).then((response) => response.songs);
   }
 };

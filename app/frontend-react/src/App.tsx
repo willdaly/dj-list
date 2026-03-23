@@ -25,6 +25,10 @@ export function App() {
   const [keyValue, setKeyValue] = useState('AbM');
   const [bpmMin, setBpmMin] = useState(88);
   const [bpmMax, setBpmMax] = useState(102);
+  const [kgViewLabel, setKgViewLabel] = useState<string | null>(null);
+  const [previousSongs, setPreviousSongs] = useState<Song[]>([]);
+  const [camelotValue, setCamelotValue] = useState('1A');
+  const [energyValue, setEnergyValue] = useState('high_energy');
 
   function handleApiError(error: unknown) {
     if (error instanceof ApiClientError) {
@@ -92,6 +96,8 @@ export function App() {
   function applyResults(results: Song[]) {
     setSongs(results);
     setSelectedIds([]);
+    setKgViewLabel(null);
+    setPreviousSongs([]);
     setStatus(results.length > 0 ? `Loaded ${results.length} song(s).` : 'No songs found.');
   }
 
@@ -165,6 +171,26 @@ export function App() {
     }
   }
 
+  async function runCamelotSearch() {
+    setStatus('Loading...');
+    try {
+      const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
+      applyResults(await apiClient.filterByCamelot(camelotValue, genres, energyValue));
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runEnergySearch() {
+    setStatus('Loading...');
+    try {
+      const genres = selectedGenres.length > 0 ? selectedGenres : undefined;
+      applyResults(await apiClient.filterByEnergy(energyValue, genres, camelotValue));
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
   async function runTextSearch(queryOverride?: string) {
     const trimmed = (queryOverride ?? query).trim();
     if (!trimmed) {
@@ -185,6 +211,67 @@ export function App() {
     } catch (error) {
       handleApiError(error);
     }
+  }
+
+  function getSelectedSong(): Song | null {
+    if (selectedIds.length !== 1) return null;
+    return songs.find((s) => s._id === selectedIds[0]) ?? null;
+  }
+
+  async function runHarmonicMatches() {
+    const song = getSelectedSong();
+    if (!song) return;
+    setStatus('Finding harmonic matches...');
+    try {
+      setPreviousSongs(songs);
+      const results = await apiClient.findHarmonicMatches(song._id);
+      setSongs(results);
+      setSelectedIds([]);
+      setKgViewLabel(`Harmonic matches for "${song.Artist} — ${song.Song}"`);
+      setStatus(results.length > 0 ? `${results.length} harmonic match(es).` : 'No harmonic matches found.');
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runSimilarTracks() {
+    const song = getSelectedSong();
+    if (!song) return;
+    setStatus('Finding similar tracks...');
+    try {
+      setPreviousSongs(songs);
+      const results = await apiClient.findSimilar(song._id);
+      setSongs(results);
+      setSelectedIds([]);
+      setKgViewLabel(`Similar tracks to "${song.Artist} — ${song.Song}"`);
+      setStatus(results.length > 0 ? `${results.length} similar track(s).` : 'No similar tracks found.');
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function runNextTracks() {
+    const song = getSelectedSong();
+    if (!song) return;
+    setStatus('Suggesting next tracks...');
+    try {
+      setPreviousSongs(songs);
+      const results = await apiClient.findNextTracks(song._id);
+      setSongs(results);
+      setSelectedIds([]);
+      setKgViewLabel(`Next track ideas after "${song.Artist} — ${song.Song}"`);
+      setStatus(results.length > 0 ? `${results.length} suggestion(s).` : 'No suggestions found.');
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  function runBackToSearch() {
+    setSongs(previousSongs);
+    setPreviousSongs([]);
+    setSelectedIds([]);
+    setKgViewLabel(null);
+    setStatus(`Loaded ${previousSongs.length} song(s).`);
   }
 
   async function runCreatePlaylist(name: string) {
@@ -302,7 +389,7 @@ export function App() {
   return (
     <>
       <Nav session={session} />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <h1 className="text-2xl font-bold text-gray-900">DJ List</h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -377,14 +464,20 @@ export function App() {
                 keyValue={keyValue}
                 bpmMin={bpmMin}
                 bpmMax={bpmMax}
+                camelotValue={camelotValue}
+                energyValue={energyValue}
                 onToggleGenre={toggleGenre}
                 onKeyChange={setKeyValue}
                 onBpmMinChange={setBpmMin}
                 onBpmMaxChange={setBpmMax}
+                onCamelotChange={setCamelotValue}
+                onEnergyChange={setEnergyValue}
                 onSearchByGenre={() => void runGenreSearch()}
                 onSearchByBpm={() => void runBpmSearch()}
                 onSearchByKey={() => void runKeySearch()}
                 onSearchByBpmKey={() => void runBpmKeySearch()}
+                onSearchByCamelot={() => void runCamelotSearch()}
+                onSearchByEnergy={() => void runEnergySearch()}
               />
 
               <TextSearchControls
@@ -395,11 +488,60 @@ export function App() {
                 onSearch={(override) => void runTextSearch(override)}
               />
 
+              {kgViewLabel && (
+                <div className="mt-4 flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2 text-sm">
+                  <button
+                    type="button"
+                    onClick={runBackToSearch}
+                    className="font-medium text-blue-700 underline hover:text-blue-900"
+                  >
+                    &larr; Back to results
+                  </button>
+                  <span className="text-blue-800">{kgViewLabel}</span>
+                </div>
+              )}
+
+              {!kgViewLabel && selectedIds.length === 1 && songs.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="self-center text-xs font-medium text-gray-500">KG actions:</span>
+                  <button
+                    type="button"
+                    onClick={() => void runHarmonicMatches()}
+                    className="rounded-md border border-blue-300 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                  >
+                    Harmonic Matches
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void runSimilarTracks()}
+                    className="rounded-md border border-purple-300 bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-700 hover:bg-purple-100"
+                  >
+                    Similar Tracks
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void runNextTracks()}
+                    className="rounded-md border border-green-300 bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 hover:bg-green-100"
+                  >
+                    Next Track Ideas
+                  </button>
+                </div>
+              )}
+
               <ResultsTable
                 songs={songs}
                 mode="search"
                 selectedIds={selectedIds}
                 onSelectionChange={setSelectedIds}
+                onFetchPreview={async (songId) => {
+                  try {
+                    const song = await apiClient.fetchPreview(songId);
+                    setSongs((prev) => prev.map((s) => (s._id === songId ? song : s)));
+                    return song;
+                  } catch {
+                    return null;
+                  }
+                }}
               />
             </>
           ) : null}
@@ -427,6 +569,9 @@ export function App() {
               onRenamePlaylist={(name) => void runRenamePlaylist(name)}
               onDeletePlaylist={() => void runDeletePlaylist()}
               onOrderChange={(title, oldO, newO) => void runOrderChange(title, oldO, newO)}
+              onPreviewFetched={(song) =>
+                setPlaylistSongs((prev) => prev.map((s) => (s._id === song._id ? song : s)))
+              }
               status={status}
               onStatusChange={setStatus}
             />

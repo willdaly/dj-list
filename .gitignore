@@ -6,6 +6,11 @@ test-results/
 playwright-report/
 app/static/assets-react/
 db/list.json
+list.json
 db/user.json
+data/collection.json
+**/data/collection.json
+__pycache__/
+**/output/embeddings.npz
 old
 workToDo.md
