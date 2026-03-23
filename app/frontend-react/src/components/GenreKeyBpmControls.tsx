@@ -58,7 +58,7 @@ export function GenreKeyBpmControls(props: GenreKeyBpmControlsProps) {
         })}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
           Key
           <select
@@ -74,29 +74,41 @@ export function GenreKeyBpmControls(props: GenreKeyBpmControlsProps) {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
-          BPM Min
-          <input
-            type="number"
-            value={props.bpmMin}
-            onChange={(event) => props.onBpmMinChange(Number(event.target.value))}
-            className={inputBase}
-            min={1}
-            max={300}
-          />
-        </label>
-
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
-          BPM Max
-          <input
-            type="number"
-            value={props.bpmMax}
-            onChange={(event) => props.onBpmMaxChange(Number(event.target.value))}
-            className={inputBase}
-            min={1}
-            max={300}
-          />
-        </label>
+        <div className="flex flex-col gap-1.5 text-sm font-medium text-gray-700">
+          <span>BPM Range: {props.bpmMin} – {props.bpmMax}</span>
+          <div className="range-slider">
+            <input
+              type="range"
+              min={34}
+              max={200}
+              value={props.bpmMin}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                if (val <= props.bpmMax) props.onBpmMinChange(val);
+              }}
+              className="range-slider__thumb range-slider__thumb--left"
+            />
+            <input
+              type="range"
+              min={34}
+              max={200}
+              value={props.bpmMax}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                if (val >= props.bpmMin) props.onBpmMaxChange(val);
+              }}
+              className="range-slider__thumb range-slider__thumb--right"
+            />
+            <div className="range-slider__track" />
+            <div
+              className="range-slider__range"
+              style={{
+                left: `${((props.bpmMin - 34) / 166) * 100}%`,
+                width: `${((props.bpmMax - props.bpmMin) / 166) * 100}%`,
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
